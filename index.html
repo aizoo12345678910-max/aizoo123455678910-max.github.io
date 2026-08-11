@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -22,7 +23,7 @@ body {
 .container {
     max-width: 1050px;
     margin: auto;
-    padding: 25px 18px 60px;
+    padding: 25px 18px 70px;
 }
 
 .header {
@@ -33,7 +34,7 @@ body {
 }
 
 .logo {
-    font-size: 24px;
+    font-size: 25px;
     font-weight: bold;
     letter-spacing: 4px;
 }
@@ -67,6 +68,23 @@ body {
 
 .message {
     font-size: 18px;
+}
+
+.main-button {
+    width: 100%;
+    border: none;
+    background: #72f5a4;
+    color: #07100b;
+    font-weight: bold;
+    padding: 16px;
+    border-radius: 14px;
+    cursor: pointer;
+    margin-top: 22px;
+    font-size: 16px;
+}
+
+.main-button:hover {
+    opacity: .85;
 }
 
 .cards {
@@ -106,6 +124,31 @@ body {
     font-size: 19px;
 }
 
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.stat {
+    background: #11161d;
+    border: 1px solid #222b35;
+    border-radius: 18px;
+    padding: 18px;
+}
+
+.stat-title {
+    color: #8d9aaa;
+    font-size: 12px;
+}
+
+.stat-value {
+    font-size: 25px;
+    font-weight: bold;
+    margin-top: 8px;
+    color: #72f5a4;
+}
+
 .chart {
     background: #11161d;
     border: 1px solid #222b35;
@@ -113,42 +156,103 @@ body {
     padding: 22px;
 }
 
-.bar-label {
-    color: #aab4c1;
-    font-size: 13px;
-    margin-top: 12px;
+.chart-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 12px 0;
 }
 
-.bar {
+.chart-date {
+    width: 65px;
+    color: #9aa6b5;
+    font-size: 12px;
+}
+
+.chart-bar {
+    flex: 1;
     height: 28px;
     background: #1c252e;
     border-radius: 8px;
     overflow: hidden;
-    margin-top: 6px;
 }
 
-.bar-inner {
+.chart-inner {
     height: 100%;
     background: #72f5a4;
     border-radius: 8px;
     transition: width .5s;
 }
 
-.main-button {
-    width: 100%;
-    border: none;
-    background: #72f5a4;
-    color: #07100b;
-    font-weight: bold;
-    padding: 16px;
-    border-radius: 14px;
-    cursor: pointer;
-    margin-top: 22px;
-    font-size: 16px;
+.chart-score {
+    width: 35px;
+    text-align: right;
+    font-size: 12px;
 }
 
-.main-button:hover {
-    opacity: .85;
+.history {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.history-item {
+    background: #11161d;
+    border: 1px solid #222b35;
+    border-radius: 16px;
+    padding: 16px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.history-date {
+    color: #9aa6b5;
+    font-size: 13px;
+}
+
+.history-note {
+    margin-top: 5px;
+    color: #d7dce3;
+    font-size: 14px;
+}
+
+.history-score {
+    font-size: 25px;
+    font-weight: bold;
+    color: #72f5a4;
+}
+
+.insight {
+    background: linear-gradient(
+        135deg,
+        #111d17,
+        #11161d
+    );
+
+    border: 1px solid #24412f;
+
+    border-radius: 20px;
+
+    padding: 25px;
+}
+
+.insight-title {
+    color: #72f5a4;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.insight-text {
+    color: #d6dce3;
+    line-height: 1.7;
+}
+
+.empty {
+    color: #718092;
+    text-align: center;
+    padding: 25px;
 }
 
 
@@ -231,7 +335,6 @@ body {
     color: white;
 
     font-size: 15px;
-
 }
 
 .field textarea {
@@ -275,21 +378,15 @@ body {
     cursor: pointer;
 
     margin-top: 25px;
-
 }
 
-.empty {
+@media(max-width:800px) {
 
-    color: #718092;
-
-    text-align: center;
-
-    padding: 20px;
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
 
 }
-
-
-/* MOBILE */
 
 @media(max-width:700px) {
 
@@ -309,6 +406,10 @@ body {
         grid-template-columns: 1fr;
     }
 
+    .stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
     .hero {
         padding: 25px 15px;
     }
@@ -316,6 +417,7 @@ body {
 }
 
 </style>
+
 </head>
 
 
@@ -331,13 +433,12 @@ body {
             MY DAY
         </div>
 
-        <div class="date" id="date">
-        </div>
+        <div class="date" id="date"></div>
 
     </div>
 
 
-    <!-- SCORE -->
+    <!-- TODAY -->
 
     <div class="hero">
 
@@ -353,29 +454,33 @@ body {
             오늘의 데이터를 입력해보세요 🌱
         </div>
 
-        <button class="main-button" onclick="openModal()">
+        <button
+            class="main-button"
+            onclick="openModal()"
+        >
             ＋ 오늘 기록하기
         </button>
 
     </div>
 
 
-    <!-- METRICS -->
+    <!-- TODAY DATA -->
 
     <div class="cards">
 
 
         <div class="card">
 
-            <div class="icon">
-                😴
-            </div>
+            <div class="icon">😴</div>
 
             <div class="card-title">
                 수면
             </div>
 
-            <div class="value" id="sleepValue">
+            <div
+                class="value"
+                id="sleepValue"
+            >
                 -
             </div>
 
@@ -384,15 +489,16 @@ body {
 
         <div class="card">
 
-            <div class="icon">
-                📚
-            </div>
+            <div class="icon">📚</div>
 
             <div class="card-title">
                 공부
             </div>
 
-            <div class="value" id="studyValue">
+            <div
+                class="value"
+                id="studyValue"
+            >
                 -
             </div>
 
@@ -401,15 +507,16 @@ body {
 
         <div class="card">
 
-            <div class="icon">
-                🏃
-            </div>
+            <div class="icon">🏃</div>
 
             <div class="card-title">
                 운동
             </div>
 
-            <div class="value" id="exerciseValue">
+            <div
+                class="value"
+                id="exerciseValue"
+            >
                 -
             </div>
 
@@ -418,15 +525,16 @@ body {
 
         <div class="card">
 
-            <div class="icon">
-                😊
-            </div>
+            <div class="icon">😊</div>
 
             <div class="card-title">
                 기분
             </div>
 
-            <div class="value" id="moodValue">
+            <div
+                class="value"
+                id="moodValue"
+            >
                 -
             </div>
 
@@ -435,15 +543,16 @@ body {
 
         <div class="card">
 
-            <div class="icon">
-                ⚡
-            </div>
+            <div class="icon">⚡</div>
 
             <div class="card-title">
                 집중도
             </div>
 
-            <div class="value" id="focusValue">
+            <div
+                class="value"
+                id="focusValue"
+            >
                 -
             </div>
 
@@ -452,15 +561,16 @@ body {
 
         <div class="card">
 
-            <div class="icon">
-                💰
-            </div>
+            <div class="icon">💰</div>
 
             <div class="card-title">
                 오늘 지출
             </div>
 
-            <div class="value" id="moneyValue">
+            <div
+                class="value"
+                id="moneyValue"
+            >
                 -
             </div>
 
@@ -470,78 +580,151 @@ body {
     </div>
 
 
-    <!-- WEEK -->
+    <!-- STATS -->
 
     <div class="section">
 
         <h2>
-            📊 이번 주
+            📈 나의 기록
         </h2>
 
-        <div class="chart">
 
-            <div class="bar-label">
-                월요일
-            </div>
+        <div class="stats">
 
-            <div class="bar">
-                <div
-                    class="bar-inner"
-                    id="mon"
-                    style="width:0%">
+
+            <div class="stat">
+
+                <div class="stat-title">
+                    평균 점수
                 </div>
-            </div>
 
-
-            <div class="bar-label">
-                화요일
-            </div>
-
-            <div class="bar">
                 <div
-                    class="bar-inner"
-                    id="tue"
-                    style="width:0%">
+                    class="stat-value"
+                    id="averageScore"
+                >
+                    0점
                 </div>
+
             </div>
 
 
-            <div class="bar-label">
-                수요일
-            </div>
+            <div class="stat">
 
-            <div class="bar">
+                <div class="stat-title">
+                    최고 점수
+                </div>
+
                 <div
-                    class="bar-inner"
-                    id="wed"
-                    style="width:0%">
+                    class="stat-value"
+                    id="bestScore"
+                >
+                    0점
                 </div>
+
             </div>
 
 
-            <div class="bar-label">
-                목요일
-            </div>
+            <div class="stat">
 
-            <div class="bar">
+                <div class="stat-title">
+                    누적 공부
+                </div>
+
                 <div
-                    class="bar-inner"
-                    id="thu"
-                    style="width:0%">
+                    class="stat-value"
+                    id="totalStudy"
+                >
+                    0시간
                 </div>
+
             </div>
 
 
-            <div class="bar-label">
-                금요일
-            </div>
+            <div class="stat">
 
-            <div class="bar">
+                <div class="stat-title">
+                    누적 운동
+                </div>
+
                 <div
-                    class="bar-inner"
-                    id="fri"
-                    style="width:0%">
+                    class="stat-value"
+                    id="totalExercise"
+                >
+                    0시간
                 </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- CHART -->
+
+    <div class="section">
+
+        <h2>
+            📊 최근 기록
+        </h2>
+
+        <div
+            class="chart"
+            id="chart"
+        >
+
+            <div class="empty">
+                아직 기록이 없습니다.
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- INSIGHT -->
+
+    <div class="section">
+
+        <h2>
+            🧠 MY INSIGHT
+        </h2>
+
+        <div class="insight">
+
+            <div class="insight-title">
+                오늘의 분석
+            </div>
+
+            <div
+                class="insight-text"
+                id="insight"
+            >
+                기록을 쌓으면
+                나만의 생활 패턴을 분석해드려요.
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- HISTORY -->
+
+    <div class="section">
+
+        <h2>
+            📅 기록 히스토리
+        </h2>
+
+        <div
+            class="history"
+            id="history"
+        >
+
+            <div class="empty">
+                아직 기록이 없습니다.
             </div>
 
         </div>
@@ -733,7 +916,7 @@ body {
 <script>
 
 
-/* 날짜 */
+/* DATE */
 
 const today = new Date();
 
@@ -833,6 +1016,30 @@ function calculateScore(
 }
 
 
+/* LOAD HISTORY */
+
+function getHistory() {
+
+    const saved =
+        localStorage.getItem("myDayHistory");
+
+    if (!saved) {
+        return [];
+    }
+
+    try {
+
+        return JSON.parse(saved);
+
+    } catch {
+
+        return [];
+
+    }
+
+}
+
+
 /* SAVE */
 
 function saveData() {
@@ -887,39 +1094,122 @@ function saveData() {
     }
 
 
-    const data = {
+    const date =
+        new Date()
+        .toISOString()
+        .split("T")[0];
 
+
+    const score =
+        calculateScore(
+            sleep,
+            study,
+            exercise,
+            mood,
+            focus
+        );
+
+
+    const record = {
+
+        date,
         sleep,
         study,
         exercise,
         money,
         mood,
         focus,
-        note
+        note,
+        score
 
     };
 
 
-    localStorage.setItem(
-        "myDayData",
-        JSON.stringify(data)
+    let history =
+        getHistory();
+
+
+    /* 같은 날짜 기록은 업데이트 */
+
+    const existingIndex =
+        history.findIndex(
+            item => item.date === date
+        );
+
+
+    if (existingIndex >= 0) {
+
+        history[existingIndex] =
+            record;
+
+    } else {
+
+        history.push(record);
+
+    }
+
+
+    history.sort(
+        (a,b) =>
+            new Date(b.date) -
+            new Date(a.date)
     );
 
 
-    updateScreen(data);
+    localStorage.setItem(
+        "myDayHistory",
+        JSON.stringify(history)
+    );
+
+
+    updateAll();
 
 
     closeModal();
 
 
-    alert("오늘 기록이 저장되었습니다! 🌱");
+    alert(
+        "오늘 기록이 저장되었습니다! 🌱"
+    );
 
 }
 
 
-/* SCREEN */
+/* UPDATE ALL */
 
-function updateScreen(data) {
+function updateAll() {
+
+    const history =
+        getHistory();
+
+
+    if (history.length === 0) {
+
+        return;
+
+    }
+
+
+    const latest =
+        history[0];
+
+
+    updateToday(latest);
+
+    updateStats(history);
+
+    updateChart(history);
+
+    updateHistory(history);
+
+    updateInsight(history);
+
+}
+
+
+/* TODAY */
+
+function updateToday(data) {
 
 
     document.getElementById("sleepValue").innerText =
@@ -946,35 +1236,25 @@ function updateScreen(data) {
         data.money.toLocaleString() + "원";
 
 
-    const score =
-        calculateScore(
-            data.sleep,
-            data.study,
-            data.exercise,
-            data.mood,
-            data.focus
-        );
-
-
     document.getElementById("score").innerText =
-        score;
+        data.score;
 
 
-    if (score >= 90) {
+    if (data.score >= 90) {
 
         document.getElementById("message").innerText =
             "완벽한 하루였어요! 🔥";
 
     }
 
-    else if (score >= 80) {
+    else if (data.score >= 80) {
 
         document.getElementById("message").innerText =
             "정말 좋은 하루예요! 🌿";
 
     }
 
-    else if (score >= 70) {
+    else if (data.score >= 70) {
 
         document.getElementById("message").innerText =
             "괜찮은 하루였어요 🙂";
@@ -991,19 +1271,321 @@ function updateScreen(data) {
 }
 
 
-/* LOAD */
+/* STATS */
 
-const saved =
-    localStorage.getItem("myDayData");
+function updateStats(history) {
 
 
-if (saved) {
+    const scores =
+        history.map(
+            item => item.score
+        );
 
-    updateScreen(
-        JSON.parse(saved)
-    );
+
+    const average =
+        Math.round(
+            scores.reduce(
+                (a,b) => a+b,
+                0
+            ) / scores.length
+        );
+
+
+    const best =
+        Math.max(...scores);
+
+
+    const totalStudy =
+        history.reduce(
+            (sum,item) =>
+                sum + Number(item.study),
+            0
+        );
+
+
+    const totalExercise =
+        history.reduce(
+            (sum,item) =>
+                sum + Number(item.exercise),
+            0
+        );
+
+
+    document.getElementById(
+        "averageScore"
+    ).innerText =
+        average + "점";
+
+
+    document.getElementById(
+        "bestScore"
+    ).innerText =
+        best + "점";
+
+
+    document.getElementById(
+        "totalStudy"
+    ).innerText =
+        (totalStudy / 60).toFixed(1)
+        + "시간";
+
+
+    document.getElementById(
+        "totalExercise"
+    ).innerText =
+        (totalExercise / 60).toFixed(1)
+        + "시간";
 
 }
+
+
+/* CHART */
+
+function updateChart(history) {
+
+
+    const chart =
+        document.getElementById("chart");
+
+
+    const recent =
+        history.slice(0,7);
+
+
+    if (recent.length === 0) {
+
+        chart.innerHTML =
+            '<div class="empty">아직 기록이 없습니다.</div>';
+
+        return;
+
+    }
+
+
+    chart.innerHTML = "";
+
+
+    recent
+        .slice()
+        .reverse()
+        .forEach(item => {
+
+
+            const row =
+                document.createElement("div");
+
+
+            row.className =
+                "chart-row";
+
+
+            const date =
+                document.createElement("div");
+
+
+            date.className =
+                "chart-date";
+
+
+            date.innerText =
+                item.date.slice(5);
+
+
+            const bar =
+                document.createElement("div");
+
+
+            bar.className =
+                "chart-bar";
+
+
+            const inner =
+                document.createElement("div");
+
+
+            inner.className =
+                "chart-inner";
+
+
+            inner.style.width =
+                item.score + "%";
+
+
+            const score =
+                document.createElement("div");
+
+
+            score.className =
+                "chart-score";
+
+
+            score.innerText =
+                item.score;
+
+
+            bar.appendChild(inner);
+
+
+            row.appendChild(date);
+
+            row.appendChild(bar);
+
+            row.appendChild(score);
+
+
+            chart.appendChild(row);
+
+        });
+
+}
+
+
+/* HISTORY */
+
+function updateHistory(history) {
+
+
+    const box =
+        document.getElementById(
+            "history"
+        );
+
+
+    box.innerHTML = "";
+
+
+    history
+        .slice(0,10)
+        .forEach(item => {
+
+
+            const element =
+                document.createElement("div");
+
+
+            element.className =
+                "history-item";
+
+
+            const left =
+                document.createElement("div");
+
+
+            const date =
+                document.createElement("div");
+
+
+            date.className =
+                "history-date";
+
+
+            date.innerText =
+                item.date;
+
+
+            const note =
+                document.createElement("div");
+
+
+            note.className =
+                "history-note";
+
+
+            note.innerText =
+                item.note ||
+                "오늘의 기록";
+
+
+            left.appendChild(date);
+
+            left.appendChild(note);
+
+
+            const score =
+                document.createElement("div");
+
+
+            score.className =
+                "history-score";
+
+
+            score.innerText =
+                item.score;
+
+
+            element.appendChild(left);
+
+            element.appendChild(score);
+
+
+            box.appendChild(element);
+
+        });
+
+}
+
+
+/* INSIGHT */
+
+function updateInsight(history) {
+
+
+    const insight =
+        document.getElementById(
+            "insight"
+        );
+
+
+    if (history.length < 2) {
+
+        insight.innerText =
+            "기록이 2일 이상 쌓이면 생활 패턴을 분석해드려요.";
+
+        return;
+
+    }
+
+
+    const avgSleep =
+        history.reduce(
+            (sum,item) =>
+                sum + Number(item.sleep),
+            0
+        ) / history.length;
+
+
+    const avgFocus =
+        history.reduce(
+            (sum,item) =>
+                sum + Number(item.focus),
+            0
+        ) / history.length;
+
+
+    const avgMood =
+        history.reduce(
+            (sum,item) =>
+                sum + Number(item.mood),
+            0
+        ) / history.length;
+
+
+    insight.innerText =
+        "최근 기록을 보면 평균 수면은 "
+        + avgSleep.toFixed(1)
+        + "시간, 평균 집중도는 "
+        + Math.round(avgFocus)
+        + "점, 평균 기분은 "
+        + Math.round(avgMood)
+        + "점이에요. "
+        + "기록이 더 쌓이면 수면·공부·운동과 집중도의 관계까지 분석할 수 있어요.";
+
+}
+
+
+/* START */
+
+updateAll();
 
 </script>
 
