@@ -1,2343 +1,3389 @@
+```html
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>MY DAY</title>
+<title>MY DAY — 나의 하루 성장 기록</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-
-* {
-    box-sizing: border-box;
+*{
+  box-sizing:border-box;
 }
 
-html {
-    min-height: 100%;
+:root{
+  --bg:#f5f8ff;
+  --card:rgba(255,255,255,.88);
+  --white:#fff;
+  --text:#26334a;
+  --muted:#8290a8;
+  --line:#e4eaf4;
+
+  --green:#57d99a;
+  --blue:#68a9ff;
+  --purple:#9d7cff;
+  --pink:#ff83b5;
+  --yellow:#ffd35a;
+  --orange:#ff9b65;
+
+  --shadow:0 18px 50px rgba(71,93,132,.13);
 }
 
-body {
-    margin: 0;
-    min-height: 100vh;
-    color: #f5f7fa;
-    font-family: Arial, sans-serif;
-
-    /* ✨ 밝고 예쁜 배경 */
-    background:
-        radial-gradient(
-            circle at 10% 10%,
-            rgba(114, 245, 164, 0.20),
-            transparent 30%
-        ),
-        radial-gradient(
-            circle at 90% 15%,
-            rgba(92, 190, 255, 0.20),
-            transparent 30%
-        ),
-        radial-gradient(
-            circle at 80% 85%,
-            rgba(170, 120, 255, 0.18),
-            transparent 35%
-        ),
-        radial-gradient(
-            circle at 15% 85%,
-            rgba(255, 190, 120, 0.12),
-            transparent 30%
-        ),
-        linear-gradient(
-            135deg,
-            #101b27 0%,
-            #14283a 35%,
-            #192d42 65%,
-            #171f35 100%
-        );
-
-    background-attachment: fixed;
+html{
+  scroll-behavior:smooth;
 }
 
-/* ✨ 은은한 빛 효과 */
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: -1;
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
+  font-family:
+    Arial,
+    "Noto Sans KR",
+    sans-serif;
 
-    background:
-        radial-gradient(
-            circle at 50% 0%,
-            rgba(255,255,255,0.08),
-            transparent 35%
-        );
+  background:
+    radial-gradient(circle at 5% 5%,rgba(87,217,154,.23),transparent 25%),
+    radial-gradient(circle at 95% 8%,rgba(104,169,255,.23),transparent 25%),
+    radial-gradient(circle at 80% 75%,rgba(157,124,255,.18),transparent 28%),
+    radial-gradient(circle at 15% 90%,rgba(255,131,181,.15),transparent 25%),
+    #f5f8ff;
 
-    filter: blur(30px);
+  overflow-x:hidden;
 }
 
-.container {
-    max-width: 1050px;
-    margin: auto;
-    padding: 25px 18px 70px;
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.35;
+
+  background-image:
+    radial-gradient(#ffffff 1px,transparent 1px);
+
+  background-size:24px 24px;
 }
 
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
+button,
+input,
+textarea{
+  font:inherit;
 }
 
-.logo {
-    font-size: 25px;
-    font-weight: bold;
-    letter-spacing: 4px;
+button{
+  cursor:pointer;
 }
 
-.user-area {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.container{
+  position:relative;
+  z-index:1;
+  width:min(1100px,calc(100% - 28px));
+  margin:auto;
+  padding:24px 0 80px;
 }
 
-.user-email {
-    color: #aab8c8;
-    font-size: 12px;
+/* =========================
+   HEADER
+========================= */
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
 }
 
-.logout {
-    background: rgba(25, 40, 55, 0.75);
-    color: white;
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 10px;
-    padding: 8px 12px;
-    cursor: pointer;
-    transition: .2s;
+.logo{
+  font-size:25px;
+  font-weight:1000;
+  letter-spacing:4px;
 }
 
-.logout:hover {
-    background: rgba(50, 70, 90, 0.85);
+.logo span{
+  color:var(--green);
 }
 
-/* HERO */
-
-.hero {
-    background:
-        linear-gradient(
-            135deg,
-            rgba(30, 52, 68, 0.90),
-            rgba(22, 39, 56, 0.85)
-        );
-
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 25px;
-    padding: 35px;
-    text-align: center;
-    margin-bottom: 18px;
-
-    box-shadow:
-        0 20px 60px rgba(0,0,0,0.20),
-        inset 0 1px 0 rgba(255,255,255,0.06);
-
-    backdrop-filter: blur(18px);
+.user-area{
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
 
-.small-title {
-    color: #9eafc1;
-    font-size: 12px;
-    letter-spacing: 3px;
+.user-email{
+  color:var(--muted);
+  font-size:12px;
 }
 
-.score {
-    font-size: 90px;
-    font-weight: bold;
-    color: #72f5a4;
-    margin: 10px 0;
-
-    text-shadow:
-        0 0 30px rgba(114,245,164,0.20);
+.profile-mini{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  border:0;
+  background:rgba(255,255,255,.7);
+  padding:6px 10px 6px 6px;
+  border-radius:999px;
+  box-shadow:0 5px 20px rgba(70,90,120,.08);
 }
 
-.message {
-    font-size: 18px;
+.btn{
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--text);
+  border-radius:12px;
+  padding:9px 13px;
+}
+
+.btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 6px 20px rgba(70,90,120,.1);
+}
+
+.avatar{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-size:22px;
+  border:3px solid rgba(255,255,255,.9);
+  box-shadow:0 5px 15px rgba(70,90,120,.15);
+}
+
+.avatar.big{
+  width:100px;
+  height:100px;
+  margin:auto;
+  font-size:52px;
+}
+
+.logout{
+  background:#fff;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+  position:relative;
+  overflow:hidden;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.94),
+      rgba(245,250,255,.9)
+    );
+
+  border:1px solid rgba(255,255,255,.8);
+  border-radius:32px;
+  padding:30px;
+  text-align:center;
+
+  box-shadow:var(--shadow);
+  margin-bottom:15px;
+}
+
+.hero:before{
+  content:"";
+  position:absolute;
+  width:250px;
+  height:250px;
+  border-radius:50%;
+  background:rgba(87,217,154,.17);
+  filter:blur(30px);
+  right:-100px;
+  top:-120px;
+}
+
+.hero:after{
+  content:"";
+  position:absolute;
+  width:220px;
+  height:220px;
+  border-radius:50%;
+  background:rgba(104,169,255,.13);
+  filter:blur(30px);
+  left:-110px;
+  bottom:-130px;
+}
+
+.small-title{
+  color:var(--muted);
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:3px;
+}
+
+.date{
+  margin-top:7px;
+  color:#91a0b5;
+  font-size:13px;
+}
+
+.score{
+  font-size:88px;
+  line-height:1;
+  font-weight:1000;
+  color:#4dcc91;
+  margin:12px 0;
+  text-shadow:0 8px 25px rgba(87,217,154,.2);
+}
+
+.message{
+  font-size:18px;
+  font-weight:700;
+}
+
+/* =========================
+   LEVEL SYSTEM
+========================= */
+
+.level-card{
+  position:relative;
+  z-index:2;
+  margin-top:20px;
+  text-align:left;
+
+  background:rgba(255,255,255,.75);
+  border:1px solid #e9eef7;
+  border-radius:20px;
+  padding:17px;
+
+  box-shadow:0 8px 25px rgba(70,90,120,.07);
+}
+
+.level-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+
+.level-name{
+  font-weight:900;
+  font-size:15px;
+}
+
+.level-badge{
+  color:#fff;
+  background:linear-gradient(135deg,#8b76ff,#a88dff);
+  padding:6px 11px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:1000;
+  box-shadow:0 5px 15px rgba(157,124,255,.25);
+}
+
+.level-title{
+  color:#8872ed;
+  font-size:12px;
+  font-weight:900;
+  margin-top:4px;
+}
+
+.xp-text{
+  display:flex;
+  justify-content:space-between;
+  color:var(--muted);
+  font-size:12px;
+  margin-top:12px;
+}
+
+.xp-bar{
+  height:13px;
+  background:#e9eef6;
+  border-radius:99px;
+  overflow:hidden;
+  margin-top:7px;
+}
+
+.xp-inner{
+  height:100%;
+  width:0;
+  background:
+    linear-gradient(
+      90deg,
+      var(--green),
+      var(--blue),
+      var(--purple)
+    );
+  border-radius:99px;
+  transition:width .7s cubic-bezier(.22,1,.36,1);
+  box-shadow:0 2px 10px rgba(104,169,255,.3);
 }
 
 .main-button,
 .save-button,
-.auth-button {
-    width: 100%;
-    border: none;
-    background: linear-gradient(
-        135deg,
-        #72f5a4,
-        #5de3b2
+.auth-button{
+  width:100%;
+  border:0;
+
+  background:
+    linear-gradient(
+      135deg,
+      #61dfa0,
+      #64b8ff
     );
-    color: #07100b;
-    font-weight: bold;
-    padding: 16px;
-    border-radius: 14px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: .2s;
+
+  color:white;
+  font-weight:1000;
+
+  padding:15px;
+  border-radius:15px;
+
+  cursor:pointer;
+
+  box-shadow:
+    0 10px 25px rgba(87,217,154,.2);
+
+  transition:.2s;
 }
 
-.main-button {
-    margin-top: 22px;
+.main-button{
+  position:relative;
+  z-index:2;
+  margin-top:20px;
 }
 
 .main-button:hover,
 .save-button:hover,
-.auth-button:hover {
-    transform: translateY(-2px);
-    box-shadow:
-        0 10px 25px rgba(114,245,164,0.18);
+.auth-button:hover{
+  transform:translateY(-2px);
+  filter:brightness(1.03);
 }
 
-/* CARDS */
+/* =========================
+   CARDS
+========================= */
 
-.cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
+.cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:13px;
 }
 
-.card {
-    background:
-        linear-gradient(
-            145deg,
-            rgba(29, 48, 65, 0.85),
-            rgba(21, 37, 53, 0.78)
-        );
-
-    border: 1px solid rgba(255,255,255,0.10);
-    border-radius: 20px;
-    padding: 20px;
-
-    backdrop-filter: blur(15px);
-
-    box-shadow:
-        0 12px 35px rgba(0,0,0,0.12);
-
-    transition: .2s;
+.card,
+.stat,
+.chart,
+.history-item,
+.insight,
+.growth-box,
+.achievement-card{
+  background:var(--card);
+  border:1px solid rgba(226,233,244,.95);
+  border-radius:20px;
+  box-shadow:0 8px 30px rgba(70,90,120,.07);
 }
 
-.card:hover {
-    transform: translateY(-3px);
-    border-color: rgba(114,245,164,0.25);
+.card{
+  padding:18px;
+  transition:.2s;
 }
 
-.icon {
-    font-size: 25px;
+.card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 14px 30px rgba(70,90,120,.12);
 }
 
-.card-title {
-    color: #9eafc1;
-    font-size: 13px;
-    margin-top: 8px;
+.icon{
+  font-size:25px;
 }
 
-.value {
-    font-size: 23px;
-    font-weight: bold;
-    margin-top: 5px;
+.card-title{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:8px;
 }
 
-/* SECTION */
-
-.section {
-    margin-top: 30px;
+.value{
+  font-size:22px;
+  font-weight:1000;
+  margin-top:5px;
 }
 
-.section h2 {
-    font-size: 19px;
+/* =========================
+   SECTION
+========================= */
+
+.section{
+  margin-top:30px;
 }
 
-/* STATS */
-
-.stats {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
+.section h2{
+  font-size:18px;
+  margin:0 0 13px;
 }
 
-.stat {
-    background:
-        linear-gradient(
-            145deg,
-            rgba(29,48,65,0.85),
-            rgba(21,37,53,0.78)
-        );
+/* =========================
+   GROWTH
+========================= */
 
-    border: 1px solid rgba(255,255,255,0.10);
-    border-radius: 18px;
-    padding: 18px;
-
-    backdrop-filter: blur(15px);
+.growth{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:13px;
 }
 
-.stat-title {
-    color: #9eafc1;
-    font-size: 12px;
+.growth-box{
+  padding:20px;
 }
 
-.stat-value {
-    font-size: 25px;
-    font-weight: bold;
-    margin-top: 8px;
-    color: #72f5a4;
+.growth-big{
+  font-size:30px;
+  font-weight:1000;
+  margin-top:5px;
 }
 
-/* CHART */
-
-.chart {
-    background:
-        linear-gradient(
-            145deg,
-            rgba(29,48,65,0.85),
-            rgba(21,37,53,0.78)
-        );
-
-    border: 1px solid rgba(255,255,255,0.10);
-    border-radius: 20px;
-    padding: 22px;
-
-    backdrop-filter: blur(15px);
+.growth-sub{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:5px;
 }
 
-.chart-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 12px 0;
+/* =========================
+   STATS
+========================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:13px;
 }
 
-.chart-date {
-    width: 65px;
-    color: #a6b4c3;
-    font-size: 12px;
+.stat{
+  padding:18px;
 }
 
-.chart-bar {
-    flex: 1;
-    height: 28px;
-    background: rgba(255,255,255,0.07);
-    border-radius: 8px;
-    overflow: hidden;
+.stat-title{
+  color:var(--muted);
+  font-size:12px;
 }
 
-.chart-inner {
-    height: 100%;
-    background: linear-gradient(
-        90deg,
-        #72f5a4,
-        #62e9c0
+.stat-value{
+  font-size:23px;
+  font-weight:1000;
+  margin-top:7px;
+  color:#55c98f;
+}
+
+/* =========================
+   CHART
+========================= */
+
+.chart{
+  padding:20px;
+}
+
+.chart-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:11px 0;
+}
+
+.chart-date{
+  width:65px;
+  color:#91a0b5;
+  font-size:12px;
+}
+
+.chart-bar{
+  flex:1;
+  height:25px;
+  background:#edf1f7;
+  border-radius:8px;
+  overflow:hidden;
+}
+
+.chart-inner{
+  height:100%;
+  background:linear-gradient(90deg,var(--green),var(--blue));
+  border-radius:8px;
+}
+
+.chart-score{
+  width:35px;
+  text-align:right;
+  font-size:12px;
+  font-weight:900;
+}
+
+.empty{
+  color:#9aa7ba;
+  text-align:center;
+  padding:25px;
+}
+
+/* =========================
+   INSIGHT
+========================= */
+
+.insight{
+  padding:22px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(234,255,245,.95),
+      rgba(238,247,255,.95)
     );
-    border-radius: 8px;
 }
 
-.chart-score {
-    width: 35px;
-    text-align: right;
-    font-size: 12px;
+.insight-title{
+  color:#45bd85;
+  font-weight:1000;
+  margin-bottom:8px;
 }
 
-/* HISTORY */
-
-.history {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+.insight-text{
+  color:#56647a;
+  line-height:1.7;
 }
 
-.history-item {
-    background:
-        linear-gradient(
-            145deg,
-            rgba(29,48,65,0.85),
-            rgba(21,37,53,0.78)
-        );
+/* =========================
+   HISTORY
+========================= */
 
-    border: 1px solid rgba(255,255,255,0.10);
-    border-radius: 16px;
-    padding: 16px;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    backdrop-filter: blur(15px);
+.history{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
 }
 
-.history-date {
-    color: #a6b4c3;
-    font-size: 13px;
+.history-item{
+  padding:15px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
-.history-note {
-    margin-top: 5px;
-    color: #d7dce3;
-    font-size: 14px;
+.history-date{
+  color:#9aa6b8;
+  font-size:12px;
 }
 
-.history-score {
-    font-size: 25px;
-    font-weight: bold;
-    color: #72f5a4;
+.history-note{
+  margin-top:4px;
+  color:#536078;
+  font-size:14px;
 }
 
-/* INSIGHT */
-
-.insight {
-    background:
-        linear-gradient(
-            135deg,
-            rgba(25,60,48,0.82),
-            rgba(23,42,56,0.82)
-        );
-
-    border: 1px solid rgba(114,245,164,0.20);
-    border-radius: 20px;
-    padding: 25px;
-
-    backdrop-filter: blur(15px);
-
-    box-shadow:
-        0 15px 40px rgba(0,0,0,0.12);
+.history-score{
+  font-size:24px;
+  font-weight:1000;
+  color:#55cb91;
 }
 
-.insight-title {
-    color: #72f5a4;
-    font-weight: bold;
-    margin-bottom: 10px;
+/* =========================
+   ACHIEVEMENTS
+========================= */
+
+.achievement-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
 }
 
-.insight-text {
-    color: #d6dce3;
-    line-height: 1.7;
+.achievement-card{
+  padding:17px;
+  text-align:center;
+  opacity:.45;
+  filter:grayscale(1);
+  transition:.25s;
 }
 
-.empty {
-    color: #8292a4;
-    text-align: center;
-    padding: 25px;
+.achievement-card.unlocked{
+  opacity:1;
+  filter:none;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.95),
+      rgba(246,251,255,.95)
+    );
 }
 
-/* LOGIN */
-
-.auth-screen {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
+.achievement-icon{
+  font-size:32px;
 }
 
-.auth-box {
-    width: 100%;
-    max-width: 420px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(29,48,65,0.92),
-            rgba(21,37,53,0.90)
-        );
-
-    border: 1px solid rgba(255,255,255,0.13);
-    border-radius: 25px;
-    padding: 30px;
-
-    backdrop-filter: blur(20px);
-
-    box-shadow:
-        0 25px 80px rgba(0,0,0,0.25);
+.achievement-name{
+  font-size:13px;
+  font-weight:900;
+  margin-top:8px;
 }
 
-.auth-logo {
-    text-align: center;
-    font-size: 30px;
-    font-weight: bold;
-    letter-spacing: 5px;
-    margin-bottom: 10px;
+.achievement-desc{
+  color:var(--muted);
+  font-size:11px;
+  margin-top:4px;
+  line-height:1.4;
 }
 
-.auth-subtitle {
-    text-align: center;
-    color: #9eafc1;
-    margin-bottom: 25px;
+/* =========================
+   AUTH
+========================= */
+
+.auth-screen{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
 }
 
-.auth-input {
-    width: 100%;
-    padding: 14px;
-    margin-bottom: 12px;
+.auth-box{
+  width:100%;
+  max-width:420px;
 
-    background: rgba(5,15,25,0.65);
+  background:rgba(255,255,255,.9);
+  border:1px solid #e4eaf4;
+  border-radius:28px;
 
-    border: 1px solid rgba(255,255,255,0.10);
-    border-radius: 10px;
-    color: white;
-    font-size: 15px;
-    outline: none;
+  padding:32px;
+
+  box-shadow:
+    0 25px 70px rgba(71,93,132,.16);
 }
 
-.auth-input:focus {
-    border-color: rgba(114,245,164,0.50);
+.auth-logo{
+  text-align:center;
+  font-size:31px;
+  font-weight:1000;
+  letter-spacing:5px;
 }
 
-.auth-button {
-    margin-top: 5px;
+.auth-logo span{
+  color:var(--green);
 }
 
-.auth-switch {
-    text-align: center;
-    color: #9eafc1;
-    margin-top: 18px;
-    cursor: pointer;
-    font-size: 14px;
+.auth-subtitle{
+  text-align:center;
+  color:var(--muted);
+  margin:10px 0 25px;
 }
 
-.auth-switch:hover {
-    color: #72f5a4;
-}
-
-.auth-message {
-    color: #72f5a4;
-    text-align: center;
-    margin-top: 15px;
-    line-height: 1.5;
-}
-
-.auth-error {
-    color: #ff7777;
-    text-align: center;
-    margin-top: 15px;
-    line-height: 1.5;
-}
-
-/* MODAL */
-
-.modal-bg {
-    position: fixed;
-    inset: 0;
-
-    background: rgba(3,8,14,0.72);
-
-    display: none;
-
-    align-items: center;
-    justify-content: center;
-
-    padding: 20px;
-
-    z-index: 100;
-
-    backdrop-filter: blur(8px);
-}
-
-.modal {
-    width: 100%;
-    max-width: 520px;
-
-    background:
-        linear-gradient(
-            145deg,
-            #1d3041,
-            #162635
-        );
-
-    border: 1px solid rgba(255,255,255,0.12);
-
-    border-radius: 24px;
-
-    padding: 25px;
-
-    max-height: 90vh;
-
-    overflow-y: auto;
-
-    box-shadow:
-        0 25px 80px rgba(0,0,0,0.35);
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.modal-header h2 {
-    margin: 0;
-}
-
-.close {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 28px;
-    cursor: pointer;
-}
-
-.field {
-    margin-top: 18px;
-}
-
-.field label {
-    display: block;
-    color: #a6b4c3;
-    font-size: 13px;
-    margin-bottom: 7px;
-}
-
+.auth-input,
 .field input,
-.field textarea {
-    width: 100%;
-    padding: 13px;
+.field textarea{
+  width:100%;
+  padding:13px;
 
-    background: rgba(5,15,25,0.65);
+  background:#f8faff;
+  border:1px solid #dfe6f1;
 
-    border: 1px solid rgba(255,255,255,0.10);
+  border-radius:11px;
+  color:var(--text);
+  font-size:15px;
 
-    border-radius: 10px;
-
-    color: white;
-
-    font-size: 15px;
-
-    outline: none;
+  outline:none;
 }
 
+.auth-input:focus,
 .field input:focus,
-.field textarea:focus {
-    border-color: rgba(114,245,164,0.50);
+.field textarea:focus{
+  border-color:#8ebcff;
+  box-shadow:0 0 0 3px rgba(104,169,255,.12);
 }
 
-.field textarea {
-    min-height: 80px;
-    resize: vertical;
+.auth-input{
+  margin-bottom:11px;
 }
 
-.range-row {
-    display: flex;
-    gap: 10px;
-    align-items: center;
+.auth-switch{
+  text-align:center;
+  color:#8190a7;
+  margin-top:17px;
+  cursor:pointer;
+  font-size:13px;
 }
 
-.range-row input {
-    flex: 1;
+.auth-message{
+  color:#43bd83;
+  text-align:center;
+  margin-top:14px;
+  line-height:1.5;
 }
 
-.range-number {
-    width: 45px;
-    text-align: center;
-    color: #72f5a4;
-    font-weight: bold;
+.auth-error{
+  color:#ed6f83;
+  text-align:center;
+  margin-top:14px;
+  line-height:1.5;
 }
 
-.save-button {
-    margin-top: 25px;
+/* =========================
+   MODAL
+========================= */
+
+.modal-bg{
+  position:fixed;
+  inset:0;
+
+  background:rgba(32,45,68,.42);
+  backdrop-filter:blur(7px);
+
+  display:none;
+  align-items:center;
+  justify-content:center;
+
+  padding:20px;
+  z-index:100;
 }
 
-/* MOBILE */
+.modal{
+  width:100%;
+  max-width:540px;
 
-@media(max-width:800px) {
+  background:#fff;
 
-    .stats {
-        grid-template-columns: repeat(2, 1fr);
-    }
+  border:1px solid #e3e9f3;
+  border-radius:25px;
 
+  padding:24px;
+
+  max-height:90vh;
+  overflow-y:auto;
+
+  box-shadow:0 30px 80px rgba(45,65,100,.22);
+
+  animation:modalIn .25s ease;
 }
 
-@media(max-width:700px) {
-
-    .cards {
-        grid-template-columns: repeat(2,1fr);
-    }
-
-    .score {
-        font-size: 70px;
-    }
-
-    .user-email {
-        display: none;
-    }
-
+@keyframes modalIn{
+  from{
+    opacity:0;
+    transform:translateY(20px) scale(.97);
+  }
+  to{
+    opacity:1;
+    transform:none;
+  }
 }
 
-@media(max-width:450px) {
-
-    .cards {
-        grid-template-columns: 1fr;
-    }
-
-    .stats {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .hero {
-        padding: 25px 15px;
-    }
-
+.modal-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
+.modal-header h2{
+  margin:0;
+}
+
+.close{
+  background:none;
+  border:0;
+  color:#637087;
+  font-size:28px;
+  cursor:pointer;
+}
+
+.field{
+  margin-top:16px;
+}
+
+.field label{
+  display:block;
+  color:#7f8ca2;
+  font-size:12px;
+  margin-bottom:7px;
+}
+
+.field textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+.range-row{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+.range-row input{
+  flex:1;
+}
+
+.range-number{
+  width:45px;
+  text-align:center;
+  color:#4cc88d;
+  font-weight:1000;
+}
+
+/* =========================
+   PROFILE
+========================= */
+
+.profile-preview{
+  text-align:center;
+  padding:10px 0 18px;
+}
+
+.profile-name{
+  font-size:20px;
+  font-weight:1000;
+  margin-top:9px;
+}
+
+.emoji-grid{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:8px;
+}
+
+.color-grid{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:8px;
+}
+
+.emoji-choice,
+.color-choice{
+  height:45px;
+  border-radius:11px;
+  border:1px solid #dfe6f0;
+  background:#f7f9fc;
+  cursor:pointer;
+  transition:.15s;
+}
+
+.emoji-choice:hover,
+.color-choice:hover{
+  transform:scale(1.04);
+}
+
+.emoji-choice.selected,
+.color-choice.selected{
+  outline:3px solid #69dba2;
+}
+
+.color-choice{
+  height:32px;
+}
+
+/* =========================
+   LEVEL UP
+========================= */
+
+.levelup{
+  position:fixed;
+  inset:0;
+
+  display:none;
+  place-items:center;
+
+  z-index:300;
+
+  background:rgba(39,53,77,.45);
+  backdrop-filter:blur(8px);
+}
+
+.levelup-box{
+  width:min(420px,calc(100% - 35px));
+  text-align:center;
+
+  background:white;
+  border-radius:30px;
+  padding:35px;
+
+  box-shadow:
+    0 30px 100px rgba(57,76,110,.3);
+
+  animation:levelPop .45s cubic-bezier(.2,1.4,.4,1);
+}
+
+@keyframes levelPop{
+  from{
+    opacity:0;
+    transform:scale(.5) rotate(-5deg);
+  }
+  to{
+    opacity:1;
+    transform:scale(1) rotate(0);
+  }
+}
+
+.levelup-icon{
+  font-size:70px;
+  animation:bounce 1s infinite alternate;
+}
+
+@keyframes bounce{
+  from{transform:translateY(0)}
+  to{transform:translateY(-10px)}
+}
+
+.levelup-box h2{
+  color:#8c72ef;
+  font-size:32px;
+  margin:10px 0;
+}
+
+.levelup-box p{
+  color:#718098;
+}
+
+.levelup-box button{
+  border:0;
+  background:linear-gradient(135deg,#9b7cff,#68a9ff);
+  color:#fff;
+  padding:13px 25px;
+  border-radius:999px;
+  font-weight:1000;
+  margin-top:10px;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:25px;
+
+  transform:translateX(-50%) translateY(20px);
+  opacity:0;
+
+  pointer-events:none;
+
+  background:#26334a;
+  color:#fff;
+
+  padding:12px 18px;
+  border-radius:999px;
+
+  z-index:400;
+  transition:.25s;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+/* =========================
+   CONFETTI
+========================= */
+
+.confetti{
+  position:fixed;
+  width:10px;
+  height:16px;
+  top:-30px;
+  z-index:350;
+  pointer-events:none;
+  animation:confettiFall 2.5s linear forwards;
+}
+
+@keyframes confettiFall{
+  to{
+    transform:
+      translateY(110vh)
+      rotate(720deg);
+  }
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:850px){
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .achievement-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:700px){
+
+  .cards{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .score{
+    font-size:70px;
+  }
+
+  .user-email{
+    display:none;
+  }
+
+  .growth{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:450px){
+
+  .container{
+    width:min(100% - 20px,1100px);
+  }
+
+  .cards{
+    grid-template-columns:1fr;
+  }
+
+  .hero{
+    padding:25px 15px;
+  }
+
+  .emoji-grid{
+    grid-template-columns:repeat(4,1fr);
+  }
+
+  .color-grid{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .achievement-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .header{
+    gap:8px;
+  }
+
+  .logo{
+    font-size:20px;
+  }
+}
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN SCREEN -->
+<!-- =========================
+     LOGIN
+========================= -->
 
 <div id="authScreen" class="auth-screen">
 
-    <div class="auth-box">
+  <div class="auth-box">
 
-        <div class="auth-logo">
-            MY DAY
-        </div>
-
-        <div
-            class="auth-subtitle"
-            id="authTitle"
-        >
-            나의 하루를 기록하세요
-        </div>
-
-        <input
-            class="auth-input"
-            type="email"
-            id="email"
-            placeholder="이메일"
-        >
-
-        <input
-            class="auth-input"
-            type="password"
-            id="password"
-            placeholder="비밀번호"
-        >
-
-        <button
-            class="auth-button"
-            id="authButton"
-            onclick="handleAuth()"
-        >
-            로그인
-        </button>
-
-        <div
-            class="auth-switch"
-            id="authSwitch"
-            onclick="toggleAuthMode()"
-        >
-            처음이신가요? 회원가입
-        </div>
-
-        <div
-            id="authMessage"
-            class="auth-message"
-        ></div>
-
-        <div
-            id="authError"
-            class="auth-error"
-        ></div>
-
+    <div class="auth-logo">
+      MY <span>DAY</span>
     </div>
+
+    <div
+      class="auth-subtitle"
+      id="authTitle">
+      나의 하루를 기록하세요
+    </div>
+
+    <input
+      class="auth-input"
+      type="email"
+      id="email"
+      placeholder="이메일">
+
+    <input
+      class="auth-input"
+      type="password"
+      id="password"
+      placeholder="비밀번호">
+
+    <button
+      class="auth-button"
+      id="authButton"
+      onclick="handleAuth()">
+      로그인
+    </button>
+
+    <div
+      class="auth-switch"
+      id="authSwitch"
+      onclick="toggleAuthMode()">
+      처음이신가요? 회원가입
+    </div>
+
+    <div id="authMessage" class="auth-message"></div>
+    <div id="authError" class="auth-error"></div>
+
+  </div>
 
 </div>
 
 
-<!-- MAIN APP -->
+<!-- =========================
+     APP
+========================= -->
 
-<div id="app" style="display:none;">
+<div id="app" style="display:none">
 
 <div class="container">
 
-    <div class="header">
+<!-- HEADER -->
 
-        <div class="logo">
-            MY DAY
-        </div>
+<div class="header">
 
-        <div class="user-area">
+  <div class="logo">
+    MY <span>DAY</span>
+  </div>
 
-            <div
-                class="user-email"
-                id="userEmail"
-            ></div>
+  <div class="user-area">
 
-            <button
-                class="logout"
-                onclick="logout()"
-            >
-                로그아웃
-            </button>
+    <button
+      class="profile-mini"
+      onclick="openProfileModal()">
 
-        </div>
+      <div
+        class="avatar"
+        id="miniAvatar">
+        🌱
+      </div>
 
-    </div>
+      <div
+        class="user-email"
+        id="userEmail">
+      </div>
 
+    </button>
 
-    <div class="hero">
+    <button
+      class="btn logout"
+      onclick="logout()">
+      로그아웃
+    </button>
 
-        <div class="small-title">
-            TODAY SCORE
-        </div>
-
-        <div
-            class="score"
-            id="score"
-        >
-            0
-        </div>
-
-        <div
-            class="message"
-            id="message"
-        >
-            오늘의 데이터를 입력해보세요 🌱
-        </div>
-
-        <button
-            class="main-button"
-            onclick="openModal()"
-        >
-            ＋ 오늘 기록하기
-        </button>
-
-    </div>
-
-
-    <div class="cards">
-
-        <div class="card">
-
-            <div class="icon">😴</div>
-
-            <div class="card-title">
-                수면
-            </div>
-
-            <div
-                class="value"
-                id="sleepValue"
-            >
-                -
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="icon">📚</div>
-
-            <div class="card-title">
-                공부
-            </div>
-
-            <div
-                class="value"
-                id="studyValue"
-            >
-                -
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="icon">🏃</div>
-
-            <div class="card-title">
-                운동
-            </div>
-
-            <div
-                class="value"
-                id="exerciseValue"
-            >
-                -
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="icon">😊</div>
-
-            <div class="card-title">
-                기분
-            </div>
-
-            <div
-                class="value"
-                id="moodValue"
-            >
-                -
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="icon">⚡</div>
-
-            <div class="card-title">
-                집중도
-            </div>
-
-            <div
-                class="value"
-                id="focusValue"
-            >
-                -
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="icon">💰</div>
-
-            <div class="card-title">
-                오늘 지출
-            </div>
-
-            <div
-                class="value"
-                id="moneyValue"
-            >
-                -
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="section">
-
-        <h2>
-            📈 나의 기록
-        </h2>
-
-        <div class="stats">
-
-            <div class="stat">
-
-                <div class="stat-title">
-                    평균 점수
-                </div>
-
-                <div
-                    class="stat-value"
-                    id="averageScore"
-                >
-                    0점
-                </div>
-
-            </div>
-
-
-            <div class="stat">
-
-                <div class="stat-title">
-                    최고 점수
-                </div>
-
-                <div
-                    class="stat-value"
-                    id="bestScore"
-                >
-                    0점
-                </div>
-
-            </div>
-
-
-            <div class="stat">
-
-                <div class="stat-title">
-                    누적 공부
-                </div>
-
-                <div
-                    class="stat-value"
-                    id="totalStudy"
-                >
-                    0시간
-                </div>
-
-            </div>
-
-
-            <div class="stat">
-
-                <div class="stat-title">
-                    누적 운동
-                </div>
-
-                <div
-                    class="stat-value"
-                    id="totalExercise"
-                >
-                    0시간
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="section">
-
-        <h2>
-            📊 최근 기록
-        </h2>
-
-        <div
-            class="chart"
-            id="chart"
-        >
-
-            <div class="empty">
-                아직 기록이 없습니다.
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="section">
-
-        <h2>
-            🧠 MY INSIGHT
-        </h2>
-
-        <div class="insight">
-
-            <div class="insight-title">
-                오늘의 분석
-            </div>
-
-            <div
-                class="insight-text"
-                id="insight"
-            >
-                기록을 쌓으면
-                나만의 생활 패턴을 분석해드려요.
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="section">
-
-        <h2>
-            📅 기록 히스토리
-        </h2>
-
-        <div
-            class="history"
-            id="history"
-        >
-
-            <div class="empty">
-                아직 기록이 없습니다.
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
+  </div>
 
 </div>
 
 
-<!-- RECORD MODAL -->
+<!-- HERO -->
+
+<div class="hero">
+
+  <div class="small-title">
+    TODAY SCORE
+  </div>
+
+  <div
+    class="date"
+    id="todayDate">
+  </div>
+
+  <div
+    class="score"
+    id="score">
+    0
+  </div>
+
+  <div
+    class="message"
+    id="message">
+    오늘의 데이터를 입력해보세요 🌱
+  </div>
+
+
+  <!-- LEVEL -->
+
+  <div class="level-card">
+
+    <div class="level-top">
+
+      <div>
+
+        <div class="level-name">
+
+          <span id="profileEmoji">
+            🌱
+          </span>
+
+          <span id="profileName">
+            MY DAY USER
+          </span>
+
+        </div>
+
+        <div
+          class="level-title"
+          id="levelTitle">
+          🌱 새싹
+        </div>
+
+      </div>
+
+      <div class="level-badge">
+        LEVEL
+        <span id="level">
+          1
+        </span>
+      </div>
+
+    </div>
+
+
+    <div class="xp-text">
+
+      <span id="xpText">
+        0 / 100 XP
+      </span>
+
+      <span id="nextXp">
+        다음 레벨까지 100 XP
+      </span>
+
+    </div>
+
+    <div class="xp-bar">
+      <div
+        class="xp-inner"
+        id="xpInner">
+      </div>
+    </div>
+
+  </div>
+
+
+  <button
+    class="main-button"
+    onclick="openModal()">
+
+    ＋ 오늘 기록하기
+
+  </button>
+
+</div>
+
+
+<!-- TODAY CARDS -->
+
+<div class="cards">
+
+  <div class="card">
+    <div class="icon">😴</div>
+    <div class="card-title">수면</div>
+    <div class="value" id="sleepValue">-</div>
+  </div>
+
+  <div class="card">
+    <div class="icon">📚</div>
+    <div class="card-title">공부</div>
+    <div class="value" id="studyValue">-</div>
+  </div>
+
+  <div class="card">
+    <div class="icon">🏃</div>
+    <div class="card-title">운동</div>
+    <div class="value" id="exerciseValue">-</div>
+  </div>
+
+  <div class="card">
+    <div class="icon">😊</div>
+    <div class="card-title">기분</div>
+    <div class="value" id="moodValue">-</div>
+  </div>
+
+  <div class="card">
+    <div class="icon">⚡</div>
+    <div class="card-title">집중도</div>
+    <div class="value" id="focusValue">-</div>
+  </div>
+
+  <div class="card">
+    <div class="icon">💰</div>
+    <div class="card-title">오늘 지출</div>
+    <div class="value" id="moneyValue">-</div>
+  </div>
+
+</div>
+
+
+<!-- GROWTH -->
+
+<div class="section">
+
+  <h2>
+    🌱 나의 성장
+  </h2>
+
+  <div class="growth">
+
+    <div class="growth-box">
+
+      <div class="stat-title">
+        연속 기록
+      </div>
+
+      <div
+        class="growth-big"
+        id="streak">
+        0일 🔥
+      </div>
+
+      <div class="growth-sub">
+        꾸준함이 가장 강력한 능력이에요
+      </div>
+
+    </div>
+
+
+    <div class="growth-box">
+
+      <div class="stat-title">
+        누적 경험치
+      </div>
+
+      <div
+        class="growth-big"
+        id="totalXP">
+        0 XP
+      </div>
+
+      <div class="growth-sub">
+        기록하고 성장할수록 레벨 UP
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- STATS -->
+
+<div class="section">
+
+  <h2>
+    📈 나의 기록
+  </h2>
+
+  <div class="stats">
+
+    <div class="stat">
+      <div class="stat-title">
+        평균 점수
+      </div>
+      <div
+        class="stat-value"
+        id="averageScore">
+        0점
+      </div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-title">
+        최고 점수
+      </div>
+      <div
+        class="stat-value"
+        id="bestScore">
+        0점
+      </div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-title">
+        누적 공부
+      </div>
+      <div
+        class="stat-value"
+        id="totalStudy">
+        0시간
+      </div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-title">
+        누적 운동
+      </div>
+      <div
+        class="stat-value"
+        id="totalExercise">
+        0시간
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- CHART -->
+
+<div class="section">
+
+  <h2>
+    📊 최근 기록
+  </h2>
+
+  <div
+    class="chart"
+    id="chart">
+
+    <div class="empty">
+      아직 기록이 없습니다.
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- INSIGHT -->
+
+<div class="section">
+
+  <h2>
+    🧠 MY INSIGHT
+  </h2>
+
+  <div class="insight">
+
+    <div class="insight-title">
+      오늘의 분석
+    </div>
+
+    <div
+      class="insight-text"
+      id="insight">
+      기록을 쌓으면 나만의 생활 패턴을 분석해드려요.
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ACHIEVEMENTS -->
+
+<div class="section">
+
+  <h2>
+    🏆 나의 업적
+  </h2>
+
+  <div
+    class="achievement-grid"
+    id="achievementGrid">
+  </div>
+
+</div>
+
+
+<!-- HISTORY -->
+
+<div class="section">
+
+  <h2>
+    📅 기록 히스토리
+  </h2>
+
+  <div
+    class="history"
+    id="history">
+
+    <div class="empty">
+      아직 기록이 없습니다.
+    </div>
+
+  </div>
+
+</div>
+
+</div>
+</div>
+
+
+<!-- =========================
+     RECORD MODAL
+========================= -->
 
 <div
-    class="modal-bg"
-    id="modalBg"
->
+  class="modal-bg"
+  id="modalBg">
 
-<div class="modal">
+  <div class="modal">
 
     <div class="modal-header">
 
-        <h2>
-            오늘 기록하기
-        </h2>
+      <h2>
+        🌱 오늘 기록하기
+      </h2>
 
-        <button
-            class="close"
-            onclick="closeModal()"
-        >
-            ×
-        </button>
+      <button
+        class="close"
+        onclick="closeModal()">
+        ×
+      </button>
 
     </div>
 
 
     <div class="field">
 
-        <label>
-            수면 시간 (시간)
-        </label>
+      <label>
+        수면 시간 (시간)
+      </label>
+
+      <input
+        type="number"
+        id="sleep"
+        min="0"
+        max="24"
+        step="0.1"
+        placeholder="예: 7.5">
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        공부 시간 (분)
+      </label>
+
+      <input
+        type="number"
+        id="study"
+        min="0"
+        placeholder="예: 120">
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        운동 시간 (분)
+      </label>
+
+      <input
+        type="number"
+        id="exercise"
+        min="0"
+        placeholder="예: 45">
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        오늘 지출 (원)
+      </label>
+
+      <input
+        type="number"
+        id="money"
+        min="0"
+        placeholder="예: 23000">
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        기분
+      </label>
+
+      <div class="range-row">
 
         <input
-            type="number"
-            id="sleep"
-            min="0"
-            max="24"
-            step="0.1"
-            placeholder="예: 7.5"
-        >
+          type="range"
+          min="0"
+          max="100"
+          value="70"
+          id="mood"
+          oninput="updateMood()">
 
-    </div>
-
-
-    <div class="field">
-
-        <label>
-            공부 시간 (분)
-        </label>
-
-        <input
-            type="number"
-            id="study"
-            min="0"
-            placeholder="예: 120"
-        >
-
-    </div>
-
-
-    <div class="field">
-
-        <label>
-            운동 시간 (분)
-        </label>
-
-        <input
-            type="number"
-            id="exercise"
-            min="0"
-            placeholder="예: 45"
-        >
-
-    </div>
-
-
-    <div class="field">
-
-        <label>
-            오늘 지출 (원)
-        </label>
-
-        <input
-            type="number"
-            id="money"
-            min="0"
-            placeholder="예: 23000"
-        >
-
-    </div>
-
-
-    <div class="field">
-
-        <label>
-            기분
-        </label>
-
-        <div class="range-row">
-
-            <input
-                type="range"
-                min="0"
-                max="100"
-                value="70"
-                id="mood"
-                oninput="updateMood()"
-            >
-
-            <div
-                class="range-number"
-                id="moodNumber"
-            >
-                70
-            </div>
-
+        <div
+          class="range-number"
+          id="moodNumber">
+          70
         </div>
 
+      </div>
+
     </div>
 
 
     <div class="field">
 
-        <label>
-            집중도
-        </label>
+      <label>
+        집중도
+      </label>
 
-        <div class="range-row">
+      <div class="range-row">
 
-            <input
-                type="range"
-                min="0"
-                max="100"
-                value="70"
-                id="focus"
-                oninput="updateFocus()"
-            >
+        <input
+          type="range"
+          min="0"
+          max="100"
+          value="70"
+          id="focus"
+          oninput="updateFocus()">
 
-            <div
-                class="range-number"
-                id="focusNumber"
-            >
-                70
-            </div>
-
+        <div
+          class="range-number"
+          id="focusNumber">
+          70
         </div>
 
+      </div>
+
     </div>
 
 
     <div class="field">
 
-        <label>
-            오늘 한마디
-        </label>
+      <label>
+        오늘 한마디
+      </label>
 
-        <textarea
-            id="note"
-            placeholder="오늘 하루는 어땠나요?"
-        ></textarea>
+      <textarea
+        id="note"
+        placeholder="오늘 하루는 어땠나요?">
+      </textarea>
 
     </div>
 
 
     <button
-        class="save-button"
-        onclick="saveRecord()"
-    >
-        클라우드에 저장하기
+      class="save-button"
+      onclick="saveRecord()">
+
+      ☁️ 오늘의 성장 저장하기
+
     </button>
+
+  </div>
 
 </div>
 
+
+<!-- =========================
+     PROFILE MODAL
+========================= -->
+
+<div
+  class="modal-bg"
+  id="profileModal">
+
+  <div class="modal">
+
+    <div class="modal-header">
+
+      <h2>
+        ✨ 내 프로필 꾸미기
+      </h2>
+
+      <button
+        class="close"
+        onclick="closeProfileModal()">
+        ×
+      </button>
+
+    </div>
+
+
+    <div class="profile-preview">
+
+      <div
+        class="avatar big"
+        id="previewAvatar">
+        🌱
+      </div>
+
+      <div
+        class="profile-name"
+        id="previewName">
+        MY DAY USER
+      </div>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        닉네임
+      </label>
+
+      <input
+        id="profileNameInput"
+        maxlength="20"
+        placeholder="나만의 닉네임">
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        프로필 아이콘
+      </label>
+
+      <div
+        class="emoji-grid"
+        id="emojiGrid">
+      </div>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        프로필 색상
+      </label>
+
+      <div
+        class="color-grid"
+        id="colorGrid">
+      </div>
+
+    </div>
+
+
+    <button
+      class="save-button"
+      onclick="saveProfile()">
+
+      ✨ 프로필 저장하기
+
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     LEVEL UP
+========================= -->
+
+<div
+  class="levelup"
+  id="levelup">
+
+  <div class="levelup-box">
+
+    <div class="levelup-icon">
+      🎉
+    </div>
+
+    <h2>
+      LEVEL UP!
+    </h2>
+
+    <p id="levelupText">
+      새로운 레벨에 도달했어요!
+    </p>
+
+    <button onclick="closeLevelup()">
+      계속 성장하기 🚀
+    </button>
+
+  </div>
+
+</div>
+
+
+<div
+  class="toast"
+  id="toast">
 </div>
 
 
 <script>
 
-/* =========================
-   SUPABASE 설정
-========================= */
+/* =====================================================
+   SUPABASE
+===================================================== */
 
 const SUPABASE_URL =
-    "https://raasbxkmehjprsjmjxtj.supabase.co";
+"https://raasbxkmehjprsjmjxtj.supabase.co";
 
 const SUPABASE_KEY =
-    "sb_publishable_BALs2dGrARhYLLa3-5Uc9Q_UAHF_4Vh";
+"sb_publishable_BALs2dGrARhYLLa3-5UcQ_UAHF_4Vh";
 
 const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
 
-/* =========================
-   상태
-========================= */
+/* =====================================================
+   GLOBAL
+===================================================== */
 
 let isSignup = false;
 let currentUser = null;
 let records = [];
 
+const emojis = [
+  "🌱","🐰","🐻","🐱",
+  "🐶","🦊","🐼","🐸",
+  "🐵","🐨","🦄","⭐",
+  "🐣","🐯","🐹","🍀",
+  "🌸","🍓","🍋","🍒",
+  "🦋","🐳","🪐","🤖"
+];
 
-/* =========================
-   인증 화면 전환
-========================= */
+const colors = [
+  "#57d99a",
+  "#68a9ff",
+  "#9d7cff",
+  "#ff83b5",
+  "#ffd35a",
+  "#ff9b65",
+  "#61d6d0",
+  "#8f9cff"
+];
 
-function toggleAuthMode() {
+let profile = {
+  name:"MY DAY USER",
+  emoji:"🌱",
+  color:"#57d99a"
+};
 
-    isSignup = !isSignup;
 
-    const title =
-        document.getElementById("authTitle");
+/* =====================================================
+   LEVEL TITLES
+===================================================== */
 
-    const button =
-        document.getElementById("authButton");
+const levelTitles = [
+  {min:1,title:"🌱 새싹"},
+  {min:3,title:"🌿 꾸준러"},
+  {min:5,title:"🔥 열정러"},
+  {min:10,title:"⚡ 집중왕"},
+  {min:15,title:"📚 성장러"},
+  {min:20,title:"💎 루틴장인"},
+  {min:30,title:"👑 MY DAY MASTER"},
+  {min:50,title:"🌌 LEGEND"}
+];
 
-    const switchText =
-        document.getElementById("authSwitch");
+function getLevelTitle(level){
 
-    clearAuthMessages();
+  let result = levelTitles[0].title;
 
-    if (isSignup) {
+  for(const item of levelTitles){
 
-        title.innerText =
-            "MY DAY 계정을 만들어보세요";
-
-        button.innerText =
-            "회원가입";
-
-        switchText.innerText =
-            "이미 계정이 있나요? 로그인";
-
-    } else {
-
-        title.innerText =
-            "나의 하루를 기록하세요";
-
-        button.innerText =
-            "로그인";
-
-        switchText.innerText =
-            "처음이신가요? 회원가입";
-
+    if(level >= item.min){
+      result = item.title;
     }
 
+  }
+
+  return result;
 }
 
 
-/* =========================
-   메시지
-========================= */
+/* =====================================================
+   DOM
+===================================================== */
 
-function clearAuthMessages() {
-
-    document.getElementById(
-        "authMessage"
-    ).innerText = "";
-
-    document.getElementById(
-        "authError"
-    ).innerText = "";
-
+function $(id){
+  return document.getElementById(id);
 }
 
 
-/* =========================
-   회원가입 / 로그인
-========================= */
+/* =====================================================
+   AUTH
+===================================================== */
 
-async function handleAuth() {
+function clearAuthMessages(){
 
-    clearAuthMessages();
-
-    const email =
-        document.getElementById(
-            "email"
-        ).value.trim();
-
-    const password =
-        document.getElementById(
-            "password"
-        ).value;
-
-    if (!email || !password) {
-
-        document.getElementById(
-            "authError"
-        ).innerText =
-            "이메일과 비밀번호를 입력해주세요.";
-
-        return;
-
-    }
-
-    if (password.length < 6) {
-
-        document.getElementById(
-            "authError"
-        ).innerText =
-            "비밀번호는 6자 이상이어야 합니다.";
-
-        return;
-
-    }
-
-    const button =
-        document.getElementById(
-            "authButton"
-        );
-
-    button.disabled = true;
-
-    button.innerText =
-        "처리 중...";
-
-    try {
-
-        if (isSignup) {
-
-            const {
-                data,
-                error
-            } =
-            await supabaseClient.auth.signUp({
-                email,
-                password
-            });
-
-            if (error) {
-                throw error;
-            }
-
-            document.getElementById(
-                "authMessage"
-            ).innerText =
-                "회원가입이 완료되었습니다. 이메일 인증이 필요한 경우 메일함에서 인증 후 로그인해주세요.";
-
-        } else {
-
-            const {
-                data,
-                error
-            } =
-            await supabaseClient.auth.signInWithPassword({
-                email,
-                password
-            });
-
-            if (error) {
-                throw error;
-            }
-
-            if (data.user) {
-
-                currentUser =
-                    data.user;
-
-                showApp();
-
-                await loadRecords();
-
-            }
-
-        }
-
-    } catch (error) {
-
-        document.getElementById(
-            "authError"
-        ).innerText =
-            error.message ||
-            "로그인 중 오류가 발생했습니다.";
-
-    }
-
-    button.disabled = false;
-
-    button.innerText =
-        isSignup
-        ? "회원가입"
-        : "로그인";
+  $("authMessage").innerText="";
+  $("authError").innerText="";
 
 }
 
 
-/* =========================
-   로그아웃
-========================= */
+function toggleAuthMode(){
 
-async function logout() {
+  isSignup = !isSignup;
 
-    await supabaseClient.auth.signOut();
+  clearAuthMessages();
 
-    currentUser = null;
+  $("authTitle").innerText =
+    isSignup
+      ? "MY DAY 계정을 만들어보세요"
+      : "나의 하루를 기록하세요";
 
-    records = [];
+  $("authButton").innerText =
+    isSignup
+      ? "회원가입"
+      : "로그인";
 
-    document.getElementById(
-        "app"
-    ).style.display = "none";
-
-    document.getElementById(
-        "authScreen"
-    ).style.display = "flex";
-
-}
-
-
-/* =========================
-   앱 표시
-========================= */
-
-function showApp() {
-
-    document.getElementById(
-        "authScreen"
-    ).style.display = "none";
-
-    document.getElementById(
-        "app"
-    ).style.display = "block";
-
-    document.getElementById(
-        "userEmail"
-    ).innerText =
-        currentUser.email;
+  $("authSwitch").innerText =
+    isSignup
+      ? "이미 계정이 있나요? 로그인"
+      : "처음이신가요? 회원가입";
 
 }
 
 
-/* =========================
-   날짜
-========================= */
+async function handleAuth(){
 
-function getToday() {
+  clearAuthMessages();
 
-    const now = new Date();
+  const email =
+    $("email").value.trim();
 
-    const year =
-        now.getFullYear();
+  const password =
+    $("password").value;
 
-    const month =
-        String(
-            now.getMonth() + 1
-        ).padStart(2, "0");
+  if(!email || !password){
 
-    const day =
-        String(
-            now.getDate()
-        ).padStart(2, "0");
+    $("authError").innerText =
+      "이메일과 비밀번호를 입력해주세요.";
 
-    return `${year}-${month}-${day}`;
+    return;
+  }
 
-}
+  if(password.length < 6){
 
+    $("authError").innerText =
+      "비밀번호는 6자 이상이어야 합니다.";
 
-/* =========================
-   모달
-========================= */
+    return;
+  }
 
-function openModal() {
+  const button =
+    $("authButton");
 
-    document.getElementById(
-        "modalBg"
-    ).style.display =
-        "flex";
+  button.disabled = true;
+  button.innerText = "처리 중...";
 
-}
+  try{
 
-function closeModal() {
+    if(isSignup){
 
-    document.getElementById(
-        "modalBg"
-    ).style.display =
-        "none";
+      const {error} =
+        await supabaseClient.auth.signUp({
+          email,
+          password
+        });
 
-}
+      if(error) throw error;
 
+      $("authMessage").innerText =
+        "회원가입이 완료되었습니다. 이메일 인증이 필요하면 인증 후 로그인해주세요.";
 
-/* =========================
-   슬라이더
-========================= */
+    }else{
 
-function updateMood() {
-
-    document.getElementById(
-        "moodNumber"
-    ).innerText =
-        document.getElementById(
-            "mood"
-        ).value;
-
-}
-
-function updateFocus() {
-
-    document.getElementById(
-        "focusNumber"
-    ).innerText =
-        document.getElementById(
-            "focus"
-        ).value;
-
-}
-
-
-/* =========================
-   점수
-========================= */
-
-function calculateScore(
-    sleep,
-    study,
-    exercise,
-    mood,
-    focus
-) {
-
-    let sleepScore =
-        Math.min(
-            100,
-            Math.max(
-                0,
-                100 -
-                Math.abs(
-                    8 - sleep
-                ) * 20
-            )
-        );
-
-    let studyScore =
-        Math.min(
-            100,
-            study / 180 * 100
-        );
-
-    let exerciseScore =
-        Math.min(
-            100,
-            exercise / 60 * 100
-        );
-
-    return Math.round(
-        sleepScore * 0.20 +
-        studyScore * 0.15 +
-        exerciseScore * 0.15 +
-        mood * 0.25 +
-        focus * 0.25
-    );
-
-}
-
-
-/* =========================
-   기록 저장
-========================= */
-
-async function saveRecord() {
-
-    if (!currentUser) {
-
-        alert(
-            "먼저 로그인해주세요."
-        );
-
-        return;
-
-    }
-
-    const sleep =
-        Number(
-            document.getElementById(
-                "sleep"
-            ).value
-        );
-
-    const study =
-        Number(
-            document.getElementById(
-                "study"
-            ).value
-        ) || 0;
-
-    const exercise =
-        Number(
-            document.getElementById(
-                "exercise"
-            ).value
-        ) || 0;
-
-    const money =
-        Number(
-            document.getElementById(
-                "money"
-            ).value
-        ) || 0;
-
-    const mood =
-        Number(
-            document.getElementById(
-                "mood"
-            ).value
-        );
-
-    const focus =
-        Number(
-            document.getElementById(
-                "focus"
-            ).value
-        );
-
-    const note =
-        document.getElementById(
-            "note"
-        ).value;
-
-    if (!sleep) {
-
-        alert(
-            "수면 시간을 입력해주세요."
-        );
-
-        return;
-
-    }
-
-    const score =
-        calculateScore(
-            sleep,
-            study,
-            exercise,
-            mood,
-            focus
-        );
-
-    const record = {
-
-        user_id:
-            currentUser.id,
-
-        record_date:
-            getToday(),
-
-        sleep,
-
-        study,
-
-        exercise,
-
-        money,
-
-        mood,
-
-        focus,
-
-        note,
-
-        score
-
-    };
-
-    const button =
-        document.querySelector(
-            ".save-button"
-        );
-
-    button.disabled = true;
-
-    button.innerText =
-        "저장 중...";
-
-    try {
-
-        const {
-            error
-        } =
-        await supabaseClient
-            .from("daily_records")
-            .upsert(
-                record,
-                {
-                    onConflict:
-                        "user_id,record_date"
-                }
-            );
-
-        if (error) {
-            throw error;
-        }
-
-        alert(
-            "☁️ 기록이 저장되었습니다!"
-        );
-
-        closeModal();
-
-        await loadRecords();
-
-    } catch (error) {
-
-        alert(
-            "저장 실패: " +
-            error.message
-        );
-
-    }
-
-    button.disabled = false;
-
-    button.innerText =
-        "클라우드에 저장하기";
-
-}
-
-
-/* =========================
-   기록 불러오기
-========================= */
-
-async function loadRecords() {
-
-    if (!currentUser) {
-        return;
-    }
-
-    const {
+      const {
         data,
         error
-    } =
-    await supabaseClient
-        .from("daily_records")
-        .select("*")
-        .eq(
-            "user_id",
-            currentUser.id
-        )
-        .order(
-            "record_date",
-            {
-                ascending: false
-            }
-        );
+      } =
+        await supabaseClient.auth.signInWithPassword({
+          email,
+          password
+        });
 
-    if (error) {
+      if(error) throw error;
 
-        console.error(error);
+      if(data.user){
 
-        alert(
-            "기록을 불러오지 못했습니다."
-        );
-
-        return;
-
-    }
-
-    records =
-        data || [];
-
-    updateAll();
-
-}
-
-
-/* =========================
-   전체 화면 업데이트
-========================= */
-
-function updateAll() {
-
-    if (
-        !records ||
-        records.length === 0
-    ) {
-
-        document.getElementById(
-            "score"
-        ).innerText = "0";
-
-        return;
-
-    }
-
-    updateToday(
-        records[0]
-    );
-
-    updateStats();
-
-    updateChart();
-
-    updateHistory();
-
-    updateInsight();
-
-}
-
-
-/* =========================
-   오늘
-========================= */
-
-function updateToday(data) {
-
-    document.getElementById(
-        "sleepValue"
-    ).innerText =
-        data.sleep + "시간";
-
-    document.getElementById(
-        "studyValue"
-    ).innerText =
-        data.study + "분";
-
-    document.getElementById(
-        "exerciseValue"
-    ).innerText =
-        data.exercise + "분";
-
-    document.getElementById(
-        "moodValue"
-    ).innerText =
-        data.mood + "점";
-
-    document.getElementById(
-        "focusValue"
-    ).innerText =
-        data.focus + "점";
-
-    document.getElementById(
-        "moneyValue"
-    ).innerText =
-        Number(
-            data.money
-        ).toLocaleString()
-        + "원";
-
-    document.getElementById(
-        "score"
-    ).innerText =
-        data.score;
-
-    if (data.score >= 90) {
-
-        document.getElementById(
-            "message"
-        ).innerText =
-            "완벽한 하루였어요! 🔥";
-
-    }
-
-    else if (data.score >= 80) {
-
-        document.getElementById(
-            "message"
-        ).innerText =
-            "정말 좋은 하루예요! 🌿";
-
-    }
-
-    else if (data.score >= 70) {
-
-        document.getElementById(
-            "message"
-        ).innerText =
-            "괜찮은 하루였어요 🙂";
-
-    }
-
-    else {
-
-        document.getElementById(
-            "message"
-        ).innerText =
-            "내일은 더 좋아질 거예요 🌱";
-
-    }
-
-}
-
-
-/* =========================
-   통계
-========================= */
-
-function updateStats() {
-
-    const scores =
-        records.map(
-            item =>
-                Number(item.score)
-        );
-
-    const average =
-        Math.round(
-            scores.reduce(
-                (a, b) => a + b,
-                0
-            ) / scores.length
-        );
-
-    const best =
-        Math.max(...scores);
-
-    const totalStudy =
-        records.reduce(
-            (sum, item) =>
-                sum +
-                Number(item.study),
-            0
-        );
-
-    const totalExercise =
-        records.reduce(
-            (sum, item) =>
-                sum +
-                Number(item.exercise),
-            0
-        );
-
-    document.getElementById(
-        "averageScore"
-    ).innerText =
-        average + "점";
-
-    document.getElementById(
-        "bestScore"
-    ).innerText =
-        best + "점";
-
-    document.getElementById(
-        "totalStudy"
-    ).innerText =
-        (totalStudy / 60)
-        .toFixed(1)
-        + "시간";
-
-    document.getElementById(
-        "totalExercise"
-    ).innerText =
-        (totalExercise / 60)
-        .toFixed(1)
-        + "시간";
-
-}
-
-
-/* =========================
-   그래프
-========================= */
-
-function updateChart() {
-
-    const chart =
-        document.getElementById(
-            "chart"
-        );
-
-    const recent =
-        records.slice(
-            0,
-            7
-        );
-
-    if (
-        recent.length === 0
-    ) {
-
-        chart.innerHTML =
-            '<div class="empty">아직 기록이 없습니다.</div>';
-
-        return;
-
-    }
-
-    chart.innerHTML = "";
-
-    recent
-        .slice()
-        .reverse()
-        .forEach(
-            item => {
-
-                const row =
-                    document.createElement(
-                        "div"
-                    );
-
-                row.className =
-                    "chart-row";
-
-                const date =
-                    document.createElement(
-                        "div"
-                    );
-
-                date.className =
-                    "chart-date";
-
-                date.innerText =
-                    item.record_date
-                        .slice(5);
-
-                const bar =
-                    document.createElement(
-                        "div"
-                    );
-
-                bar.className =
-                    "chart-bar";
-
-                const inner =
-                    document.createElement(
-                        "div"
-                    );
-
-                inner.className =
-                    "chart-inner";
-
-                inner.style.width =
-                    item.score + "%";
-
-                const score =
-                    document.createElement(
-                        "div"
-                    );
-
-                score.className =
-                    "chart-score";
-
-                score.innerText =
-                    item.score;
-
-                bar.appendChild(
-                    inner
-                );
-
-                row.appendChild(
-                    date
-                );
-
-                row.appendChild(
-                    bar
-                );
-
-                row.appendChild(
-                    score
-                );
-
-                chart.appendChild(
-                    row
-                );
-
-            }
-        );
-
-}
-
-
-/* =========================
-   히스토리
-========================= */
-
-function updateHistory() {
-
-    const box =
-        document.getElementById(
-            "history"
-        );
-
-    box.innerHTML = "";
-
-    records
-        .slice(
-            0,
-            10
-        )
-        .forEach(
-            item => {
-
-                const element =
-                    document.createElement(
-                        "div"
-                    );
-
-                element.className =
-                    "history-item";
-
-                const left =
-                    document.createElement(
-                        "div"
-                    );
-
-                const date =
-                    document.createElement(
-                        "div"
-                    );
-
-                date.className =
-                    "history-date";
-
-                date.innerText =
-                    item.record_date;
-
-                const note =
-                    document.createElement(
-                        "div"
-                    );
-
-                note.className =
-                    "history-note";
-
-                note.innerText =
-                    item.note ||
-                    "오늘의 기록";
-
-                left.appendChild(
-                    date
-                );
-
-                left.appendChild(
-                    note
-                );
-
-                const score =
-                    document.createElement(
-                        "div"
-                    );
-
-                score.className =
-                    "history-score";
-
-                score.innerText =
-                    item.score;
-
-                element.appendChild(
-                    left
-                );
-
-                element.appendChild(
-                    score
-                );
-
-                box.appendChild(
-                    element
-                );
-
-            }
-        );
-
-}
-
-
-/* =========================
-   인사이트
-========================= */
-
-function updateInsight() {
-
-    const insight =
-        document.getElementById(
-            "insight"
-        );
-
-    if (
-        records.length < 2
-    ) {
-
-        insight.innerText =
-            "기록이 2일 이상 쌓이면 생활 패턴을 분석해드려요.";
-
-        return;
-
-    }
-
-    const avgSleep =
-        records.reduce(
-            (sum, item) =>
-                sum +
-                Number(item.sleep),
-            0
-        ) / records.length;
-
-    const avgFocus =
-        records.reduce(
-            (sum, item) =>
-                sum +
-                Number(item.focus),
-            0
-        ) / records.length;
-
-    const avgMood =
-        records.reduce(
-            (sum, item) =>
-                sum +
-                Number(item.mood),
-            0
-        ) / records.length;
-
-    insight.innerText =
-        "지금까지 평균 수면은 "
-        + avgSleep.toFixed(1)
-        + "시간, 평균 집중도는 "
-        + Math.round(avgFocus)
-        + "점, 평균 기분은 "
-        + Math.round(avgMood)
-        + "점이에요. 기록이 더 쌓이면 MY DAY가 생활 패턴을 더 자세히 분석할 수 있어요.";
-
-}
-
-
-/* =========================
-   로그인 상태 확인
-========================= */
-
-async function checkSession() {
-
-    const {
-        data
-    } =
-    await supabaseClient
-        .auth
-        .getSession();
-
-    if (
-        data &&
-        data.session &&
-        data.session.user
-    ) {
-
-        currentUser =
-            data.session.user;
+        currentUser = data.user;
 
         showApp();
 
         await loadRecords();
 
+      }
+
     }
+
+  }catch(error){
+
+    $("authError").innerText =
+      error.message ||
+      "오류가 발생했습니다.";
+
+  }
+
+  button.disabled = false;
+
+  button.innerText =
+    isSignup
+      ? "회원가입"
+      : "로그인";
+}
+
+
+async function logout(){
+
+  await supabaseClient.auth.signOut();
+
+  currentUser = null;
+  records = [];
+
+  $("app").style.display="none";
+  $("authScreen").style.display="flex";
 
 }
 
 
-/* =========================
-   로그인 상태 변화 감지
-========================= */
+/* =====================================================
+   APP
+===================================================== */
 
-supabaseClient
-    .auth
-    .onAuthStateChange(
-        async (
-            event,
-            session
-        ) => {
+function showApp(){
 
-            if (
-                session &&
-                session.user
-            ) {
+  $("authScreen").style.display="none";
+  $("app").style.display="block";
 
-                currentUser =
-                    session.user;
+  $("userEmail").innerText =
+    currentUser.email;
 
-                showApp();
+  loadProfile();
 
-                await loadRecords();
+  $("todayDate").innerText =
+    new Date().toLocaleDateString(
+      "ko-KR",
+      {
+        year:"numeric",
+        month:"long",
+        day:"numeric",
+        weekday:"long"
+      }
+    );
 
-            }
+}
 
-        }
+
+function getToday(){
+
+  const d = new Date();
+
+  return `${d.getFullYear()}-${String(
+    d.getMonth()+1
+  ).padStart(2,"0")}-${String(
+    d.getDate()
+  ).padStart(2,"0")}`;
+
+}
+
+
+/* =====================================================
+   RECORD MODAL
+===================================================== */
+
+function openModal(){
+
+  $("modalBg").style.display="flex";
+
+}
+
+function closeModal(){
+
+  $("modalBg").style.display="none";
+
+}
+
+function updateMood(){
+
+  $("moodNumber").innerText =
+    $("mood").value;
+
+}
+
+function updateFocus(){
+
+  $("focusNumber").innerText =
+    $("focus").value;
+
+}
+
+
+/* =====================================================
+   SCORE
+===================================================== */
+
+function calculateScore(
+  sleep,
+  study,
+  exercise,
+  mood,
+  focus
+){
+
+  const sleepScore =
+    Math.min(
+      100,
+      Math.max(
+        0,
+        100 - Math.abs(8 - sleep) * 20
+      )
+    );
+
+  const studyScore =
+    Math.min(
+      100,
+      study / 180 * 100
+    );
+
+  const exerciseScore =
+    Math.min(
+      100,
+      exercise / 60 * 100
+    );
+
+  return Math.round(
+    sleepScore * .20 +
+    studyScore * .15 +
+    exerciseScore * .15 +
+    mood * .25 +
+    focus * .25
+  );
+
+}
+
+
+/* =====================================================
+   SAVE RECORD
+===================================================== */
+
+async function saveRecord(){
+
+  if(!currentUser){
+
+    alert("먼저 로그인해주세요.");
+
+    return;
+  }
+
+  const sleep =
+    Number($("sleep").value);
+
+  const study =
+    Number($("study").value) || 0;
+
+  const exercise =
+    Number($("exercise").value) || 0;
+
+  const money =
+    Number($("money").value) || 0;
+
+  const mood =
+    Number($("mood").value);
+
+  const focus =
+    Number($("focus").value);
+
+  const note =
+    $("note").value.trim();
+
+
+  if(!sleep){
+
+    alert("수면 시간을 입력해주세요.");
+
+    return;
+  }
+
+
+  const oldXP =
+    calculateTotalXP(records);
+
+  const oldLevel =
+    Math.floor(oldXP / 100) + 1;
+
+
+  const score =
+    calculateScore(
+      sleep,
+      study,
+      exercise,
+      mood,
+      focus
     );
 
 
-/* 시작 */
+  const record = {
+
+    user_id:currentUser.id,
+
+    record_date:getToday(),
+
+    sleep,
+    study,
+    exercise,
+    money,
+    mood,
+    focus,
+    note,
+    score
+
+  };
+
+
+  const button =
+    document.querySelector(".save-button");
+
+  button.disabled = true;
+  button.innerText = "저장 중...";
+
+
+  try{
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from("daily_records")
+        .upsert(
+          record,
+          {
+            onConflict:
+              "user_id,record_date"
+          }
+        );
+
+    if(error) throw error;
+
+
+    closeModal();
+
+    showToast(
+      "☁️ 오늘의 성장이 저장됐어요!"
+    );
+
+
+    $("sleep").value="";
+    $("study").value="";
+    $("exercise").value="";
+    $("money").value="";
+    $("note").value="";
+
+
+    await loadRecords();
+
+
+    const newXP =
+      calculateTotalXP(records);
+
+    const newLevel =
+      Math.floor(newXP / 100) + 1;
+
+
+    if(newLevel > oldLevel){
+
+      showLevelUp(newLevel);
+
+    }
+
+
+  }catch(error){
+
+    alert(
+      "저장 실패: " +
+      error.message
+    );
+
+  }
+
+
+  button.disabled = false;
+
+  button.innerText =
+    "☁️ 오늘의 성장 저장하기";
+
+}
+
+
+/* =====================================================
+   LOAD RECORDS
+===================================================== */
+
+async function loadRecords(){
+
+  if(!currentUser) return;
+
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("daily_records")
+      .select("*")
+      .eq(
+        "user_id",
+        currentUser.id
+      )
+      .order(
+        "record_date",
+        {
+          ascending:false
+        }
+      );
+
+
+  if(error){
+
+    console.error(error);
+
+    alert(
+      "기록을 불러오지 못했습니다."
+    );
+
+    return;
+  }
+
+
+  records = data || [];
+
+  updateAll();
+
+}
+
+
+/* =====================================================
+   TOTAL XP
+===================================================== */
+
+function calculateTotalXP(data){
+
+  return data.reduce(
+    (total,item) =>
+      total +
+      Math.max(
+        10,
+        Number(item.score || 0)
+      ),
+    0
+  );
+
+}
+
+
+/* =====================================================
+   UPDATE ALL
+===================================================== */
+
+function updateAll(){
+
+  if(!records.length){
+
+    updateGrowth();
+
+    updateAchievements();
+
+    return;
+  }
+
+
+  updateToday(records[0]);
+
+  updateStats();
+
+  updateChart();
+
+  updateHistory();
+
+  updateInsight();
+
+  updateGrowth();
+
+  updateAchievements();
+
+}
+
+
+/* =====================================================
+   TODAY
+===================================================== */
+
+function updateToday(d){
+
+  $("sleepValue").innerText =
+    d.sleep + "시간";
+
+  $("studyValue").innerText =
+    d.study + "분";
+
+  $("exerciseValue").innerText =
+    d.exercise + "분";
+
+  $("moodValue").innerText =
+    d.mood + "점";
+
+  $("focusValue").innerText =
+    d.focus + "점";
+
+  $("moneyValue").innerText =
+    Number(d.money)
+      .toLocaleString() + "원";
+
+  $("score").innerText =
+    d.score;
+
+
+  if(d.score >= 90){
+
+    $("message").innerText =
+      "완벽한 하루였어요! 🔥";
+
+  }else if(d.score >= 80){
+
+    $("message").innerText =
+      "정말 좋은 하루예요! 🌿";
+
+  }else if(d.score >= 70){
+
+    $("message").innerText =
+      "괜찮은 하루였어요 🙂";
+
+  }else{
+
+    $("message").innerText =
+      "내일은 더 좋아질 거예요 🌱";
+
+  }
+
+}
+
+
+/* =====================================================
+   STATS
+===================================================== */
+
+function updateStats(){
+
+  const scores =
+    records.map(
+      x => Number(x.score)
+    );
+
+  const avg =
+    Math.round(
+      scores.reduce(
+        (a,b)=>a+b,
+        0
+      ) / scores.length
+    );
+
+  const best =
+    Math.max(...scores);
+
+  const study =
+    records.reduce(
+      (sum,x) =>
+        sum + Number(x.study || 0),
+      0
+    );
+
+  const exercise =
+    records.reduce(
+      (sum,x) =>
+        sum + Number(x.exercise || 0),
+      0
+    );
+
+
+  $("averageScore").innerText =
+    avg + "점";
+
+  $("bestScore").innerText =
+    best + "점";
+
+  $("totalStudy").innerText =
+    (study / 60).toFixed(1) +
+    "시간";
+
+  $("totalExercise").innerText =
+    (exercise / 60).toFixed(1) +
+    "시간";
+
+}
+
+
+/* =====================================================
+   CHART
+===================================================== */
+
+function updateChart(){
+
+  const recent =
+    records
+      .slice(0,7)
+      .reverse();
+
+  $("chart").innerHTML="";
+
+
+  if(!recent.length){
+
+    $("chart").innerHTML =
+      '<div class="empty">아직 기록이 없습니다.</div>';
+
+    return;
+  }
+
+
+  recent.forEach(item => {
+
+    $("chart").insertAdjacentHTML(
+      "beforeend",
+
+      `
+      <div class="chart-row">
+
+        <div class="chart-date">
+          ${item.record_date.slice(5)}
+        </div>
+
+        <div class="chart-bar">
+
+          <div
+            class="chart-inner"
+            style="width:${item.score}%">
+          </div>
+
+        </div>
+
+        <div class="chart-score">
+          ${item.score}
+        </div>
+
+      </div>
+      `
+    );
+
+  });
+
+}
+
+
+/* =====================================================
+   HISTORY
+===================================================== */
+
+function escapeHtml(value){
+
+  return String(value)
+    .replace(
+      /[&<>"']/g,
+      match => ({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+      }[match])
+    );
+
+}
+
+
+function updateHistory(){
+
+  $("history").innerHTML="";
+
+
+  if(!records.length){
+
+    $("history").innerHTML =
+      '<div class="empty">아직 기록이 없습니다.</div>';
+
+    return;
+  }
+
+
+  records
+    .slice(0,10)
+    .forEach(item => {
+
+      $("history").insertAdjacentHTML(
+        "beforeend",
+
+        `
+        <div class="history-item">
+
+          <div>
+
+            <div class="history-date">
+              ${item.record_date}
+            </div>
+
+            <div class="history-note">
+              ${escapeHtml(
+                item.note ||
+                "오늘의 기록"
+              )}
+            </div>
+
+          </div>
+
+          <div class="history-score">
+            ${item.score}
+          </div>
+
+        </div>
+        `
+      );
+
+    });
+
+}
+
+
+/* =====================================================
+   INSIGHT
+===================================================== */
+
+function updateInsight(){
+
+  if(records.length < 2){
+
+    $("insight").innerText =
+      "기록이 2일 이상 쌓이면 생활 패턴을 분석해드려요.";
+
+    return;
+  }
+
+
+  const avgSleep =
+    records.reduce(
+      (sum,x)=>
+        sum + Number(x.sleep),
+      0
+    ) / records.length;
+
+
+  const avgFocus =
+    records.reduce(
+      (sum,x)=>
+        sum + Number(x.focus),
+      0
+    ) / records.length;
+
+
+  const avgMood =
+    records.reduce(
+      (sum,x)=>
+        sum + Number(x.mood),
+      0
+    ) / records.length;
+
+
+  $("insight").innerText =
+    `지금까지 평균 수면은 ${
+      avgSleep.toFixed(1)
+    }시간, 평균 집중도는 ${
+      Math.round(avgFocus)
+    }점, 평균 기분은 ${
+      Math.round(avgMood)
+    }점이에요. 기록이 더 쌓일수록 MY DAY가 생활 패턴을 더 자세히 보여드릴게요.`;
+
+}
+
+
+/* =====================================================
+   GROWTH
+===================================================== */
+
+function updateGrowth(){
+
+  const xp =
+    calculateTotalXP(records);
+
+  const level =
+    Math.floor(xp / 100) + 1;
+
+  const currentXP =
+    xp % 100;
+
+  const nextXP =
+    100 - currentXP;
+
+
+  $("level").innerText =
+    level;
+
+  $("totalXP").innerText =
+    xp + " XP";
+
+  $("xpText").innerText =
+    `${currentXP} / 100 XP`;
+
+  $("nextXp").innerText =
+    `다음 레벨까지 ${nextXP} XP`;
+
+  $("xpInner").style.width =
+    currentXP + "%";
+
+
+  $("levelTitle").innerText =
+    getLevelTitle(level);
+
+
+  /* STREAK */
+
+  let streak = 0;
+
+  if(records.length){
+
+    let today =
+      new Date();
+
+    today.setHours(
+      0,0,0,0
+    );
+
+
+    for(
+      const item of records
+    ){
+
+      const recordDate =
+        new Date(
+          item.record_date +
+          "T00:00:00"
+        );
+
+      const diff =
+        Math.round(
+          (today - recordDate) /
+          86400000
+        );
+
+
+      if(diff === streak){
+
+        streak++;
+
+      }else if(
+        diff > streak
+      ){
+
+        break;
+
+      }
+
+    }
+
+  }
+
+
+  $("streak").innerText =
+    streak + "일 🔥";
+
+}
+
+
+/* =====================================================
+   ACHIEVEMENTS
+===================================================== */
+
+const achievements = [
+
+  {
+    id:"first",
+    icon:"🌱",
+    name:"첫 걸음",
+    desc:"첫 번째 기록을 남겼어요",
+    check:()=>records.length >= 1
+  },
+
+  {
+    id:"three",
+    icon:"🔥",
+    name:"3일 연속",
+    desc:"3일 이상 기록했어요",
+    check:()=>getStreak() >= 3
+  },
+
+  {
+    id:"seven",
+    icon:"⚡",
+    name:"일주일 루틴",
+    desc:"7일 연속 기록했어요",
+    check:()=>getStreak() >= 7
+  },
+
+  {
+    id:"xp500",
+    icon:"⭐",
+    name:"500 XP",
+    desc:"누적 XP 500 달성",
+    check:()=>calculateTotalXP(records) >= 500
+  },
+
+  {
+    id:"xp1000",
+    icon:"💎",
+    name:"1000 XP",
+    desc:"누적 XP 1000 달성",
+    check:()=>calculateTotalXP(records) >= 1000
+  },
+
+  {
+    id:"score90",
+    icon:"🏆",
+    name:"최고의 하루",
+    desc:"90점 이상의 하루를 만들었어요",
+    check:()=>records.some(
+      x=>Number(x.score)>=90
+    )
+  },
+
+  {
+    id:"records10",
+    icon:"📚",
+    name:"기록 습관",
+    desc:"10개 이상의 기록",
+    check:()=>records.length>=10
+  },
+
+  {
+    id:"master",
+    icon:"👑",
+    name:"MY DAY MASTER",
+    desc:"레벨 10 달성",
+    check:()=>Math.floor(
+      calculateTotalXP(records)/100
+    )+1 >= 10
+  }
+
+];
+
+
+function getStreak(){
+
+  let streak=0;
+
+  if(!records.length)
+    return 0;
+
+
+  let today =
+    new Date();
+
+  today.setHours(
+    0,0,0,0
+  );
+
+
+  for(
+    const item of records
+  ){
+
+    const date =
+      new Date(
+        item.record_date +
+        "T00:00:00"
+      );
+
+    const diff =
+      Math.round(
+        (today-date) /
+        86400000
+      );
+
+
+    if(diff===streak){
+
+      streak++;
+
+    }else if(
+      diff>streak
+    ){
+
+      break;
+
+    }
+
+  }
+
+
+  return streak;
+
+}
+
+
+function updateAchievements(){
+
+  const grid =
+    $("achievementGrid");
+
+  grid.innerHTML="";
+
+
+  achievements.forEach(
+    achievement => {
+
+      const unlocked =
+        achievement.check();
+
+
+      grid.insertAdjacentHTML(
+        "beforeend",
+
+        `
+        <div
+          class="achievement-card ${
+            unlocked
+              ? "unlocked"
+              : ""
+          }">
+
+          <div class="achievement-icon">
+            ${achievement.icon}
+          </div>
+
+          <div class="achievement-name">
+            ${achievement.name}
+          </div>
+
+          <div class="achievement-desc">
+            ${achievement.desc}
+          </div>
+
+        </div>
+        `
+      );
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   PROFILE
+===================================================== */
+
+function loadProfile(){
+
+  if(!currentUser)
+    return;
+
+
+  const key =
+    "myday_profile_" +
+    currentUser.id;
+
+
+  const saved =
+    localStorage.getItem(key);
+
+
+  if(saved){
+
+    try{
+
+      profile = {
+        ...profile,
+        ...JSON.parse(saved)
+      };
+
+    }catch(error){
+
+      console.error(error);
+
+    }
+
+  }
+
+
+  applyProfile();
+
+}
+
+
+function applyProfile(){
+
+  $("profileName").innerText =
+    profile.name;
+
+  $("profileEmoji").innerText =
+    profile.emoji;
+
+  $("miniAvatar").innerText =
+    profile.emoji;
+
+  $("miniAvatar").style.background =
+    `linear-gradient(
+      135deg,
+      ${profile.color},
+      #68a9ff
+    )`;
+
+  $("previewAvatar").innerText =
+    profile.emoji;
+
+  $("previewAvatar").style.background =
+    `linear-gradient(
+      135deg,
+      ${profile.color},
+      #68a9ff
+    )`;
+
+  $("previewName").innerText =
+    profile.name;
+
+}
+
+
+function openProfileModal(){
+
+  $("profileNameInput").value =
+    profile.name;
+
+  buildProfileChoices();
+
+  $("profileModal").style.display =
+    "flex";
+
+}
+
+
+function closeProfileModal(){
+
+  $("profileModal").style.display =
+    "none";
+
+}
+
+
+function buildProfileChoices(){
+
+  $("emojiGrid").innerHTML =
+    emojis.map(
+      emoji =>
+
+      `
+      <button
+        class="emoji-choice ${
+          emoji === profile.emoji
+            ? "selected"
+            : ""
+        }"
+        onclick="chooseEmoji(
+          this,
+          '${emoji}'
+        )">
+
+        ${emoji}
+
+      </button>
+      `
+    ).join("");
+
+
+  $("colorGrid").innerHTML =
+    colors.map(
+      color =>
+
+      `
+      <button
+        class="color-choice ${
+          color === profile.color
+            ? "selected"
+            : ""
+        }"
+        style="background:${color}"
+        onclick="chooseColor(
+          this,
+          '${color}'
+        )">
+      </button>
+      `
+    ).join("");
+
+}
+
+
+function chooseEmoji(
+  element,
+  emoji
+){
+
+  profile.emoji =
+    emoji;
+
+
+  document
+    .querySelectorAll(
+      ".emoji-choice"
+    )
+    .forEach(
+      item =>
+        item.classList.remove(
+          "selected"
+        )
+    );
+
+
+  element.classList.add(
+    "selected"
+  );
+
+
+  $("previewAvatar").innerText =
+    emoji;
+
+}
+
+
+function chooseColor(
+  element,
+  color
+){
+
+  profile.color =
+    color;
+
+
+  document
+    .querySelectorAll(
+      ".color-choice"
+    )
+    .forEach(
+      item =>
+        item.classList.remove(
+          "selected"
+        )
+    );
+
+
+  element.classList.add(
+    "selected"
+  );
+
+
+  $("previewAvatar").style.background =
+    `linear-gradient(
+      135deg,
+      ${color},
+      #68a9ff
+    )`;
+
+}
+
+
+function saveProfile(){
+
+  profile.name =
+    $("profileNameInput")
+      .value
+      .trim() ||
+    "MY DAY USER";
+
+
+  localStorage.setItem(
+    "myday_profile_" +
+    currentUser.id,
+
+    JSON.stringify(profile)
+  );
+
+
+  applyProfile();
+
+  closeProfileModal();
+
+  showToast(
+    "✨ 프로필이 저장됐어요!"
+  );
+
+}
+
+
+/* =====================================================
+   LEVEL UP
+===================================================== */
+
+function showLevelUp(level){
+
+  $("levelupText").innerText =
+    `축하해요! MY DAY 레벨이 ${level}이 되었어요!`;
+
+  $("levelup").style.display =
+    "grid";
+
+
+  createConfetti();
+
+}
+
+
+function closeLevelup(){
+
+  $("levelup").style.display =
+    "none";
+
+}
+
+
+function createConfetti(){
+
+  const colors = [
+    "#57d99a",
+    "#68a9ff",
+    "#9d7cff",
+    "#ff83b5",
+    "#ffd35a",
+    "#ff9b65"
+  ];
+
+
+  for(
+    let i=0;
+    i<80;
+    i++
+  ){
+
+    const piece =
+      document.createElement(
+        "div"
+      );
+
+
+    piece.className =
+      "confetti";
+
+
+    piece.style.left =
+      Math.random()*100 +
+      "vw";
+
+
+    piece.style.background =
+      colors[
+        Math.floor(
+          Math.random() *
+          colors.length
+        )
+      ];
+
+
+    piece.style.animationDelay =
+      Math.random() * .8 +
+      "s";
+
+
+    piece.style.transform =
+      `rotate(
+        ${Math.random()*360}deg
+      )`;
+
+
+    document.body.appendChild(
+      piece
+    );
+
+
+    setTimeout(
+      ()=>{
+        piece.remove();
+      },
+      3500
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+function showToast(text){
+
+  const toast =
+    $("toast");
+
+  toast.innerText =
+    text;
+
+  toast.classList.add(
+    "show"
+  );
+
+
+  setTimeout(
+    ()=>{
+      toast.classList.remove(
+        "show"
+      );
+    },
+    2200
+  );
+
+}
+
+
+/* =====================================================
+   SESSION
+===================================================== */
+
+async function checkSession(){
+
+  const {
+    data
+  } =
+    await supabaseClient
+      .auth
+      .getSession();
+
+
+  if(
+    data &&
+    data.session &&
+    data.session.user
+  ){
+
+    currentUser =
+      data.session.user;
+
+    showApp();
+
+    await loadRecords();
+
+  }
+
+}
+
+
+supabaseClient
+  .auth
+  .onAuthStateChange(
+    (
+      event,
+      session
+    )=>{
+
+      if(
+        session &&
+        session.user &&
+        !currentUser
+      ){
+
+        currentUser =
+          session.user;
+
+        showApp();
+
+        loadRecords();
+
+      }
+
+    }
+  );
+
+
+/* START */
 
 checkSession();
 
@@ -2345,3 +3391,4 @@ checkSession();
 
 </body>
 </html>
+```
