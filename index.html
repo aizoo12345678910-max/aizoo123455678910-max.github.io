@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>MY DAY</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 
@@ -39,9 +40,24 @@ body {
     letter-spacing: 4px;
 }
 
-.date {
+.user-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-email {
     color: #8d9aaa;
-    font-size: 13px;
+    font-size: 12px;
+}
+
+.logout {
+    background: #1b232c;
+    color: white;
+    border: 1px solid #303b47;
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
 }
 
 .hero {
@@ -70,7 +86,9 @@ body {
     font-size: 18px;
 }
 
-.main-button {
+.main-button,
+.save-button,
+.auth-button {
     width: 100%;
     border: none;
     background: #72f5a4;
@@ -79,11 +97,16 @@ body {
     padding: 16px;
     border-radius: 14px;
     cursor: pointer;
-    margin-top: 22px;
     font-size: 16px;
 }
 
-.main-button:hover {
+.main-button {
+    margin-top: 22px;
+}
+
+.main-button:hover,
+.save-button:hover,
+.auth-button:hover {
     opacity: .85;
 }
 
@@ -181,7 +204,6 @@ body {
     height: 100%;
     background: #72f5a4;
     border-radius: 8px;
-    transition: width .5s;
 }
 
 .chart-score {
@@ -232,9 +254,7 @@ body {
     );
 
     border: 1px solid #24412f;
-
     border-radius: 20px;
-
     padding: 25px;
 }
 
@@ -253,6 +273,77 @@ body {
     color: #718092;
     text-align: center;
     padding: 25px;
+}
+
+
+/* LOGIN */
+
+.auth-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.auth-box {
+    width: 100%;
+    max-width: 420px;
+    background: #11161d;
+    border: 1px solid #293440;
+    border-radius: 25px;
+    padding: 30px;
+}
+
+.auth-logo {
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    letter-spacing: 5px;
+    margin-bottom: 10px;
+}
+
+.auth-subtitle {
+    text-align: center;
+    color: #8d9aaa;
+    margin-bottom: 25px;
+}
+
+.auth-input {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 12px;
+    background: #080b0f;
+    border: 1px solid #28323d;
+    border-radius: 10px;
+    color: white;
+    font-size: 15px;
+}
+
+.auth-button {
+    margin-top: 5px;
+}
+
+.auth-switch {
+    text-align: center;
+    color: #8d9aaa;
+    margin-top: 18px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.auth-message {
+    color: #72f5a4;
+    text-align: center;
+    margin-top: 15px;
+    line-height: 1.5;
+}
+
+.auth-error {
+    color: #ff7777;
+    text-align: center;
+    margin-top: 15px;
+    line-height: 1.5;
 }
 
 
@@ -360,23 +451,6 @@ body {
 }
 
 .save-button {
-
-    width: 100%;
-
-    border: none;
-
-    background: #72f5a4;
-
-    color: #07100b;
-
-    font-weight: bold;
-
-    padding: 15px;
-
-    border-radius: 12px;
-
-    cursor: pointer;
-
     margin-top: 25px;
 }
 
@@ -398,6 +472,10 @@ body {
         font-size: 70px;
     }
 
+    .user-email {
+        display: none;
+    }
+
 }
 
 @media(max-width:450px) {
@@ -417,11 +495,80 @@ body {
 }
 
 </style>
-
 </head>
 
 
 <body>
+
+
+<!-- LOGIN SCREEN -->
+
+<div id="authScreen" class="auth-screen">
+
+    <div class="auth-box">
+
+        <div class="auth-logo">
+            MY DAY
+        </div>
+
+        <div
+            class="auth-subtitle"
+            id="authTitle"
+        >
+            나의 하루를 기록하세요
+        </div>
+
+        <input
+            class="auth-input"
+            type="email"
+            id="email"
+            placeholder="이메일"
+        >
+
+        <input
+            class="auth-input"
+            type="password"
+            id="password"
+            placeholder="비밀번호"
+        >
+
+        <button
+            class="auth-button"
+            id="authButton"
+            onclick="handleAuth()"
+        >
+            로그인
+        </button>
+
+        <div
+            class="auth-switch"
+            id="authSwitch"
+            onclick="toggleAuthMode()"
+        >
+            처음이신가요? 회원가입
+        </div>
+
+        <div
+            id="authMessage"
+            class="auth-message"
+        ></div>
+
+        <div
+            id="authError"
+            class="auth-error"
+        ></div>
+
+    </div>
+
+</div>
+
+
+<!-- MAIN APP -->
+
+<div
+    id="app"
+    style="display:none;"
+>
 
 
 <div class="container">
@@ -433,12 +580,24 @@ body {
             MY DAY
         </div>
 
-        <div class="date" id="date"></div>
+        <div class="user-area">
+
+            <div
+                class="user-email"
+                id="userEmail"
+            ></div>
+
+            <button
+                class="logout"
+                onclick="logout()"
+            >
+                로그아웃
+            </button>
+
+        </div>
 
     </div>
 
-
-    <!-- TODAY -->
 
     <div class="hero">
 
@@ -446,11 +605,17 @@ body {
             TODAY SCORE
         </div>
 
-        <div class="score" id="score">
+        <div
+            class="score"
+            id="score"
+        >
             0
         </div>
 
-        <div class="message" id="message">
+        <div
+            class="message"
+            id="message"
+        >
             오늘의 데이터를 입력해보세요 🌱
         </div>
 
@@ -463,8 +628,6 @@ body {
 
     </div>
 
-
-    <!-- TODAY DATA -->
 
     <div class="cards">
 
@@ -580,14 +743,11 @@ body {
     </div>
 
 
-    <!-- STATS -->
-
     <div class="section">
 
         <h2>
             📈 나의 기록
         </h2>
-
 
         <div class="stats">
 
@@ -661,8 +821,6 @@ body {
     </div>
 
 
-    <!-- CHART -->
-
     <div class="section">
 
         <h2>
@@ -682,8 +840,6 @@ body {
 
     </div>
 
-
-    <!-- INSIGHT -->
 
     <div class="section">
 
@@ -710,8 +866,6 @@ body {
     </div>
 
 
-    <!-- HISTORY -->
-
     <div class="section">
 
         <h2>
@@ -735,7 +889,10 @@ body {
 </div>
 
 
-<!-- MODAL -->
+</div>
+
+
+<!-- RECORD MODAL -->
 
 <div
     class="modal-bg"
@@ -902,9 +1059,9 @@ body {
 
     <button
         class="save-button"
-        onclick="saveData()"
+        onclick="saveRecord()"
     >
-        저장하기
+        클라우드에 저장하기
     </button>
 
 
@@ -916,12 +1073,307 @@ body {
 <script>
 
 
-/* DATE */
+/* =========================
+   SUPABASE 설정
+========================= */
 
-const today = new Date();
+const SUPABASE_URL =
+    "https://raasbxkmehjprsjmjxtj.supabase.co";
 
-document.getElementById("date").innerText =
-    today.toLocaleDateString(
+const SUPABASE_KEY =
+    "sb_publishable_BALs2dGrARhYLLa3-5Uc9Q_UAHF_4Vh";
+
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =========================
+   상태
+========================= */
+
+let isSignup = false;
+
+let currentUser = null;
+
+let records = [];
+
+
+/* =========================
+   인증 화면 전환
+========================= */
+
+function toggleAuthMode() {
+
+    isSignup = !isSignup;
+
+    const title =
+        document.getElementById("authTitle");
+
+    const button =
+        document.getElementById("authButton");
+
+    const switchText =
+        document.getElementById("authSwitch");
+
+    clearAuthMessages();
+
+
+    if (isSignup) {
+
+        title.innerText =
+            "MY DAY 계정을 만들어보세요";
+
+        button.innerText =
+            "회원가입";
+
+        switchText.innerText =
+            "이미 계정이 있나요? 로그인";
+
+    } else {
+
+        title.innerText =
+            "나의 하루를 기록하세요";
+
+        button.innerText =
+            "로그인";
+
+        switchText.innerText =
+            "처음이신가요? 회원가입";
+
+    }
+
+}
+
+
+/* =========================
+   메시지
+========================= */
+
+function clearAuthMessages() {
+
+    document.getElementById(
+        "authMessage"
+    ).innerText = "";
+
+    document.getElementById(
+        "authError"
+    ).innerText = "";
+
+}
+
+
+/* =========================
+   회원가입 / 로그인
+========================= */
+
+async function handleAuth() {
+
+    clearAuthMessages();
+
+    const email =
+        document.getElementById(
+            "email"
+        ).value.trim();
+
+    const password =
+        document.getElementById(
+            "password"
+        ).value;
+
+
+    if (!email || !password) {
+
+        document.getElementById(
+            "authError"
+        ).innerText =
+            "이메일과 비밀번호를 입력해주세요.";
+
+        return;
+
+    }
+
+
+    if (password.length < 6) {
+
+        document.getElementById(
+            "authError"
+        ).innerText =
+            "비밀번호는 6자 이상이어야 합니다.";
+
+        return;
+
+    }
+
+
+    const button =
+        document.getElementById(
+            "authButton"
+        );
+
+    button.disabled = true;
+
+    button.innerText =
+        "처리 중...";
+
+
+    try {
+
+
+        if (isSignup) {
+
+            const {
+                data,
+                error
+            } =
+            await supabaseClient.auth.signUp({
+                email,
+                password
+            });
+
+
+            if (error) {
+                throw error;
+            }
+
+
+            document.getElementById(
+                "authMessage"
+            ).innerText =
+                "회원가입이 완료되었습니다. 이메일 인증이 필요한 경우 메일함에서 인증 후 로그인해주세요.";
+
+        } else {
+
+
+            const {
+                data,
+                error
+            } =
+            await supabaseClient.auth.signInWithPassword({
+                email,
+                password
+            });
+
+
+            if (error) {
+                throw error;
+            }
+
+
+            if (data.user) {
+
+                currentUser =
+                    data.user;
+
+                showApp();
+
+                await loadRecords();
+
+            }
+
+        }
+
+
+    } catch (error) {
+
+        document.getElementById(
+            "authError"
+        ).innerText =
+            error.message ||
+            "로그인 중 오류가 발생했습니다.";
+
+    }
+
+
+    button.disabled = false;
+
+    button.innerText =
+        isSignup
+        ? "회원가입"
+        : "로그인";
+
+}
+
+
+/* =========================
+   로그아웃
+========================= */
+
+async function logout() {
+
+    await supabaseClient.auth.signOut();
+
+    currentUser = null;
+
+    records = [];
+
+    document.getElementById(
+        "app"
+    ).style.display = "none";
+
+    document.getElementById(
+        "authScreen"
+    ).style.display = "flex";
+
+}
+
+
+/* =========================
+   앱 표시
+========================= */
+
+function showApp() {
+
+    document.getElementById(
+        "authScreen"
+    ).style.display = "none";
+
+    document.getElementById(
+        "app"
+    ).style.display = "block";
+
+    document.getElementById(
+        "userEmail"
+    ).innerText =
+        currentUser.email;
+
+}
+
+
+/* =========================
+   날짜
+========================= */
+
+function getToday() {
+
+    const now =
+        new Date();
+
+    const year =
+        now.getFullYear();
+
+    const month =
+        String(
+            now.getMonth() + 1
+        ).padStart(2,"0");
+
+    const day =
+        String(
+            now.getDate()
+        ).padStart(2,"0");
+
+    return `${year}-${month}-${day}`;
+
+}
+
+
+document.getElementById(
+    "date"
+).innerText =
+    new Date().toLocaleDateString(
         "ko-KR",
         {
             year: "numeric",
@@ -932,11 +1384,15 @@ document.getElementById("date").innerText =
     );
 
 
-/* MODAL */
+/* =========================
+   모달
+========================= */
 
 function openModal() {
 
-    document.getElementById("modalBg").style.display =
+    document.getElementById(
+        "modalBg"
+    ).style.display =
         "flex";
 
 }
@@ -944,31 +1400,45 @@ function openModal() {
 
 function closeModal() {
 
-    document.getElementById("modalBg").style.display =
+    document.getElementById(
+        "modalBg"
+    ).style.display =
         "none";
 
 }
 
 
-/* RANGE */
+/* =========================
+   슬라이더
+========================= */
 
 function updateMood() {
 
-    document.getElementById("moodNumber").innerText =
-        document.getElementById("mood").value;
+    document.getElementById(
+        "moodNumber"
+    ).innerText =
+        document.getElementById(
+            "mood"
+        ).value;
 
 }
 
 
 function updateFocus() {
 
-    document.getElementById("focusNumber").innerText =
-        document.getElementById("focus").value;
+    document.getElementById(
+        "focusNumber"
+    ).innerText =
+        document.getElementById(
+            "focus"
+        ).value;
 
 }
 
 
-/* SCORE */
+/* =========================
+   점수
+========================= */
 
 function calculateScore(
     sleep,
@@ -984,7 +1454,9 @@ function calculateScore(
             Math.max(
                 0,
                 100 -
-                Math.abs(8 - sleep) * 20
+                Math.abs(
+                    8 - sleep
+                ) * 20
             )
         );
 
@@ -1003,101 +1475,97 @@ function calculateScore(
         );
 
 
-    let score =
-        sleepScore * 0.2 +
+    return Math.round(
+        sleepScore * 0.20 +
         studyScore * 0.15 +
         exerciseScore * 0.15 +
         mood * 0.25 +
-        focus * 0.25;
-
-
-    return Math.round(score);
+        focus * 0.25
+    );
 
 }
 
 
-/* LOAD HISTORY */
+/* =========================
+   기록 저장
+========================= */
 
-function getHistory() {
+async function saveRecord() {
 
-    const saved =
-        localStorage.getItem("myDayHistory");
+    if (!currentUser) {
 
-    if (!saved) {
-        return [];
-    }
-
-    try {
-
-        return JSON.parse(saved);
-
-    } catch {
-
-        return [];
-
-    }
-
-}
-
-
-/* SAVE */
-
-function saveData() {
-
-
-    const sleep =
-        Number(
-            document.getElementById("sleep").value
+        alert(
+            "먼저 로그인해주세요."
         );
-
-
-    const study =
-        Number(
-            document.getElementById("study").value
-        );
-
-
-    const exercise =
-        Number(
-            document.getElementById("exercise").value
-        );
-
-
-    const money =
-        Number(
-            document.getElementById("money").value
-        );
-
-
-    const mood =
-        Number(
-            document.getElementById("mood").value
-        );
-
-
-    const focus =
-        Number(
-            document.getElementById("focus").value
-        );
-
-
-    const note =
-        document.getElementById("note").value;
-
-
-    if (!sleep) {
-
-        alert("수면 시간을 입력해주세요.");
 
         return;
 
     }
 
 
-    const date =
-        new Date()
-        .toISOString()
-        .split("T")[0];
+    const sleep =
+        Number(
+            document.getElementById(
+                "sleep"
+            ).value
+        );
+
+
+    const study =
+        Number(
+            document.getElementById(
+                "study"
+            ).value
+        ) || 0;
+
+
+    const exercise =
+        Number(
+            document.getElementById(
+                "exercise"
+            ).value
+        ) || 0;
+
+
+    const money =
+        Number(
+            document.getElementById(
+                "money"
+            ).value
+        ) || 0;
+
+
+    const mood =
+        Number(
+            document.getElementById(
+                "mood"
+            ).value
+        );
+
+
+    const focus =
+        Number(
+            document.getElementById(
+                "focus"
+            ).value
+        );
+
+
+    const note =
+        document.getElementById(
+            "note"
+        ).value;
+
+
+    if (!sleep) {
+
+        alert(
+            "수면 시간을 입력해주세요."
+        );
+
+        return;
+
+    }
 
 
     const score =
@@ -1112,158 +1580,260 @@ function saveData() {
 
     const record = {
 
-        date,
+        user_id:
+            currentUser.id,
+
+        record_date:
+            getToday(),
+
         sleep,
+
         study,
+
         exercise,
+
         money,
+
         mood,
+
         focus,
+
         note,
+
         score
 
     };
 
 
-    let history =
-        getHistory();
-
-
-    /* 같은 날짜 기록은 업데이트 */
-
-    const existingIndex =
-        history.findIndex(
-            item => item.date === date
+    const button =
+        document.querySelector(
+            ".save-button"
         );
 
 
-    if (existingIndex >= 0) {
+    button.disabled = true;
 
-        history[existingIndex] =
-            record;
+    button.innerText =
+        "저장 중...";
 
-    } else {
 
-        history.push(record);
+    try {
+
+
+        const {
+            error
+        } =
+        await supabaseClient
+            .from("daily_records")
+            .upsert(
+                record,
+                {
+                    onConflict:
+                        "user_id,record_date"
+                }
+            );
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        alert(
+            "☁️ 기록이 저장되었습니다!"
+        );
+
+
+        closeModal();
+
+
+        await loadRecords();
+
+
+    } catch (error) {
+
+        alert(
+            "저장 실패: "
+            + error.message
+        );
 
     }
 
 
-    history.sort(
-        (a,b) =>
-            new Date(b.date) -
-            new Date(a.date)
-    );
+    button.disabled = false;
 
-
-    localStorage.setItem(
-        "myDayHistory",
-        JSON.stringify(history)
-    );
-
-
-    updateAll();
-
-
-    closeModal();
-
-
-    alert(
-        "오늘 기록이 저장되었습니다! 🌱"
-    );
+    button.innerText =
+        "클라우드에 저장하기";
 
 }
 
 
-/* UPDATE ALL */
+/* =========================
+   기록 불러오기
+========================= */
 
-function updateAll() {
+async function loadRecords() {
 
-    const history =
-        getHistory();
+    if (!currentUser) {
+        return;
+    }
 
 
-    if (history.length === 0) {
+    const {
+        data,
+        error
+    } =
+    await supabaseClient
+        .from("daily_records")
+        .select("*")
+        .eq(
+            "user_id",
+            currentUser.id
+        )
+        .order(
+            "record_date",
+            {
+                ascending: false
+            }
+        );
+
+
+    if (error) {
+
+        console.error(error);
+
+        alert(
+            "기록을 불러오지 못했습니다."
+        );
 
         return;
 
     }
 
 
-    const latest =
-        history[0];
+    records =
+        data || [];
 
 
-    updateToday(latest);
-
-    updateStats(history);
-
-    updateChart(history);
-
-    updateHistory(history);
-
-    updateInsight(history);
+    updateAll();
 
 }
 
 
-/* TODAY */
+/* =========================
+   전체 화면 업데이트
+========================= */
+
+function updateAll() {
+
+    if (
+        !records ||
+        records.length === 0
+    ) {
+
+        return;
+
+    }
+
+
+    updateToday(
+        records[0]
+    );
+
+    updateStats();
+
+    updateChart();
+
+    updateHistory();
+
+    updateInsight();
+
+}
+
+
+/* =========================
+   오늘
+========================= */
 
 function updateToday(data) {
 
-
-    document.getElementById("sleepValue").innerText =
+    document.getElementById(
+        "sleepValue"
+    ).innerText =
         data.sleep + "시간";
 
 
-    document.getElementById("studyValue").innerText =
+    document.getElementById(
+        "studyValue"
+    ).innerText =
         data.study + "분";
 
 
-    document.getElementById("exerciseValue").innerText =
+    document.getElementById(
+        "exerciseValue"
+    ).innerText =
         data.exercise + "분";
 
 
-    document.getElementById("moodValue").innerText =
+    document.getElementById(
+        "moodValue"
+    ).innerText =
         data.mood + "점";
 
 
-    document.getElementById("focusValue").innerText =
+    document.getElementById(
+        "focusValue"
+    ).innerText =
         data.focus + "점";
 
 
-    document.getElementById("moneyValue").innerText =
-        data.money.toLocaleString() + "원";
+    document.getElementById(
+        "moneyValue"
+    ).innerText =
+        Number(
+            data.money
+        ).toLocaleString()
+        + "원";
 
 
-    document.getElementById("score").innerText =
+    document.getElementById(
+        "score"
+    ).innerText =
         data.score;
 
 
     if (data.score >= 90) {
 
-        document.getElementById("message").innerText =
+        document.getElementById(
+            "message"
+        ).innerText =
             "완벽한 하루였어요! 🔥";
 
     }
 
     else if (data.score >= 80) {
 
-        document.getElementById("message").innerText =
+        document.getElementById(
+            "message"
+        ).innerText =
             "정말 좋은 하루예요! 🌿";
 
     }
 
     else if (data.score >= 70) {
 
-        document.getElementById("message").innerText =
+        document.getElementById(
+            "message"
+        ).innerText =
             "괜찮은 하루였어요 🙂";
 
     }
 
     else {
 
-        document.getElementById("message").innerText =
+        document.getElementById(
+            "message"
+        ).innerText =
             "내일은 더 좋아질 거예요 🌱";
 
     }
@@ -1271,14 +1841,16 @@ function updateToday(data) {
 }
 
 
-/* STATS */
+/* =========================
+   통계
+========================= */
 
-function updateStats(history) {
-
+function updateStats() {
 
     const scores =
-        history.map(
-            item => item.score
+        records.map(
+            item =>
+                Number(item.score)
         );
 
 
@@ -1296,17 +1868,19 @@ function updateStats(history) {
 
 
     const totalStudy =
-        history.reduce(
+        records.reduce(
             (sum,item) =>
-                sum + Number(item.study),
+                sum +
+                Number(item.study),
             0
         );
 
 
     const totalExercise =
-        history.reduce(
+        records.reduce(
             (sum,item) =>
-                sum + Number(item.exercise),
+                sum +
+                Number(item.exercise),
             0
         );
 
@@ -1326,33 +1900,43 @@ function updateStats(history) {
     document.getElementById(
         "totalStudy"
     ).innerText =
-        (totalStudy / 60).toFixed(1)
+        (totalStudy / 60)
+        .toFixed(1)
         + "시간";
 
 
     document.getElementById(
         "totalExercise"
     ).innerText =
-        (totalExercise / 60).toFixed(1)
+        (totalExercise / 60)
+        .toFixed(1)
         + "시간";
 
 }
 
 
-/* CHART */
+/* =========================
+   그래프
+========================= */
 
-function updateChart(history) {
-
+function updateChart() {
 
     const chart =
-        document.getElementById("chart");
+        document.getElementById(
+            "chart"
+        );
 
 
     const recent =
-        history.slice(0,7);
+        records.slice(
+            0,
+            7
+        );
 
 
-    if (recent.length === 0) {
+    if (
+        recent.length === 0
+    ) {
 
         chart.innerHTML =
             '<div class="empty">아직 기록이 없습니다.</div>';
@@ -1368,82 +1952,95 @@ function updateChart(history) {
     recent
         .slice()
         .reverse()
-        .forEach(item => {
+        .forEach(
+            item => {
+
+                const row =
+                    document.createElement(
+                        "div"
+                    );
+
+                row.className =
+                    "chart-row";
 
 
-            const row =
-                document.createElement("div");
+                const date =
+                    document.createElement(
+                        "div"
+                    );
+
+                date.className =
+                    "chart-date";
+
+                date.innerText =
+                    item.record_date
+                        .slice(5);
 
 
-            row.className =
-                "chart-row";
+                const bar =
+                    document.createElement(
+                        "div"
+                    );
+
+                bar.className =
+                    "chart-bar";
 
 
-            const date =
-                document.createElement("div");
+                const inner =
+                    document.createElement(
+                        "div"
+                    );
+
+                inner.className =
+                    "chart-inner";
+
+                inner.style.width =
+                    item.score + "%";
 
 
-            date.className =
-                "chart-date";
+                const score =
+                    document.createElement(
+                        "div"
+                    );
+
+                score.className =
+                    "chart-score";
+
+                score.innerText =
+                    item.score;
 
 
-            date.innerText =
-                item.date.slice(5);
+                bar.appendChild(
+                    inner
+                );
 
+                row.appendChild(
+                    date
+                );
 
-            const bar =
-                document.createElement("div");
+                row.appendChild(
+                    bar
+                );
 
+                row.appendChild(
+                    score
+                );
 
-            bar.className =
-                "chart-bar";
+                chart.appendChild(
+                    row
+                );
 
-
-            const inner =
-                document.createElement("div");
-
-
-            inner.className =
-                "chart-inner";
-
-
-            inner.style.width =
-                item.score + "%";
-
-
-            const score =
-                document.createElement("div");
-
-
-            score.className =
-                "chart-score";
-
-
-            score.innerText =
-                item.score;
-
-
-            bar.appendChild(inner);
-
-
-            row.appendChild(date);
-
-            row.appendChild(bar);
-
-            row.appendChild(score);
-
-
-            chart.appendChild(row);
-
-        });
+            }
+        );
 
 }
 
 
-/* HISTORY */
+/* =========================
+   히스토리
+========================= */
 
-function updateHistory(history) {
-
+function updateHistory() {
 
     const box =
         document.getElementById(
@@ -1454,81 +2051,99 @@ function updateHistory(history) {
     box.innerHTML = "";
 
 
-    history
-        .slice(0,10)
-        .forEach(item => {
+    records
+        .slice(
+            0,
+            10
+        )
+        .forEach(
+            item => {
+
+                const element =
+                    document.createElement(
+                        "div"
+                    );
+
+                element.className =
+                    "history-item";
 
 
-            const element =
-                document.createElement("div");
+                const left =
+                    document.createElement(
+                        "div"
+                    );
 
 
-            element.className =
-                "history-item";
+                const date =
+                    document.createElement(
+                        "div"
+                    );
+
+                date.className =
+                    "history-date";
+
+                date.innerText =
+                    item.record_date;
 
 
-            const left =
-                document.createElement("div");
+                const note =
+                    document.createElement(
+                        "div"
+                    );
+
+                note.className =
+                    "history-note";
+
+                note.innerText =
+                    item.note ||
+                    "오늘의 기록";
 
 
-            const date =
-                document.createElement("div");
+                left.appendChild(
+                    date
+                );
+
+                left.appendChild(
+                    note
+                );
 
 
-            date.className =
-                "history-date";
+                const score =
+                    document.createElement(
+                        "div"
+                    );
+
+                score.className =
+                    "history-score";
+
+                score.innerText =
+                    item.score;
 
 
-            date.innerText =
-                item.date;
+                element.appendChild(
+                    left
+                );
+
+                element.appendChild(
+                    score
+                );
 
 
-            const note =
-                document.createElement("div");
+                box.appendChild(
+                    element
+                );
 
-
-            note.className =
-                "history-note";
-
-
-            note.innerText =
-                item.note ||
-                "오늘의 기록";
-
-
-            left.appendChild(date);
-
-            left.appendChild(note);
-
-
-            const score =
-                document.createElement("div");
-
-
-            score.className =
-                "history-score";
-
-
-            score.innerText =
-                item.score;
-
-
-            element.appendChild(left);
-
-            element.appendChild(score);
-
-
-            box.appendChild(element);
-
-        });
+            }
+        );
 
 }
 
 
-/* INSIGHT */
+/* =========================
+   인사이트
+========================= */
 
-function updateInsight(history) {
-
+function updateInsight() {
 
     const insight =
         document.getElementById(
@@ -1536,7 +2151,9 @@ function updateInsight(history) {
         );
 
 
-    if (history.length < 2) {
+    if (
+        records.length < 2
+    ) {
 
         insight.innerText =
             "기록이 2일 이상 쌓이면 생활 패턴을 분석해드려요.";
@@ -1547,45 +2164,109 @@ function updateInsight(history) {
 
 
     const avgSleep =
-        history.reduce(
+        records.reduce(
             (sum,item) =>
-                sum + Number(item.sleep),
+                sum +
+                Number(item.sleep),
             0
-        ) / history.length;
+        ) / records.length;
 
 
     const avgFocus =
-        history.reduce(
+        records.reduce(
             (sum,item) =>
-                sum + Number(item.focus),
+                sum +
+                Number(item.focus),
             0
-        ) / history.length;
+        ) / records.length;
 
 
     const avgMood =
-        history.reduce(
+        records.reduce(
             (sum,item) =>
-                sum + Number(item.mood),
+                sum +
+                Number(item.mood),
             0
-        ) / history.length;
+        ) / records.length;
 
 
     insight.innerText =
-        "최근 기록을 보면 평균 수면은 "
+        "지금까지 평균 수면은 "
         + avgSleep.toFixed(1)
         + "시간, 평균 집중도는 "
         + Math.round(avgFocus)
         + "점, 평균 기분은 "
         + Math.round(avgMood)
-        + "점이에요. "
-        + "기록이 더 쌓이면 수면·공부·운동과 집중도의 관계까지 분석할 수 있어요.";
+        + "점이에요. 기록이 더 쌓이면 MY DAY가 생활 패턴을 더 자세히 분석할 수 있어요.";
 
 }
 
 
-/* START */
+/* =========================
+   로그인 상태 확인
+========================= */
 
-updateAll();
+async function checkSession() {
+
+    const {
+        data
+    } =
+    await supabaseClient
+        .auth
+        .getSession();
+
+
+    if (
+        data &&
+        data.session &&
+        data.session.user
+    ) {
+
+        currentUser =
+            data.session.user;
+
+        showApp();
+
+        await loadRecords();
+
+    }
+
+}
+
+
+/* =========================
+   로그인 상태 변화 감지
+========================= */
+
+supabaseClient
+    .auth
+    .onAuthStateChange(
+        async (
+            event,
+            session
+        ) => {
+
+            if (
+                session &&
+                session.user
+            ) {
+
+                currentUser =
+                    session.user;
+
+                showApp();
+
+                await loadRecords();
+
+            }
+
+        }
+    );
+
+
+/* 시작 */
+
+checkSession();
 
 </script>
 
