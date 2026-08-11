@@ -1,0 +1,290 @@
+    <!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MY DAY</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #080b0f;
+    color: #f5f7fa;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 30px 20px 60px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 3px;
+}
+
+.date {
+    color: #8d9aaa;
+}
+
+.hero {
+    background: #11161d;
+    border: 1px solid #222b35;
+    border-radius: 25px;
+    padding: 40px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.small-title {
+    color: #8d9aaa;
+    font-size: 13px;
+    letter-spacing: 3px;
+}
+
+.score {
+    font-size: 90px;
+    font-weight: bold;
+    color: #72f5a4;
+    margin: 15px 0;
+}
+
+.message {
+    font-size: 18px;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.card {
+    background: #11161d;
+    border: 1px solid #222b35;
+    border-radius: 20px;
+    padding: 22px;
+}
+
+.icon {
+    font-size: 25px;
+}
+
+.card-title {
+    color: #8d9aaa;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.value {
+    font-size: 25px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.section {
+    margin-top: 35px;
+}
+
+.section h2 {
+    font-size: 19px;
+}
+
+.chart {
+    background: #11161d;
+    border: 1px solid #222b35;
+    border-radius: 20px;
+    padding: 25px;
+}
+
+.bar {
+    height: 35px;
+    background: #1c252e;
+    border-radius: 10px;
+    margin: 12px 0;
+    overflow: hidden;
+}
+
+.bar-inner {
+    height: 100%;
+    background: #72f5a4;
+    border-radius: 10px;
+}
+
+button {
+    border: none;
+    background: #72f5a4;
+    color: #07100b;
+    font-weight: bold;
+    padding: 14px 22px;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-top: 25px;
+}
+
+button:hover {
+    opacity: 0.85;
+}
+
+@media (max-width: 700px) {
+    .cards {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .score {
+        font-size: 70px;
+    }
+}
+
+@media (max-width: 450px) {
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .hero {
+        padding: 30px 20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <div class="logo">MY DAY</div>
+        <div class="date" id="date"></div>
+    </div>
+
+    <div class="hero">
+        <div class="small-title">TODAY SCORE</div>
+
+        <div class="score" id="score">
+            87
+        </div>
+
+        <div class="message">
+            오늘도 좋은 하루예요 🌱
+        </div>
+
+        <button onclick="changeScore()">
+            오늘 점수 바꾸기
+        </button>
+    </div>
+
+    <div class="cards">
+
+        <div class="card">
+            <div class="icon">😴</div>
+            <div class="card-title">수면</div>
+            <div class="value">7시간 20분</div>
+        </div>
+
+        <div class="card">
+            <div class="icon">📚</div>
+            <div class="card-title">공부</div>
+            <div class="value">2시간 15분</div>
+        </div>
+
+        <div class="card">
+            <div class="icon">🏃</div>
+            <div class="card-title">운동</div>
+            <div class="value">45분</div>
+        </div>
+
+        <div class="card">
+            <div class="icon">😊</div>
+            <div class="card-title">기분</div>
+            <div class="value">82점</div>
+        </div>
+
+        <div class="card">
+            <div class="icon">⚡</div>
+            <div class="card-title">집중도</div>
+            <div class="value">78점</div>
+        </div>
+
+        <div class="card">
+            <div class="icon">💰</div>
+            <div class="card-title">오늘 지출</div>
+            <div class="value">23,000원</div>
+        </div>
+
+    </div>
+
+    <div class="section">
+
+        <h2>📊 이번 주</h2>
+
+        <div class="chart">
+
+            <div>월요일</div>
+            <div class="bar">
+                <div class="bar-inner" style="width:82%"></div>
+            </div>
+
+            <div>화요일</div>
+            <div class="bar">
+                <div class="bar-inner" style="width:64%"></div>
+            </div>
+
+            <div>수요일</div>
+            <div class="bar">
+                <div class="bar-inner" style="width:91%"></div>
+            </div>
+
+            <div>목요일</div>
+            <div class="bar">
+                <div class="bar-inner" style="width:72%"></div>
+            </div>
+
+            <div>금요일</div>
+            <div class="bar">
+                <div class="bar-inner" style="width:88%"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const today = new Date();
+
+document.getElementById("date").innerText =
+    today.toLocaleDateString("ko-KR", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        weekday: "long"
+    });
+
+function changeScore() {
+
+    const newScore =
+        Math.floor(Math.random() * 31) + 70;
+
+    document.getElementById("score").innerText =
+        newScore;
+
+}
+
+</script>
+
+</body>
+</html>
