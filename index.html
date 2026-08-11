@@ -3,1067 +3,1369 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>MY DAY</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+*{box-sizing:border-box}
 
-* {
-    box-sizing: border-box;
+:root{
+    --green:#72f5a4;
+    --bg:#070a0e;
+    --card:#10151b;
+    --line:#26313b;
+    --text:#f5f7fa;
+    --muted:#84909e;
 }
 
-body {
-    margin: 0;
-    background: #080b0f;
-    color: #f5f7fa;
-    font-family: Arial, sans-serif;
+html,body{
+    margin:0;
+    min-height:100%;
 }
 
-.container {
-    max-width: 1050px;
-    margin: auto;
-    padding: 25px 18px 70px;
+body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:Arial,"Noto Sans KR",sans-serif;
+    transition:background 1s ease,color 1s ease;
 }
 
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
+button,input,textarea{
+    font:inherit;
 }
 
-.logo {
-    font-size: 25px;
-    font-weight: bold;
-    letter-spacing: 4px;
+button{
+    cursor:pointer;
 }
 
-.user-area {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:18px 15px 70px;
 }
 
-.user-email {
-    color: #8d9aaa;
-    font-size: 12px;
+/* =========================
+   로그인
+========================= */
+
+.auth-screen{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    background:
+        radial-gradient(circle at 50% 20%,#17251e,transparent 40%),
+        #070a0e;
 }
 
-.logout {
-    background: #1b232c;
-    color: white;
-    border: 1px solid #303b47;
-    border-radius: 8px;
-    padding: 8px 12px;
-    cursor: pointer;
+.auth-box{
+    width:100%;
+    max-width:410px;
+    padding:30px;
+    border:1px solid var(--line);
+    border-radius:25px;
+    background:#10151b;
+    box-shadow:0 20px 70px rgba(0,0,0,.35);
 }
 
-.hero {
-    background: #11161d;
-    border: 1px solid #222b35;
-    border-radius: 25px;
-    padding: 35px;
-    text-align: center;
-    margin-bottom: 18px;
+.auth-logo{
+    text-align:center;
+    font-size:30px;
+    font-weight:900;
+    letter-spacing:6px;
 }
 
-.small-title {
-    color: #8d9aaa;
-    font-size: 12px;
-    letter-spacing: 3px;
+.auth-subtitle{
+    text-align:center;
+    color:var(--muted);
+    margin:10px 0 25px;
 }
 
-.score {
-    font-size: 90px;
-    font-weight: bold;
-    color: #72f5a4;
-    margin: 10px 0;
+.auth-input{
+    width:100%;
+    padding:14px;
+    margin-bottom:10px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    outline:none;
+    background:#080b0f;
+    color:white;
 }
 
-.message {
-    font-size: 18px;
+.auth-button{
+    width:100%;
+    padding:14px;
+    border:0;
+    border-radius:11px;
+    background:var(--green);
+    color:#07100b;
+    font-weight:800;
 }
 
-.main-button,
-.save-button,
-.auth-button {
-    width: 100%;
-    border: none;
-    background: #72f5a4;
-    color: #07100b;
-    font-weight: bold;
-    padding: 16px;
-    border-radius: 14px;
-    cursor: pointer;
-    font-size: 16px;
+.auth-switch{
+    text-align:center;
+    color:#87929e;
+    margin-top:18px;
+    font-size:13px;
+    cursor:pointer;
 }
 
-.main-button {
-    margin-top: 22px;
+.auth-message{
+    color:var(--green);
+    text-align:center;
+    margin-top:15px;
+    line-height:1.5;
 }
 
-.main-button:hover,
-.save-button:hover,
-.auth-button:hover {
-    opacity: .85;
+.auth-error{
+    color:#ff7272;
+    text-align:center;
+    margin-top:15px;
+    line-height:1.5;
 }
 
-.cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
+/* =========================
+   헤더
+========================= */
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
 }
 
-.card {
-    background: #11161d;
-    border: 1px solid #222b35;
-    border-radius: 20px;
-    padding: 20px;
+.logo{
+    font-size:24px;
+    font-weight:900;
+    letter-spacing:4px;
 }
 
-.icon {
-    font-size: 25px;
+.user-area{
+    display:flex;
+    align-items:center;
+    gap:10px;
 }
 
-.card-title {
-    color: #8d9aaa;
-    font-size: 13px;
-    margin-top: 8px;
+.user-email{
+    color:var(--muted);
+    font-size:12px;
 }
 
-.value {
-    font-size: 23px;
-    font-weight: bold;
-    margin-top: 5px;
+.logout{
+    padding:8px 12px;
+    border:1px solid var(--line);
+    border-radius:9px;
+    background:#151b22;
+    color:white;
 }
 
-.section {
-    margin-top: 30px;
+/* =========================
+   감정 월드
+========================= */
+
+.mood-world{
+    position:relative;
+    height:300px;
+    overflow:hidden;
+    margin-bottom:15px;
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:28px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    background:
+        radial-gradient(circle at 50% 15%,rgba(255,255,255,.5),transparent 32%),
+        linear-gradient(180deg,#65d8ff,#d5f6ff);
+
+    transition:background 1s ease;
 }
 
-.section h2 {
-    font-size: 19px;
+.mood-sun{
+    position:absolute;
+    right:30px;
+    top:22px;
+    font-size:48px;
+    transition:all 1s ease;
 }
 
-.stats {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
+.mood-moon{
+    position:absolute;
+    right:32px;
+    top:23px;
+    font-size:43px;
+    opacity:0;
+    transition:all 1s ease;
 }
 
-.stat {
-    background: #11161d;
-    border: 1px solid #222b35;
-    border-radius: 18px;
-    padding: 18px;
+.mood-cloud{
+    position:absolute;
+    font-size:40px;
+    opacity:.75;
+    transition:all 1s ease;
 }
 
-.stat-title {
-    color: #8d9aaa;
-    font-size: 12px;
+.cloud1{
+    left:8%;
+    top:45px;
 }
 
-.stat-value {
-    font-size: 25px;
-    font-weight: bold;
-    margin-top: 8px;
-    color: #72f5a4;
+.cloud2{
+    right:15%;
+    top:95px;
 }
 
-.chart {
-    background: #11161d;
-    border: 1px solid #222b35;
-    border-radius: 20px;
-    padding: 22px;
+.character{
+    position:relative;
+    width:125px;
+    height:155px;
+    animation:float 3s ease-in-out infinite;
+    z-index:3;
 }
 
-.chart-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 12px 0;
+.character-face{
+    position:absolute;
+    left:8px;
+    top:0;
+    width:109px;
+    height:109px;
+    border-radius:50%;
+    background:#ffe0a6;
+    border:4px solid #33271c;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:58px;
+    box-shadow:0 8px 20px rgba(0,0,0,.15);
+    transition:.5s;
 }
 
-.chart-date {
-    width: 65px;
-    color: #9aa6b5;
-    font-size: 12px;
+.character-body{
+    position:absolute;
+    left:28px;
+    top:99px;
+    width:69px;
+    height:57px;
+    border-radius:34px 34px 20px 20px;
+    background:#72f5a4;
+    border:4px solid #33271c;
+    transition:.5s;
 }
 
-.chart-bar {
-    flex: 1;
-    height: 28px;
-    background: #1c252e;
-    border-radius: 8px;
-    overflow: hidden;
+.character-shadow{
+    position:absolute;
+    left:12px;
+    bottom:-8px;
+    width:100px;
+    height:17px;
+    border-radius:50%;
+    background:rgba(0,0,0,.16);
+    filter:blur(4px);
 }
 
-.chart-inner {
-    height: 100%;
-    background: #72f5a4;
-    border-radius: 8px;
+.character-text{
+    position:absolute;
+    bottom:19px;
+    z-index:5;
+    color:#17212b;
+    font-size:15px;
+    font-weight:800;
+    text-align:center;
+    text-shadow:0 1px 2px rgba(255,255,255,.8);
+    transition:.5s;
 }
 
-.chart-score {
-    width: 35px;
-    text-align: right;
-    font-size: 12px;
+@keyframes float{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-9px)}
 }
 
-.history {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+/* 매우 좋음 */
+
+.mood-great .mood-world{
+    background:
+        radial-gradient(circle at 50% 10%,rgba(255,255,255,.7),transparent 30%),
+        linear-gradient(180deg,#58d9ff,#fff0a0);
 }
 
-.history-item {
-    background: #11161d;
-    border: 1px solid #222b35;
-    border-radius: 16px;
-    padding: 16px;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.mood-great .mood-sun{
+    transform:scale(1.3) rotate(15deg);
 }
 
-.history-date {
-    color: #9aa6b5;
-    font-size: 13px;
+.mood-great .character-body{
+    background:#ffdc55;
 }
 
-.history-note {
-    margin-top: 5px;
-    color: #d7dce3;
-    font-size: 14px;
+.mood-great .character{
+    animation:happy 1.8s ease-in-out infinite;
 }
 
-.history-score {
-    font-size: 25px;
-    font-weight: bold;
-    color: #72f5a4;
+@keyframes happy{
+    0%,100%{transform:translateY(0) rotate(-2deg)}
+    50%{transform:translateY(-12px) rotate(2deg)}
 }
 
-.insight {
-    background: linear-gradient(
-        135deg,
-        #111d17,
-        #11161d
-    );
+/* 좋음 */
 
-    border: 1px solid #24412f;
-    border-radius: 20px;
-    padding: 25px;
+.mood-good .mood-world{
+    background:
+        linear-gradient(180deg,#8bdcff,#c9f5dc);
 }
 
-.insight-title {
-    color: #72f5a4;
-    font-weight: bold;
-    margin-bottom: 10px;
+.mood-good .character-body{
+    background:#72f5a4;
 }
 
-.insight-text {
-    color: #d6dce3;
-    line-height: 1.7;
+/* 보통 */
+
+.mood-normal .mood-world{
+    background:
+        linear-gradient(180deg,#9eafbf,#d7dde2);
 }
 
-.empty {
-    color: #718092;
-    text-align: center;
-    padding: 25px;
+.mood-normal .character-body{
+    background:#aab6c2;
 }
 
+/* 슬픔 */
 
-/* LOGIN */
-
-.auth-screen {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
+.mood-sad .mood-world{
+    background:
+        linear-gradient(180deg,#5d6b7e,#929dad);
 }
 
-.auth-box {
-    width: 100%;
-    max-width: 420px;
-    background: #11161d;
-    border: 1px solid #293440;
-    border-radius: 25px;
-    padding: 30px;
+.mood-sad .mood-sun{
+    opacity:0;
 }
 
-.auth-logo {
-    text-align: center;
-    font-size: 30px;
-    font-weight: bold;
-    letter-spacing: 5px;
-    margin-bottom: 10px;
+.mood-sad .mood-moon{
+    opacity:.75;
 }
 
-.auth-subtitle {
-    text-align: center;
-    color: #8d9aaa;
-    margin-bottom: 25px;
+.mood-sad .character-body{
+    background:#758397;
 }
 
-.auth-input {
-    width: 100%;
-    padding: 14px;
-    margin-bottom: 12px;
-    background: #080b0f;
-    border: 1px solid #28323d;
-    border-radius: 10px;
-    color: white;
-    font-size: 15px;
+.mood-sad .character{
+    animation:sad 3s ease-in-out infinite;
 }
 
-.auth-button {
-    margin-top: 5px;
+@keyframes sad{
+    0%,100%{transform:rotate(-2deg)}
+    50%{transform:rotate(2deg) translateY(3px)}
 }
 
-.auth-switch {
-    text-align: center;
-    color: #8d9aaa;
-    margin-top: 18px;
-    cursor: pointer;
-    font-size: 14px;
+/* 매우 낮음 */
+
+.mood-low .mood-world{
+    background:
+        radial-gradient(circle at 70% 15%,rgba(255,255,255,.08),transparent 25%),
+        linear-gradient(180deg,#111827,#293449);
 }
 
-.auth-message {
-    color: #72f5a4;
-    text-align: center;
-    margin-top: 15px;
-    line-height: 1.5;
+.mood-low .mood-sun{
+    opacity:0;
 }
 
-.auth-error {
-    color: #ff7777;
-    text-align: center;
-    margin-top: 15px;
-    line-height: 1.5;
+.mood-low .mood-moon{
+    opacity:1;
 }
 
-
-/* MODAL */
-
-.modal-bg {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,.75);
-
-    display: none;
-
-    align-items: center;
-    justify-content: center;
-
-    padding: 20px;
-
-    z-index: 100;
+.mood-low .mood-cloud{
+    opacity:.2;
 }
 
-.modal {
-    width: 100%;
-    max-width: 520px;
-
-    background: #11161d;
-
-    border: 1px solid #293440;
-
-    border-radius: 24px;
-
-    padding: 25px;
-
-    max-height: 90vh;
-
-    overflow-y: auto;
+.mood-low .character-face{
+    background:#d3c3ad;
 }
 
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.mood-low .character-body{
+    background:#526071;
 }
 
-.modal-header h2 {
-    margin: 0;
+.mood-low .character{
+    animation:tired 4s ease-in-out infinite;
 }
 
-.close {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 28px;
-    cursor: pointer;
+@keyframes tired{
+    0%,100%{transform:translateY(5px)}
+    50%{transform:translateY(10px)}
 }
 
-.field {
-    margin-top: 18px;
+/* =========================
+   오늘 점수
+========================= */
+
+.hero{
+    padding:28px;
+    text-align:center;
+    border:1px solid #26352d;
+    border-radius:25px;
+    background:linear-gradient(145deg,#111a16,#10151b);
 }
 
-.field label {
-    display: block;
-    color: #9aa6b5;
-    font-size: 13px;
-    margin-bottom: 7px;
+.small-title{
+    color:#7e8b98;
+    letter-spacing:3px;
+    font-size:11px;
+}
+
+.score{
+    color:var(--green);
+    font-size:82px;
+    line-height:1;
+    font-weight:900;
+    margin:15px 0;
+}
+
+.message{
+    color:#dbe2e8;
+}
+
+.main-button{
+    width:100%;
+    margin-top:22px;
+    padding:15px;
+    border:0;
+    border-radius:13px;
+    background:var(--green);
+    color:#07100b;
+    font-weight:900;
+}
+
+/* =========================
+   카드
+========================= */
+
+.grid{
+    display:grid;
+    gap:12px;
+}
+
+.cards{
+    grid-template-columns:repeat(3,1fr);
+    margin-top:14px;
+}
+
+.card,
+.stat,
+.panel{
+    padding:18px;
+    border:1px solid #222c36;
+    border-radius:19px;
+    background:#10151b;
+}
+
+.icon{
+    font-size:23px;
+}
+
+.label{
+    margin-top:8px;
+    color:#84909e;
+    font-size:12px;
+}
+
+.value{
+    margin-top:5px;
+    font-size:22px;
+    font-weight:800;
+}
+
+/* =========================
+   공통
+========================= */
+
+.section{
+    margin-top:28px;
+}
+
+.section-title{
+    margin-bottom:12px;
+    font-size:18px;
+    font-weight:800;
+}
+
+/* =========================
+   통계
+========================= */
+
+.stats{
+    grid-template-columns:repeat(4,1fr);
+}
+
+.stat-value{
+    margin-top:7px;
+    color:var(--green);
+    font-size:24px;
+    font-weight:900;
+}
+
+/* =========================
+   스트릭
+========================= */
+
+.streak{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px;
+    border:1px solid #4b3716;
+    border-radius:20px;
+    background:linear-gradient(135deg,#21190b,#15120d);
+}
+
+.streak-number{
+    color:#ffb84d;
+    font-size:42px;
+    font-weight:900;
+}
+
+.streak-text{
+    color:#d9dee3;
+}
+
+.streak-fire{
+    font-size:45px;
+}
+
+/* =========================
+   그래프
+========================= */
+
+.bar-row{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    margin:11px 0;
+}
+
+.bar-date{
+    width:42px;
+    color:#8995a2;
+    font-size:11px;
+}
+
+.bar{
+    flex:1;
+    height:25px;
+    overflow:hidden;
+    border-radius:7px;
+    background:#1b242d;
+}
+
+.bar-fill{
+    height:100%;
+    border-radius:7px;
+    background:linear-gradient(90deg,#72f5a4,#46d982);
+}
+
+.bar-score{
+    width:30px;
+    text-align:right;
+    font-size:11px;
+}
+
+/* =========================
+   달력
+========================= */
+
+.calendar{
+    padding:16px;
+}
+
+.calendar-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.calendar-title{
+    font-weight:800;
+}
+
+.calendar-buttons button{
+    padding:6px 10px;
+    border:1px solid #293440;
+    border-radius:8px;
+    background:#151b22;
+    color:white;
+}
+
+.weekdays,
+.calendar-grid{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:5px;
+}
+
+.weekdays div{
+    padding:5px;
+    color:#65717e;
+    text-align:center;
+    font-size:11px;
+}
+
+.day{
+    min-height:50px;
+    padding:6px;
+    border:1px solid #202a33;
+    border-radius:9px;
+    background:#0d1217;
+    cursor:pointer;
+}
+
+.day:hover{
+    border-color:var(--green);
+}
+
+.day.empty{
+    border:0;
+    background:transparent;
+    cursor:default;
+}
+
+.day-number{
+    color:#a8b1ba;
+    font-size:11px;
+}
+
+.day-score{
+    margin-top:5px;
+    color:var(--green);
+    font-size:12px;
+    font-weight:900;
+}
+
+.today{
+    border-color:var(--green);
+}
+
+/* =========================
+   인사이트
+========================= */
+
+.insight{
+    color:#d2d9df;
+    line-height:1.8;
+}
+
+/* =========================
+   기록
+========================= */
+
+.history{
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+}
+
+.history-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px;
+    border:1px solid #222c36;
+    border-radius:15px;
+    background:#10151b;
+    cursor:pointer;
+}
+
+.history-date{
+    color:#8b97a3;
+    font-size:12px;
+}
+
+.history-note{
+    margin-top:5px;
+    color:#d9dfe5;
+    font-size:14px;
+}
+
+.history-score{
+    color:var(--green);
+    font-size:24px;
+    font-weight:900;
+}
+
+.empty{
+    padding:25px;
+    color:#697683;
+    text-align:center;
+}
+
+/* =========================
+   모달
+========================= */
+
+.modal-bg,
+.detail{
+    position:fixed;
+    inset:0;
+    z-index:100;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    padding:18px;
+    background:rgba(0,0,0,.78);
+}
+
+.modal,
+.detail-box{
+    width:100%;
+    max-width:520px;
+    max-height:92vh;
+    overflow:auto;
+    padding:23px;
+    border:1px solid #293440;
+    border-radius:23px;
+    background:#11161d;
+}
+
+.modal-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.close{
+    border:0;
+    background:none;
+    color:white;
+    font-size:28px;
+}
+
+.field{
+    margin-top:17px;
+}
+
+.field label{
+    display:block;
+    margin-bottom:7px;
+    color:#8b97a3;
+    font-size:12px;
 }
 
 .field input,
-.field textarea {
-
-    width: 100%;
-
-    padding: 13px;
-
-    background: #080b0f;
-
-    border: 1px solid #28323d;
-
-    border-radius: 10px;
-
-    color: white;
-
-    font-size: 15px;
+.field textarea{
+    width:100%;
+    padding:13px;
+    border:1px solid #293440;
+    border-radius:9px;
+    background:#080b0f;
+    color:white;
 }
 
-.field textarea {
-    min-height: 80px;
-    resize: vertical;
+.field textarea{
+    min-height:80px;
+    resize:vertical;
 }
 
-.range-row {
-    display: flex;
-    gap: 10px;
-    align-items: center;
+.range-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
 }
 
-.range-row input {
-    flex: 1;
+.range-row input{
+    flex:1;
 }
 
-.range-number {
-    width: 45px;
-    text-align: center;
-    color: #72f5a4;
-    font-weight: bold;
+.range-number{
+    width:35px;
+    color:var(--green);
+    text-align:right;
+    font-weight:900;
 }
 
-.save-button {
-    margin-top: 25px;
+.save-button{
+    width:100%;
+    margin-top:23px;
+    padding:15px;
+    border:0;
+    border-radius:13px;
+    background:var(--green);
+    color:#07100b;
+    font-weight:900;
 }
 
-@media(max-width:800px) {
+.detail-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:15px;
+}
 
-    .stats {
-        grid-template-columns: repeat(2, 1fr);
+.detail-card{
+    padding:13px;
+    border-radius:12px;
+    background:#0a0e13;
+}
+
+.detail-card span{
+    display:block;
+    color:#7f8b98;
+    font-size:11px;
+}
+
+.detail-card strong{
+    display:block;
+    margin-top:5px;
+    font-size:17px;
+}
+
+/* =========================
+   모바일
+========================= */
+
+@media(max-width:750px){
+
+    .cards{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
     }
 
 }
 
-@media(max-width:700px) {
+@media(max-width:500px){
 
-    .cards {
-        grid-template-columns: repeat(2,1fr);
+    .container{
+        padding:15px 11px 50px;
     }
 
-    .score {
-        font-size: 70px;
+    .logo{
+        font-size:20px;
     }
 
-    .user-email {
-        display: none;
+    .user-email{
+        display:none;
     }
 
-}
-
-@media(max-width:450px) {
-
-    .cards {
-        grid-template-columns: 1fr;
+    .score{
+        font-size:68px;
     }
 
-    .stats {
-        grid-template-columns: 1fr 1fr;
+    .mood-world{
+        height:270px;
     }
 
-    .hero {
-        padding: 25px 15px;
+    .day{
+        min-height:43px;
     }
 
 }
-
 </style>
 </head>
 
-
 <body>
 
-
-<!-- LOGIN SCREEN -->
+<!-- =========================
+     로그인 화면
+========================= -->
 
 <div id="authScreen" class="auth-screen">
 
-    <div class="auth-box">
+<div class="auth-box">
 
-        <div class="auth-logo">
-            MY DAY
-        </div>
+<div class="auth-logo">MY DAY</div>
 
-        <div
-            class="auth-subtitle"
-            id="authTitle"
-        >
-            나의 하루를 기록하세요
-        </div>
+<div id="authTitle" class="auth-subtitle">
+나의 하루를 기록하세요
+</div>
 
-        <input
-            class="auth-input"
-            type="email"
-            id="email"
-            placeholder="이메일"
-        >
+<input
+id="email"
+class="auth-input"
+type="email"
+placeholder="이메일">
 
-        <input
-            class="auth-input"
-            type="password"
-            id="password"
-            placeholder="비밀번호"
-        >
+<input
+id="password"
+class="auth-input"
+type="password"
+placeholder="비밀번호">
 
-        <button
-            class="auth-button"
-            id="authButton"
-            onclick="handleAuth()"
-        >
-            로그인
-        </button>
+<button
+id="authButton"
+class="auth-button"
+onclick="handleAuth()">
+로그인
+</button>
 
-        <div
-            class="auth-switch"
-            id="authSwitch"
-            onclick="toggleAuthMode()"
-        >
-            처음이신가요? 회원가입
-        </div>
+<div
+id="authSwitch"
+class="auth-switch"
+onclick="toggleAuthMode()">
+처음이신가요? 회원가입
+</div>
 
-        <div
-            id="authMessage"
-            class="auth-message"
-        ></div>
+<div id="authMessage" class="auth-message"></div>
+<div id="authError" class="auth-error"></div>
 
-        <div
-            id="authError"
-            class="auth-error"
-        ></div>
-
-    </div>
-
+</div>
 </div>
 
 
-<!-- MAIN APP -->
+<!-- =========================
+     앱
+========================= -->
 
-<div
-    id="app"
-    style="display:none;"
->
-
+<div id="app" style="display:none">
 
 <div class="container">
 
+<div class="header">
 
-    <div class="header">
+<div class="logo">MY DAY</div>
 
-        <div class="logo">
-            MY DAY
-        </div>
+<div class="user-area">
 
-        <div class="user-area">
+<div id="userEmail" class="user-email"></div>
 
-            <div
-                class="user-email"
-                id="userEmail"
-            ></div>
+<button class="logout" onclick="logout()">
+로그아웃
+</button>
 
-            <button
-                class="logout"
-                onclick="logout()"
-            >
-                로그아웃
-            </button>
+</div>
+</div>
 
-        </div>
 
-    </div>
+<!-- 감정 월드 -->
 
+<div id="moodWorld" class="mood-world">
 
-    <div class="hero">
+<div class="mood-sun">☀️</div>
+<div class="mood-moon">🌙</div>
 
-        <div class="small-title">
-            TODAY SCORE
-        </div>
+<div class="mood-cloud cloud1">☁️</div>
+<div class="mood-cloud cloud2">☁️</div>
 
-        <div
-            class="score"
-            id="score"
-        >
-            0
-        </div>
+<div class="character">
 
-        <div
-            class="message"
-            id="message"
-        >
-            오늘의 데이터를 입력해보세요 🌱
-        </div>
+<div id="characterFace" class="character-face">
+🙂
+</div>
 
-        <button
-            class="main-button"
-            onclick="openModal()"
-        >
-            ＋ 오늘 기록하기
-        </button>
+<div class="character-body"></div>
 
-    </div>
+<div class="character-shadow"></div>
 
+</div>
 
-    <div class="cards">
-
-
-        <div class="card">
-
-            <div class="icon">😴</div>
-
-            <div class="card-title">
-                수면
-            </div>
-
-            <div
-                class="value"
-                id="sleepValue"
-            >
-                -
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="icon">📚</div>
-
-            <div class="card-title">
-                공부
-            </div>
-
-            <div
-                class="value"
-                id="studyValue"
-            >
-                -
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="icon">🏃</div>
-
-            <div class="card-title">
-                운동
-            </div>
-
-            <div
-                class="value"
-                id="exerciseValue"
-            >
-                -
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="icon">😊</div>
-
-            <div class="card-title">
-                기분
-            </div>
-
-            <div
-                class="value"
-                id="moodValue"
-            >
-                -
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="icon">⚡</div>
-
-            <div class="card-title">
-                집중도
-            </div>
-
-            <div
-                class="value"
-                id="focusValue"
-            >
-                -
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="icon">💰</div>
-
-            <div class="card-title">
-                오늘 지출
-            </div>
-
-            <div
-                class="value"
-                id="moneyValue"
-            >
-                -
-            </div>
-
-        </div>
-
-
-    </div>
-
-
-    <div class="section">
-
-        <h2>
-            📈 나의 기록
-        </h2>
-
-        <div class="stats">
-
-
-            <div class="stat">
-
-                <div class="stat-title">
-                    평균 점수
-                </div>
-
-                <div
-                    class="stat-value"
-                    id="averageScore"
-                >
-                    0점
-                </div>
-
-            </div>
-
-
-            <div class="stat">
-
-                <div class="stat-title">
-                    최고 점수
-                </div>
-
-                <div
-                    class="stat-value"
-                    id="bestScore"
-                >
-                    0점
-                </div>
-
-            </div>
-
-
-            <div class="stat">
-
-                <div class="stat-title">
-                    누적 공부
-                </div>
-
-                <div
-                    class="stat-value"
-                    id="totalStudy"
-                >
-                    0시간
-                </div>
-
-            </div>
-
-
-            <div class="stat">
-
-                <div class="stat-title">
-                    누적 운동
-                </div>
-
-                <div
-                    class="stat-value"
-                    id="totalExercise"
-                >
-                    0시간
-                </div>
-
-            </div>
-
-
-        </div>
-
-    </div>
-
-
-    <div class="section">
-
-        <h2>
-            📊 최근 기록
-        </h2>
-
-        <div
-            class="chart"
-            id="chart"
-        >
-
-            <div class="empty">
-                아직 기록이 없습니다.
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="section">
-
-        <h2>
-            🧠 MY INSIGHT
-        </h2>
-
-        <div class="insight">
-
-            <div class="insight-title">
-                오늘의 분석
-            </div>
-
-            <div
-                class="insight-text"
-                id="insight"
-            >
-                기록을 쌓으면
-                나만의 생활 패턴을 분석해드려요.
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="section">
-
-        <h2>
-            📅 기록 히스토리
-        </h2>
-
-        <div
-            class="history"
-            id="history"
-        >
-
-            <div class="empty">
-                아직 기록이 없습니다.
-            </div>
-
-        </div>
-
-    </div>
-
+<div id="characterText" class="character-text">
+오늘도 좋은 하루가 될 거예요 🌱
+</div>
 
 </div>
 
 
+<!-- 오늘 점수 -->
+
+<div class="hero">
+
+<div class="small-title">
+TODAY SCORE
+</div>
+
+<div id="score" class="score">-</div>
+
+<div id="message" class="message">
+오늘의 데이터를 입력해보세요 🌱
+</div>
+
+<button
+class="main-button"
+onclick="openModal()">
+＋ 오늘 기록하기
+</button>
+
 </div>
 
 
-<!-- RECORD MODAL -->
+<!-- 오늘 데이터 -->
 
-<div
-    class="modal-bg"
-    id="modalBg"
->
+<div class="grid cards">
 
+<div class="card">
+<div class="icon">😴</div>
+<div class="label">수면</div>
+<div id="sleepValue" class="value">-</div>
+</div>
+
+<div class="card">
+<div class="icon">📚</div>
+<div class="label">공부</div>
+<div id="studyValue" class="value">-</div>
+</div>
+
+<div class="card">
+<div class="icon">🏃</div>
+<div class="label">운동</div>
+<div id="exerciseValue" class="value">-</div>
+</div>
+
+<div class="card">
+<div class="icon">😊</div>
+<div class="label">기분</div>
+<div id="moodValue" class="value">-</div>
+</div>
+
+<div class="card">
+<div class="icon">⚡</div>
+<div class="label">집중도</div>
+<div id="focusValue" class="value">-</div>
+</div>
+
+<div class="card">
+<div class="icon">💰</div>
+<div class="label">지출</div>
+<div id="moneyValue" class="value">-</div>
+</div>
+
+</div>
+
+
+<!-- 스트릭 -->
+
+<div class="section">
+
+<div class="section-title">
+🔥 기록 연속성
+</div>
+
+<div class="streak">
+
+<div>
+<div id="streak" class="streak-number">0</div>
+<div class="streak-text">일 연속 기록 중</div>
+</div>
+
+<div class="streak-fire">🔥</div>
+
+</div>
+
+</div>
+
+
+<!-- 통계 -->
+
+<div class="section">
+
+<div class="section-title">
+📊 나의 통계
+</div>
+
+<div class="grid stats">
+
+<div class="stat">
+<div class="label">평균 점수</div>
+<div id="averageScore" class="stat-value">0</div>
+</div>
+
+<div class="stat">
+<div class="label">최고 점수</div>
+<div id="bestScore" class="stat-value">0</div>
+</div>
+
+<div class="stat">
+<div class="label">평균 수면</div>
+<div id="averageSleep" class="stat-value">0h</div>
+</div>
+
+<div class="stat">
+<div class="label">누적 공부</div>
+<div id="totalStudy" class="stat-value">0h</div>
+</div>
+
+</div>
+
+</div>
+
+
+<!-- 그래프 -->
+
+<div class="section">
+
+<div class="section-title">
+📈 최근 7일 점수
+</div>
+
+<div id="chart" class="panel">
+
+<div class="empty">
+기록이 없습니다.
+</div>
+
+</div>
+
+</div>
+
+
+<!-- 달력 -->
+
+<div class="section">
+
+<div class="section-title">
+📅 기록 달력
+</div>
+
+<div class="panel calendar">
+
+<div class="calendar-head">
+
+<div id="calendarTitle" class="calendar-title"></div>
+
+<div class="calendar-buttons">
+
+<button onclick="changeMonth(-1)">‹</button>
+<button onclick="changeMonth(1)">›</button>
+
+</div>
+
+</div>
+
+<div class="weekdays">
+
+<div>일</div>
+<div>월</div>
+<div>화</div>
+<div>수</div>
+<div>목</div>
+<div>금</div>
+<div>토</div>
+
+</div>
+
+<div id="calendarGrid" class="calendar-grid"></div>
+
+</div>
+
+</div>
+
+
+<!-- Insight -->
+
+<div class="section">
+
+<div class="section-title">
+🧠 MY INSIGHT
+</div>
+
+<div id="insight" class="panel insight">
+
+기록을 쌓으면 나만의 생활 패턴을 분석해드려요.
+
+</div>
+
+</div>
+
+
+<!-- 최근 기록 -->
+
+<div class="section">
+
+<div class="section-title">
+📜 최근 기록
+</div>
+
+<div id="history" class="history">
+
+<div class="empty">
+아직 기록이 없습니다.
+</div>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+
+<!-- =========================
+     기록 입력창
+========================= -->
+
+<div id="modalBg" class="modal-bg">
 
 <div class="modal">
 
+<div class="modal-head">
 
-    <div class="modal-header">
+<h2>오늘 기록하기</h2>
 
-        <h2>
-            오늘 기록하기
-        </h2>
+<button class="close" onclick="closeModal()">×</button>
 
-        <button
-            class="close"
-            onclick="closeModal()"
-        >
-            ×
-        </button>
-
-    </div>
+</div>
 
 
-    <div class="field">
+<div class="field">
 
-        <label>
-            수면 시간 (시간)
-        </label>
+<label>
+수면 시간 (시간)
+</label>
 
-        <input
-            type="number"
-            id="sleep"
-            min="0"
-            max="24"
-            step="0.1"
-            placeholder="예: 7.5"
-        >
+<input
+id="sleep"
+type="number"
+min="0"
+max="24"
+step="0.1"
+placeholder="예: 7.5">
 
-    </div>
-
-
-    <div class="field">
-
-        <label>
-            공부 시간 (분)
-        </label>
-
-        <input
-            type="number"
-            id="study"
-            min="0"
-            placeholder="예: 120"
-        >
-
-    </div>
+</div>
 
 
-    <div class="field">
+<div class="field">
 
-        <label>
-            운동 시간 (분)
-        </label>
+<label>
+공부 시간 (분)
+</label>
 
-        <input
-            type="number"
-            id="exercise"
-            min="0"
-            placeholder="예: 45"
-        >
+<input
+id="study"
+type="number"
+min="0"
+placeholder="예: 120">
 
-    </div>
-
-
-    <div class="field">
-
-        <label>
-            오늘 지출 (원)
-        </label>
-
-        <input
-            type="number"
-            id="money"
-            min="0"
-            placeholder="예: 23000"
-        >
-
-    </div>
+</div>
 
 
-    <div class="field">
+<div class="field">
 
-        <label>
-            기분
-        </label>
+<label>
+운동 시간 (분)
+</label>
 
-        <div class="range-row">
+<input
+id="exercise"
+type="number"
+min="0"
+placeholder="예: 40">
 
-            <input
-                type="range"
-                min="0"
-                max="100"
-                value="70"
-                id="mood"
-                oninput="updateMood()"
-            >
-
-            <div
-                class="range-number"
-                id="moodNumber"
-            >
-                70
-            </div>
-
-        </div>
-
-    </div>
+</div>
 
 
-    <div class="field">
+<div class="field">
 
-        <label>
-            집중도
-        </label>
+<label>
+오늘 지출 (원)
+</label>
 
-        <div class="range-row">
+<input
+id="money"
+type="number"
+min="0"
+placeholder="예: 15000">
 
-            <input
-                type="range"
-                min="0"
-                max="100"
-                value="70"
-                id="focus"
-                oninput="updateFocus()"
-            >
-
-            <div
-                class="range-number"
-                id="focusNumber"
-            >
-                70
-            </div>
-
-        </div>
-
-    </div>
+</div>
 
 
-    <div class="field">
+<div class="field">
 
-        <label>
-            오늘 한마디
-        </label>
+<label>
+오늘 기분
+</label>
 
-        <textarea
-            id="note"
-            placeholder="오늘 하루는 어땠나요?"
-        ></textarea>
+<div class="range-row">
 
-    </div>
+<input
+id="mood"
+type="range"
+min="0"
+max="100"
+value="70"
+oninput="updateRange('mood');updateMoodWorld(Number(this.value))">
+
+<div id="moodNumber" class="range-number">
+70
+</div>
+
+</div>
+
+</div>
 
 
-    <button
-        class="save-button"
-        onclick="saveRecord()"
-    >
-        클라우드에 저장하기
-    </button>
+<div class="field">
 
+<label>
+집중도
+</label>
+
+<div class="range-row">
+
+<input
+id="focus"
+type="range"
+min="0"
+max="100"
+value="70"
+oninput="updateRange('focus')">
+
+<div id="focusNumber" class="range-number">
+70
+</div>
+
+</div>
+
+</div>
+
+
+<div class="field">
+
+<label>
+오늘 한마디
+</label>
+
+<textarea
+id="note"
+placeholder="오늘 하루는 어땠나요?"></textarea>
+
+</div>
+
+
+<button
+class="save-button"
+onclick="saveRecord()">
+
+☁️ 클라우드에 저장하기
+
+</button>
+
+</div>
+</div>
+
+
+<!-- =========================
+     날짜 상세
+========================= -->
+
+<div id="detail" class="detail">
+
+<div class="detail-box">
+
+<div class="modal-head">
+
+<h2 id="detailTitle">
+기록
+</h2>
+
+<button class="close" onclick="closeDetail()">
+×
+</button>
+
+</div>
+
+<div id="detailContent"></div>
 
 </div>
 
@@ -1072,273 +1374,175 @@ body {
 
 <script>
 
-
 /* =========================
-   SUPABASE 설정
+   SUPABASE
 ========================= */
 
 const SUPABASE_URL =
-    "https://raasbxkmehjprsjmjxtj.supabase.co";
+"https://raasbxkmehjprsjmjxtj.supabase.co";
 
 const SUPABASE_KEY =
-    "sb_publishable_BALs2dGrARhYLLa3-5Uc9Q_UAHF_4Vh";
-
+"sb_publishable_BALs2dGrARhYLLa3-5Uc9Q_UAHF_4Vh";
 
 const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
 
 
 /* =========================
    상태
 ========================= */
 
-let isSignup = false;
-
-let currentUser = null;
-
-let records = [];
+let currentUser=null;
+let records=[];
+let signupMode=false;
+let calendarDate=new Date();
 
 
 /* =========================
-   인증 화면 전환
+   인증
 ========================= */
 
-function toggleAuthMode() {
+function toggleAuthMode(){
 
-    isSignup = !isSignup;
+signupMode=!signupMode;
 
-    const title =
-        document.getElementById("authTitle");
+clearAuthMessages();
 
-    const button =
-        document.getElementById("authButton");
+document.getElementById("authTitle").innerText=
+signupMode
+?"MY DAY 계정을 만들어보세요"
+:"나의 하루를 기록하세요";
 
-    const switchText =
-        document.getElementById("authSwitch");
+document.getElementById("authButton").innerText=
+signupMode
+?"회원가입"
+:"로그인";
 
-    clearAuthMessages();
-
-
-    if (isSignup) {
-
-        title.innerText =
-            "MY DAY 계정을 만들어보세요";
-
-        button.innerText =
-            "회원가입";
-
-        switchText.innerText =
-            "이미 계정이 있나요? 로그인";
-
-    } else {
-
-        title.innerText =
-            "나의 하루를 기록하세요";
-
-        button.innerText =
-            "로그인";
-
-        switchText.innerText =
-            "처음이신가요? 회원가입";
-
-    }
+document.getElementById("authSwitch").innerText=
+signupMode
+?"이미 계정이 있나요? 로그인"
+:"처음이신가요? 회원가입";
 
 }
 
 
-/* =========================
-   메시지
-========================= */
+function clearAuthMessages(){
 
-function clearAuthMessages() {
-
-    document.getElementById(
-        "authMessage"
-    ).innerText = "";
-
-    document.getElementById(
-        "authError"
-    ).innerText = "";
+document.getElementById("authMessage").innerText="";
+document.getElementById("authError").innerText="";
 
 }
 
 
-/* =========================
-   회원가입 / 로그인
-========================= */
+async function handleAuth(){
 
-async function handleAuth() {
+clearAuthMessages();
 
-    clearAuthMessages();
+const email=
+document.getElementById("email").value.trim();
 
-    const email =
-        document.getElementById(
-            "email"
-        ).value.trim();
+const password=
+document.getElementById("password").value;
 
-    const password =
-        document.getElementById(
-            "password"
-        ).value;
+if(!email||!password){
 
+document.getElementById("authError").innerText=
+"이메일과 비밀번호를 입력해주세요.";
 
-    if (!email || !password) {
+return;
 
-        document.getElementById(
-            "authError"
-        ).innerText =
-            "이메일과 비밀번호를 입력해주세요.";
+}
 
-        return;
+if(password.length<6){
 
-    }
+document.getElementById("authError").innerText=
+"비밀번호는 6자 이상이어야 합니다.";
 
+return;
 
-    if (password.length < 6) {
+}
 
-        document.getElementById(
-            "authError"
-        ).innerText =
-            "비밀번호는 6자 이상이어야 합니다.";
+const button=
+document.getElementById("authButton");
 
-        return;
+button.disabled=true;
+button.innerText="처리 중...";
 
-    }
+try{
 
+if(signupMode){
 
-    const button =
-        document.getElementById(
-            "authButton"
-        );
+const {error}=
+await supabaseClient.auth.signUp({
+email,
+password
+});
 
-    button.disabled = true;
+if(error)throw error;
 
-    button.innerText =
-        "처리 중...";
+document.getElementById("authMessage").innerText=
+"회원가입 완료! 이메일 인증 후 로그인해주세요.";
 
+}else{
 
-    try {
+const {data,error}=
+await supabaseClient.auth.signInWithPassword({
+email,
+password
+});
 
+if(error)throw error;
 
-        if (isSignup) {
+if(data.user){
 
-            const {
-                data,
-                error
-            } =
-            await supabaseClient.auth.signUp({
-                email,
-                password
-            });
+currentUser=data.user;
 
+showApp();
 
-            if (error) {
-                throw error;
-            }
+await loadRecords();
 
+}
 
-            document.getElementById(
-                "authMessage"
-            ).innerText =
-                "회원가입이 완료되었습니다. 이메일 인증이 필요한 경우 메일함에서 인증 후 로그인해주세요.";
+}
 
-        } else {
+}catch(error){
 
+document.getElementById("authError").innerText=
+error.message||"오류가 발생했습니다.";
 
-            const {
-                data,
-                error
-            } =
-            await supabaseClient.auth.signInWithPassword({
-                email,
-                password
-            });
+}
 
+button.disabled=false;
 
-            if (error) {
-                throw error;
-            }
-
-
-            if (data.user) {
-
-                currentUser =
-                    data.user;
-
-                showApp();
-
-                await loadRecords();
-
-            }
-
-        }
-
-
-    } catch (error) {
-
-        document.getElementById(
-            "authError"
-        ).innerText =
-            error.message ||
-            "로그인 중 오류가 발생했습니다.";
-
-    }
-
-
-    button.disabled = false;
-
-    button.innerText =
-        isSignup
-        ? "회원가입"
-        : "로그인";
+button.innerText=
+signupMode?"회원가입":"로그인";
 
 }
 
 
-/* =========================
-   로그아웃
-========================= */
+async function logout(){
 
-async function logout() {
+await supabaseClient.auth.signOut();
 
-    await supabaseClient.auth.signOut();
+currentUser=null;
+records=[];
 
-    currentUser = null;
-
-    records = [];
-
-    document.getElementById(
-        "app"
-    ).style.display = "none";
-
-    document.getElementById(
-        "authScreen"
-    ).style.display = "flex";
+document.getElementById("app").style.display="none";
+document.getElementById("authScreen").style.display="flex";
 
 }
 
 
-/* =========================
-   앱 표시
-========================= */
+function showApp(){
 
-function showApp() {
+document.getElementById("authScreen").style.display="none";
+document.getElementById("app").style.display="block";
 
-    document.getElementById(
-        "authScreen"
-    ).style.display = "none";
-
-    document.getElementById(
-        "app"
-    ).style.display = "block";
-
-    document.getElementById(
-        "userEmail"
-    ).innerText =
-        currentUser.email;
+document.getElementById("userEmail").innerText=
+currentUser.email;
 
 }
 
@@ -1347,91 +1551,54 @@ function showApp() {
    날짜
 ========================= */
 
-function getToday() {
+function localDateString(date){
 
-    const now =
-        new Date();
+const y=date.getFullYear();
 
-    const year =
-        now.getFullYear();
+const m=String(date.getMonth()+1).padStart(2,"0");
 
-    const month =
-        String(
-            now.getMonth() + 1
-        ).padStart(2,"0");
+const d=String(date.getDate()).padStart(2,"0");
 
-    const day =
-        String(
-            now.getDate()
-        ).padStart(2,"0");
-
-    return `${year}-${month}-${day}`;
+return `${y}-${m}-${d}`;
 
 }
 
 
-document.getElementById(
-    "date"
-).innerText =
-    new Date().toLocaleDateString(
-        "ko-KR",
-        {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-            weekday: "long"
-        }
-    );
+function todayString(){
 
-
-/* =========================
-   모달
-========================= */
-
-function openModal() {
-
-    document.getElementById(
-        "modalBg"
-    ).style.display =
-        "flex";
-
-}
-
-
-function closeModal() {
-
-    document.getElementById(
-        "modalBg"
-    ).style.display =
-        "none";
+return localDateString(new Date());
 
 }
 
 
 /* =========================
-   슬라이더
+   기록 불러오기
 ========================= */
 
-function updateMood() {
+async function loadRecords(){
 
-    document.getElementById(
-        "moodNumber"
-    ).innerText =
-        document.getElementById(
-            "mood"
-        ).value;
+if(!currentUser)return;
+
+const {data,error}=
+await supabaseClient
+.from("daily_records")
+.select("*")
+.eq("user_id",currentUser.id)
+.order("record_date",{ascending:false});
+
+if(error){
+
+console.error(error);
+
+alert("기록을 불러오지 못했습니다.");
+
+return;
 
 }
 
+records=data||[];
 
-function updateFocus() {
-
-    document.getElementById(
-        "focusNumber"
-    ).innerText =
-        document.getElementById(
-            "focus"
-        ).value;
+renderAll();
 
 }
 
@@ -1441,402 +1608,320 @@ function updateFocus() {
 ========================= */
 
 function calculateScore(
-    sleep,
-    study,
-    exercise,
-    mood,
-    focus
-) {
+sleep,
+study,
+exercise,
+mood,
+focus
+){
 
-    let sleepScore =
-        Math.min(
-            100,
-            Math.max(
-                0,
-                100 -
-                Math.abs(
-                    8 - sleep
-                ) * 20
-            )
-        );
+const sleepScore=
+Math.min(
+100,
+Math.max(
+0,
+100-Math.abs(8-sleep)*20
+)
+);
 
+const studyScore=
+Math.min(100,(study/180)*100);
 
-    let studyScore =
-        Math.min(
-            100,
-            study / 180 * 100
-        );
+const exerciseScore=
+Math.min(100,(exercise/60)*100);
 
-
-    let exerciseScore =
-        Math.min(
-            100,
-            exercise / 60 * 100
-        );
-
-
-    return Math.round(
-        sleepScore * 0.20 +
-        studyScore * 0.15 +
-        exerciseScore * 0.15 +
-        mood * 0.25 +
-        focus * 0.25
-    );
+return Math.round(
+sleepScore*.20+
+studyScore*.15+
+exerciseScore*.15+
+mood*.25+
+focus*.25
+);
 
 }
 
 
 /* =========================
-   기록 저장
+   감정 시스템
 ========================= */
 
-async function saveRecord() {
+function updateMoodWorld(mood){
 
-    if (!currentUser) {
+const world=
+document.getElementById("moodWorld");
 
-        alert(
-            "먼저 로그인해주세요."
-        );
+const face=
+document.getElementById("characterFace");
 
-        return;
+const text=
+document.getElementById("characterText");
 
-    }
+if(!world||!face||!text)return;
 
+world.classList.remove(
+"mood-great",
+"mood-good",
+"mood-normal",
+"mood-sad",
+"mood-low"
+);
 
-    const sleep =
-        Number(
-            document.getElementById(
-                "sleep"
-            ).value
-        );
+if(mood>=81){
 
+world.classList.add("mood-great");
 
-    const study =
-        Number(
-            document.getElementById(
-                "study"
-            ).value
-        ) || 0;
+face.innerText="🤩";
 
+text.innerText=
+"오늘 기분 최고예요! ✨";
 
-    const exercise =
-        Number(
-            document.getElementById(
-                "exercise"
-            ).value
-        ) || 0;
+}
 
+else if(mood>=61){
 
-    const money =
-        Number(
-            document.getElementById(
-                "money"
-            ).value
-        ) || 0;
+world.classList.add("mood-good");
 
+face.innerText="😊";
 
-    const mood =
-        Number(
-            document.getElementById(
-                "mood"
-            ).value
-        );
+text.innerText=
+"좋은 하루를 보내고 있어요 🌱";
 
+}
 
-    const focus =
-        Number(
-            document.getElementById(
-                "focus"
-            ).value
-        );
+else if(mood>=41){
 
+world.classList.add("mood-normal");
 
-    const note =
-        document.getElementById(
-            "note"
-        ).value;
+face.innerText="🙂";
 
+text.innerText=
+"괜찮아요. 천천히 가도 돼요.";
 
-    if (!sleep) {
+}
 
-        alert(
-            "수면 시간을 입력해주세요."
-        );
+else if(mood>=21){
 
-        return;
+world.classList.add("mood-sad");
 
-    }
+face.innerText="🥺";
 
+text.innerText=
+"오늘 조금 힘들었나 봐요. 쉬어가요.";
 
-    const score =
-        calculateScore(
-            sleep,
-            study,
-            exercise,
-            mood,
-            focus
-        );
+}
 
+else{
 
-    const record = {
+world.classList.add("mood-low");
 
-        user_id:
-            currentUser.id,
+face.innerText="😴";
 
-        record_date:
-            getToday(),
+text.innerText=
+"오늘은 푹 쉬는 것도 좋은 하루예요 🌙";
 
-        sleep,
-
-        study,
-
-        exercise,
-
-        money,
-
-        mood,
-
-        focus,
-
-        note,
-
-        score
-
-    };
-
-
-    const button =
-        document.querySelector(
-            ".save-button"
-        );
-
-
-    button.disabled = true;
-
-    button.innerText =
-        "저장 중...";
-
-
-    try {
-
-
-        const {
-            error
-        } =
-        await supabaseClient
-            .from("daily_records")
-            .upsert(
-                record,
-                {
-                    onConflict:
-                        "user_id,record_date"
-                }
-            );
-
-
-        if (error) {
-            throw error;
-        }
-
-
-        alert(
-            "☁️ 기록이 저장되었습니다!"
-        );
-
-
-        closeModal();
-
-
-        await loadRecords();
-
-
-    } catch (error) {
-
-        alert(
-            "저장 실패: "
-            + error.message
-        );
-
-    }
-
-
-    button.disabled = false;
-
-    button.innerText =
-        "클라우드에 저장하기";
+}
 
 }
 
 
 /* =========================
-   기록 불러오기
+   저장
 ========================= */
 
-async function loadRecords() {
+async function saveRecord(){
 
-    if (!currentUser) {
-        return;
-    }
+if(!currentUser){
 
+alert("로그인해주세요.");
 
-    const {
-        data,
-        error
-    } =
-    await supabaseClient
-        .from("daily_records")
-        .select("*")
-        .eq(
-            "user_id",
-            currentUser.id
-        )
-        .order(
-            "record_date",
-            {
-                ascending: false
-            }
-        );
+return;
 
+}
 
-    if (error) {
+const sleep=
+Number(document.getElementById("sleep").value);
 
-        console.error(error);
+const study=
+Number(document.getElementById("study").value)||0;
 
-        alert(
-            "기록을 불러오지 못했습니다."
-        );
+const exercise=
+Number(document.getElementById("exercise").value)||0;
 
-        return;
+const money=
+Number(document.getElementById("money").value)||0;
 
-    }
+const mood=
+Number(document.getElementById("mood").value);
 
+const focus=
+Number(document.getElementById("focus").value);
 
-    records =
-        data || [];
+const note=
+document.getElementById("note").value.trim();
 
+if(!sleep){
 
-    updateAll();
+alert("수면 시간을 입력해주세요.");
+
+return;
+
+}
+
+const score=
+calculateScore(
+sleep,
+study,
+exercise,
+mood,
+focus
+);
+
+const record={
+
+user_id:currentUser.id,
+record_date:todayString(),
+sleep,
+study,
+exercise,
+money,
+mood,
+focus,
+note,
+score
+
+};
+
+const button=
+document.querySelector(".save-button");
+
+button.disabled=true;
+button.innerText="저장 중...";
+
+try{
+
+const {error}=
+await supabaseClient
+.from("daily_records")
+.upsert(
+record,
+{
+onConflict:"user_id,record_date"
+}
+);
+
+if(error)throw error;
+
+alert("☁️ 오늘 기록이 저장되었습니다!");
+
+closeModal();
+
+await loadRecords();
+
+}catch(error){
+
+alert("저장 실패: "+error.message);
+
+}
+
+button.disabled=false;
+button.innerText=
+"☁️ 클라우드에 저장하기";
 
 }
 
 
 /* =========================
-   전체 화면 업데이트
+   전체 렌더링
 ========================= */
 
-function updateAll() {
+function renderAll(){
 
-    if (
-        !records ||
-        records.length === 0
-    ) {
-
-        return;
-
-    }
-
-
-    updateToday(
-        records[0]
-    );
-
-    updateStats();
-
-    updateChart();
-
-    updateHistory();
-
-    updateInsight();
+renderToday();
+renderStats();
+renderChart();
+renderCalendar();
+renderHistory();
+renderStreak();
+renderInsight();
 
 }
 
 
 /* =========================
-   오늘
+   오늘 화면
 ========================= */
 
-function updateToday(data) {
+function renderToday(){
 
-    document.getElementById(
-        "sleepValue"
-    ).innerText =
-        data.sleep + "시간";
+const data=
+records.find(
+r=>r.record_date===todayString()
+);
 
+if(!data){
 
-    document.getElementById(
-        "studyValue"
-    ).innerText =
-        data.study + "분";
+document.getElementById("score").innerText="-";
 
+document.getElementById("message").innerText=
+"오늘의 데이터를 입력해보세요 🌱";
 
-    document.getElementById(
-        "exerciseValue"
-    ).innerText =
-        data.exercise + "분";
+updateMoodWorld(50);
 
+return;
 
-    document.getElementById(
-        "moodValue"
-    ).innerText =
-        data.mood + "점";
+}
 
+document.getElementById("score").innerText=
+data.score;
 
-    document.getElementById(
-        "focusValue"
-    ).innerText =
-        data.focus + "점";
+document.getElementById("sleepValue").innerText=
+data.sleep+"시간";
 
+document.getElementById("studyValue").innerText=
+data.study+"분";
 
-    document.getElementById(
-        "moneyValue"
-    ).innerText =
-        Number(
-            data.money
-        ).toLocaleString()
-        + "원";
+document.getElementById("exerciseValue").innerText=
+data.exercise+"분";
 
+document.getElementById("moodValue").innerText=
+data.mood+"점";
 
-    document.getElementById(
-        "score"
-    ).innerText =
-        data.score;
+document.getElementById("focusValue").innerText=
+data.focus+"점";
 
+document.getElementById("moneyValue").innerText=
+Number(data.money).toLocaleString()+"원";
 
-    if (data.score >= 90) {
+let message;
 
-        document.getElementById(
-            "message"
-        ).innerText =
-            "완벽한 하루였어요! 🔥";
+if(data.score>=90){
 
-    }
+message="🔥 오늘 정말 잘했어요!";
 
-    else if (data.score >= 80) {
+}
 
-        document.getElementById(
-            "message"
-        ).innerText =
-            "정말 좋은 하루예요! 🌿";
+else if(data.score>=80){
 
-    }
+message="🌿 아주 좋은 하루예요!";
 
-    else if (data.score >= 70) {
+}
 
-        document.getElementById(
-            "message"
-        ).innerText =
-            "괜찮은 하루였어요 🙂";
+else if(data.score>=70){
 
-    }
+message="🙂 괜찮은 하루였어요.";
 
-    else {
+}
 
-        document.getElementById(
-            "message"
-        ).innerText =
-            "내일은 더 좋아질 거예요 🌱";
+else{
 
-    }
+message="🌱 내일은 더 좋아질 거예요.";
+
+}
+
+document.getElementById("message").innerText=
+message;
+
+updateMoodWorld(Number(data.mood));
 
 }
 
@@ -1845,72 +1930,42 @@ function updateToday(data) {
    통계
 ========================= */
 
-function updateStats() {
+function renderStats(){
 
-    const scores =
-        records.map(
-            item =>
-                Number(item.score)
-        );
+if(!records.length)return;
 
+const scores=
+records.map(r=>Number(r.score));
 
-    const average =
-        Math.round(
-            scores.reduce(
-                (a,b) => a+b,
-                0
-            ) / scores.length
-        );
+const average=
+Math.round(
+scores.reduce((a,b)=>a+b,0)/scores.length
+);
 
+const best=
+Math.max(...scores);
 
-    const best =
-        Math.max(...scores);
+const avgSleep=
+records.reduce(
+(a,r)=>a+Number(r.sleep),0
+)/records.length;
 
+const study=
+records.reduce(
+(a,r)=>a+Number(r.study),0
+);
 
-    const totalStudy =
-        records.reduce(
-            (sum,item) =>
-                sum +
-                Number(item.study),
-            0
-        );
+document.getElementById("averageScore").innerText=
+average+"점";
 
+document.getElementById("bestScore").innerText=
+best+"점";
 
-    const totalExercise =
-        records.reduce(
-            (sum,item) =>
-                sum +
-                Number(item.exercise),
-            0
-        );
+document.getElementById("averageSleep").innerText=
+avgSleep.toFixed(1)+"h";
 
-
-    document.getElementById(
-        "averageScore"
-    ).innerText =
-        average + "점";
-
-
-    document.getElementById(
-        "bestScore"
-    ).innerText =
-        best + "점";
-
-
-    document.getElementById(
-        "totalStudy"
-    ).innerText =
-        (totalStudy / 60)
-        .toFixed(1)
-        + "시간";
-
-
-    document.getElementById(
-        "totalExercise"
-    ).innerText =
-        (totalExercise / 60)
-        .toFixed(1)
-        + "시간";
+document.getElementById("totalStudy").innerText=
+(study/60).toFixed(1)+"h";
 
 }
 
@@ -1919,357 +1974,578 @@ function updateStats() {
    그래프
 ========================= */
 
-function updateChart() {
+function renderChart(){
 
-    const chart =
-        document.getElementById(
-            "chart"
-        );
+const box=
+document.getElementById("chart");
 
+if(!records.length){
 
-    const recent =
-        records.slice(
-            0,
-            7
-        );
+box.innerHTML=
+'<div class="empty">기록이 없습니다.</div>';
 
+return;
 
-    if (
-        recent.length === 0
-    ) {
+}
 
-        chart.innerHTML =
-            '<div class="empty">아직 기록이 없습니다.</div>';
+const recent=
+records.slice(0,7).slice().reverse();
 
-        return;
+box.innerHTML="";
 
-    }
+recent.forEach(r=>{
 
+const row=
+document.createElement("div");
 
-    chart.innerHTML = "";
+row.className="bar-row";
 
+const date=
+document.createElement("div");
 
-    recent
-        .slice()
-        .reverse()
-        .forEach(
-            item => {
+date.className="bar-date";
 
-                const row =
-                    document.createElement(
-                        "div"
-                    );
+date.innerText=
+r.record_date.slice(5);
 
-                row.className =
-                    "chart-row";
+const bar=
+document.createElement("div");
 
+bar.className="bar";
 
-                const date =
-                    document.createElement(
-                        "div"
-                    );
+const fill=
+document.createElement("div");
 
-                date.className =
-                    "chart-date";
+fill.className="bar-fill";
 
-                date.innerText =
-                    item.record_date
-                        .slice(5);
+fill.style.width=
+Math.max(3,Number(r.score))+"%";
 
+bar.appendChild(fill);
 
-                const bar =
-                    document.createElement(
-                        "div"
-                    );
+const score=
+document.createElement("div");
 
-                bar.className =
-                    "chart-bar";
+score.className="bar-score";
 
+score.innerText=
+r.score;
 
-                const inner =
-                    document.createElement(
-                        "div"
-                    );
+row.appendChild(date);
+row.appendChild(bar);
+row.appendChild(score);
 
-                inner.className =
-                    "chart-inner";
+box.appendChild(row);
 
-                inner.style.width =
-                    item.score + "%";
-
-
-                const score =
-                    document.createElement(
-                        "div"
-                    );
-
-                score.className =
-                    "chart-score";
-
-                score.innerText =
-                    item.score;
-
-
-                bar.appendChild(
-                    inner
-                );
-
-                row.appendChild(
-                    date
-                );
-
-                row.appendChild(
-                    bar
-                );
-
-                row.appendChild(
-                    score
-                );
-
-                chart.appendChild(
-                    row
-                );
-
-            }
-        );
+});
 
 }
 
 
 /* =========================
-   히스토리
+   스트릭
 ========================= */
 
-function updateHistory() {
+function renderStreak(){
 
-    const box =
-        document.getElementById(
-            "history"
-        );
+if(!records.length){
 
+document.getElementById("streak").innerText="0";
 
-    box.innerHTML = "";
+return;
 
+}
 
-    records
-        .slice(
-            0,
-            10
-        )
-        .forEach(
-            item => {
+const dates=
+new Set(
+records.map(r=>r.record_date)
+);
 
-                const element =
-                    document.createElement(
-                        "div"
-                    );
+let current=
+new Date();
 
-                element.className =
-                    "history-item";
+let count=0;
 
+while(true){
 
-                const left =
-                    document.createElement(
-                        "div"
-                    );
+const key=
+localDateString(current);
 
+if(!dates.has(key))break;
 
-                const date =
-                    document.createElement(
-                        "div"
-                    );
+count++;
 
-                date.className =
-                    "history-date";
+current.setDate(
+current.getDate()-1
+);
 
-                date.innerText =
-                    item.record_date;
+}
 
-
-                const note =
-                    document.createElement(
-                        "div"
-                    );
-
-                note.className =
-                    "history-note";
-
-                note.innerText =
-                    item.note ||
-                    "오늘의 기록";
-
-
-                left.appendChild(
-                    date
-                );
-
-                left.appendChild(
-                    note
-                );
-
-
-                const score =
-                    document.createElement(
-                        "div"
-                    );
-
-                score.className =
-                    "history-score";
-
-                score.innerText =
-                    item.score;
-
-
-                element.appendChild(
-                    left
-                );
-
-                element.appendChild(
-                    score
-                );
-
-
-                box.appendChild(
-                    element
-                );
-
-            }
-        );
+document.getElementById("streak").innerText=
+count;
 
 }
 
 
 /* =========================
-   인사이트
+   달력
 ========================= */
 
-function updateInsight() {
+function changeMonth(amount){
 
-    const insight =
-        document.getElementById(
-            "insight"
-        );
+calendarDate.setMonth(
+calendarDate.getMonth()+amount
+);
 
+renderCalendar();
 
-    if (
-        records.length < 2
-    ) {
-
-        insight.innerText =
-            "기록이 2일 이상 쌓이면 생활 패턴을 분석해드려요.";
-
-        return;
-
-    }
+}
 
 
-    const avgSleep =
-        records.reduce(
-            (sum,item) =>
-                sum +
-                Number(item.sleep),
-            0
-        ) / records.length;
+function renderCalendar(){
 
+const year=
+calendarDate.getFullYear();
 
-    const avgFocus =
-        records.reduce(
-            (sum,item) =>
-                sum +
-                Number(item.focus),
-            0
-        ) / records.length;
+const month=
+calendarDate.getMonth();
 
+document.getElementById("calendarTitle").innerText=
+`${year}년 ${month+1}월`;
 
-    const avgMood =
-        records.reduce(
-            (sum,item) =>
-                sum +
-                Number(item.mood),
-            0
-        ) / records.length;
+const grid=
+document.getElementById("calendarGrid");
 
+grid.innerHTML="";
 
-    insight.innerText =
-        "지금까지 평균 수면은 "
-        + avgSleep.toFixed(1)
-        + "시간, 평균 집중도는 "
-        + Math.round(avgFocus)
-        + "점, 평균 기분은 "
-        + Math.round(avgMood)
-        + "점이에요. 기록이 더 쌓이면 MY DAY가 생활 패턴을 더 자세히 분석할 수 있어요.";
+const first=
+new Date(year,month,1);
+
+const last=
+new Date(year,month+1,0);
+
+for(
+let i=0;
+i<first.getDay();
+i++
+){
+
+const empty=
+document.createElement("div");
+
+empty.className="day empty";
+
+grid.appendChild(empty);
+
+}
+
+for(
+let day=1;
+day<=last.getDate();
+day++
+){
+
+const date=
+new Date(year,month,day);
+
+const key=
+localDateString(date);
+
+const record=
+records.find(
+r=>r.record_date===key
+);
+
+const cell=
+document.createElement("div");
+
+cell.className="day";
+
+if(key===todayString()){
+
+cell.classList.add("today");
+
+}
+
+const number=
+document.createElement("div");
+
+number.className="day-number";
+
+number.innerText=day;
+
+cell.appendChild(number);
+
+if(record){
+
+const score=
+document.createElement("div");
+
+score.className="day-score";
+
+score.innerText=
+record.score+"점";
+
+cell.appendChild(score);
+
+cell.onclick=
+()=>showDetail(record);
+
+}
+
+grid.appendChild(cell);
+
+}
 
 }
 
 
 /* =========================
-   로그인 상태 확인
+   상세 기록
 ========================= */
 
-async function checkSession() {
+function showDetail(record){
 
-    const {
-        data
-    } =
-    await supabaseClient
-        .auth
-        .getSession();
+document.getElementById("detailTitle").innerText=
+record.record_date;
+
+document.getElementById("detailContent").innerHTML=`
+
+<div style="
+color:#72f5a4;
+font-size:38px;
+font-weight:900;
+text-align:center;
+margin:15px">
+${record.score}점
+</div>
+
+<div class="detail-grid">
+
+<div class="detail-card">
+<span>😴 수면</span>
+<strong>${record.sleep}시간</strong>
+</div>
+
+<div class="detail-card">
+<span>📚 공부</span>
+<strong>${record.study}분</strong>
+</div>
+
+<div class="detail-card">
+<span>🏃 운동</span>
+<strong>${record.exercise}분</strong>
+</div>
+
+<div class="detail-card">
+<span>😊 기분</span>
+<strong>${record.mood}점</strong>
+</div>
+
+<div class="detail-card">
+<span>⚡ 집중도</span>
+<strong>${record.focus}점</strong>
+</div>
+
+<div class="detail-card">
+<span>💰 지출</span>
+<strong>${Number(record.money).toLocaleString()}원</strong>
+</div>
+
+</div>
+
+<div style="
+margin-top:18px;
+color:#aab4be;
+line-height:1.7">
+${escapeHtml(record.note||"작성한 메모가 없습니다.")}
+</div>
+
+`;
+
+document.getElementById("detail").style.display="flex";
+
+}
 
 
-    if (
-        data &&
-        data.session &&
-        data.session.user
-    ) {
+function closeDetail(){
 
-        currentUser =
-            data.session.user;
+document.getElementById("detail").style.display="none";
 
-        showApp();
+}
 
-        await loadRecords();
 
-    }
+function escapeHtml(text){
+
+return String(text)
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
 
 }
 
 
 /* =========================
-   로그인 상태 변화 감지
+   최근 기록
 ========================= */
 
-supabaseClient
-    .auth
-    .onAuthStateChange(
-        async (
-            event,
-            session
-        ) => {
+function renderHistory(){
 
-            if (
-                session &&
-                session.user
-            ) {
+const box=
+document.getElementById("history");
 
-                currentUser =
-                    session.user;
+box.innerHTML="";
 
-                showApp();
+if(!records.length){
 
-                await loadRecords();
+box.innerHTML=
+'<div class="empty">아직 기록이 없습니다.</div>';
 
-            }
+return;
 
-        }
-    );
+}
+
+records
+.slice(0,10)
+.forEach(record=>{
+
+const item=
+document.createElement("div");
+
+item.className="history-item";
+
+const left=
+document.createElement("div");
+
+const date=
+document.createElement("div");
+
+date.className="history-date";
+
+date.innerText=
+record.record_date;
+
+const note=
+document.createElement("div");
+
+note.className="history-note";
+
+note.innerText=
+record.note||"오늘의 기록";
+
+left.appendChild(date);
+left.appendChild(note);
+
+const score=
+document.createElement("div");
+
+score.className="history-score";
+
+score.innerText=
+record.score;
+
+item.appendChild(left);
+item.appendChild(score);
+
+item.onclick=
+()=>showDetail(record);
+
+box.appendChild(item);
+
+});
+
+}
 
 
-/* 시작 */
+/* =========================
+   Insight
+========================= */
+
+function renderInsight(){
+
+const box=
+document.getElementById("insight");
+
+if(records.length<2){
+
+box.innerText=
+"기록을 2일 이상 쌓으면 MY DAY가 생활 패턴을 분석해드려요.";
+
+return;
+
+}
+
+const avgSleep=
+records.reduce(
+(a,r)=>a+Number(r.sleep),0
+)/records.length;
+
+const avgMood=
+records.reduce(
+(a,r)=>a+Number(r.mood),0
+)/records.length;
+
+const avgFocus=
+records.reduce(
+(a,r)=>a+Number(r.focus),0
+)/records.length;
+
+const avgScore=
+records.reduce(
+(a,r)=>a+Number(r.score),0
+)/records.length;
+
+let text=
+`현재까지 평균 점수는 ${Math.round(avgScore)}점이에요. `;
+
+text+=
+`평균 수면은 ${avgSleep.toFixed(1)}시간, `;
+
+text+=
+`평균 기분은 ${Math.round(avgMood)}점, `;
+
+text+=
+`평균 집중도는 ${Math.round(avgFocus)}점이에요. `;
+
+if(avgSleep<6.5){
+
+text+=
+"최근 수면 시간이 조금 부족해 보여요. 수면을 먼저 챙겨보는 걸 추천해요. 😴";
+
+}
+
+else if(avgFocus>=80){
+
+text+=
+"집중도가 상당히 좋아요. 지금의 생활 패턴을 유지해보세요. ⚡";
+
+}
+
+else if(avgMood>=80){
+
+text+=
+"평균 기분이 좋아요. 현재의 생활 리듬을 유지해보세요. 😊";
+
+}
+
+else{
+
+text+=
+"조금 더 기록하면 어떤 생활 습관이 점수에 영향을 주는지 더 잘 파악할 수 있어요.";
+
+}
+
+box.innerText=text;
+
+}
+
+
+/* =========================
+   모달
+========================= */
+
+function openModal(){
+
+const today=
+records.find(
+r=>r.record_date===todayString()
+);
+
+if(today){
+
+document.getElementById("sleep").value=
+today.sleep;
+
+document.getElementById("study").value=
+today.study;
+
+document.getElementById("exercise").value=
+today.exercise;
+
+document.getElementById("money").value=
+today.money;
+
+document.getElementById("mood").value=
+today.mood;
+
+document.getElementById("focus").value=
+today.focus;
+
+document.getElementById("note").value=
+today.note||"";
+
+updateRange("mood");
+updateRange("focus");
+updateMoodWorld(Number(today.mood));
+
+}
+
+document.getElementById("modalBg").style.display="flex";
+
+}
+
+
+function closeModal(){
+
+document.getElementById("modalBg").style.display="none";
+
+}
+
+
+function updateRange(type){
+
+document.getElementById(type+"Number").innerText=
+document.getElementById(type).value;
+
+}
+
+
+/* =========================
+   세션 확인
+========================= */
+
+async function checkSession(){
+
+const {data}=
+await supabaseClient.auth.getSession();
+
+if(data&&data.session){
+
+currentUser=
+data.session.user;
+
+showApp();
+
+await loadRecords();
+
+}
+
+}
+
+
+supabaseClient.auth.onAuthStateChange(
+(event,session)=>{
+
+if(session&&session.user){
+
+currentUser=
+session.user;
+
+showApp();
+
+loadRecords();
+
+}
+
+}
+);
+
 
 checkSession();
 
 </script>
-
 
 </body>
 </html>
