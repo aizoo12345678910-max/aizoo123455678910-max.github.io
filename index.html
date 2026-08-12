@@ -375,7 +375,7 @@ async function saveRecord(){
  try{
    const {error}=await supabaseClient.from("daily_records").upsert(record,{onConflict:"user_id,record_date"});
    if(error)throw error;
-   const xpGain=Math.max(10,score);
+   const xpGain=Math.max(5,Math.round(score/2));
    addCoins(Math.max(5,Math.floor(score/10)));
    closeModal();showToast(`☁️ 저장 완료! +${xpGain} XP · +${Math.max(5,Math.floor(score/10))} 🪙`);
    ["sleep","study","exercise","money","note"].forEach(id=>$(id).value="");
@@ -398,8 +398,8 @@ async function loadRecords(){
  if(error){console.error(error);alert("기록을 불러오지 못했습니다.");return}
  records=data||[];updateAll();
 }
-function getXP(){return records.reduce((s,x)=>s+Math.max(10,Number(x.score||0)),0)}
-function getLevel(r=records){return Math.floor(r.reduce((s,x)=>s+Math.max(10,Number(x.score||0)),0)/100)+1}
+function getXP(){return records.reduce((s,x)=>s+Math.max(5,Math.round(Number(x.score||0)/2)),0)}
+function getLevel(r=records){return Math.floor(r.reduce((s,x)=>s+Math.max(5,Math.round(Number(x.score||0)/2)),0)/100)+1}
 function calcStreak(r=records){
  if(!r.length)return 0;
  const dates=new Set(r.map(x=>x.record_date));let d=new Date();d.setHours(0,0,0,0);let streak=0;
