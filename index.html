@@ -48,6 +48,43 @@ button,input,textarea{font:inherit}.container{max-width:1120px;margin:auto;paddi
 .growth{display:grid;grid-template-columns:1fr 1fr;gap:10px}.growth-box{padding:18px}.growth-big{font-size:30px;font-weight:1000;margin-top:5px}.growth-sub{color:var(--muted);font-size:12px;margin-top:4px}
 .features{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.feature-card{padding:18px;cursor:pointer;transition:.2s}.feature-card:hover{transform:translateY(-3px);box-shadow:0 14px 35px rgba(87,61,111,.14)}.feature-icon{font-size:28px}.feature-title{font-weight:900;margin-top:8px}.feature-sub{font-size:12px;color:var(--muted);margin-top:4px}
 .badges{display:flex;gap:9px;overflow:auto;padding:4px 2px 8px}.badge{min-width:115px;padding:13px;border-radius:16px;background:#fff;border:1px solid var(--line);text-align:center;box-shadow:0 5px 16px rgba(80,50,100,.05)}.badge.locked{opacity:.42;filter:grayscale(1)}.badge-icon{font-size:26px}.badge-name{font-size:12px;font-weight:900;margin-top:5px}.badge-desc{font-size:10px;color:var(--muted);margin-top:3px}
+
+.evolution-card{
+  margin-bottom:12px;padding:20px;background:
+  linear-gradient(135deg,rgba(255,255,255,.92),rgba(247,243,255,.86));
+  border:1px solid #fff;border-radius:24px;box-shadow:0 10px 32px rgba(87,61,111,.09);
+  display:grid;grid-template-columns:190px 1fr;gap:22px;align-items:center;overflow:hidden;position:relative
+}
+.evolution-card:before{content:"";position:absolute;width:180px;height:180px;border-radius:50%;background:rgba(155,124,255,.10);right:-70px;top:-90px}
+.character-stage{display:grid;place-items:center;min-height:170px;position:relative}
+.character-orb{
+  width:145px;height:145px;border-radius:50%;display:grid;place-items:center;position:relative;
+  background:linear-gradient(135deg,#fff8dc,#edf7ff 52%,#f3eaff);
+  box-shadow:inset 0 0 0 5px rgba(255,255,255,.72),0 14px 35px rgba(114,93,160,.16);
+  animation:floatCharacter 3s ease-in-out infinite
+}
+.character-orb:after{content:"";position:absolute;left:24px;right:24px;bottom:-12px;height:20px;border-radius:50%;background:rgba(76,60,90,.10);filter:blur(8px);z-index:-1}
+.character-emoji{font-size:68px;line-height:1;filter:drop-shadow(0 8px 10px rgba(70,50,90,.13))}
+.character-spark{position:absolute;font-size:22px;animation:twinkle 1.8s ease-in-out infinite}
+.character-spark.s1{left:10px;top:15px}.character-spark.s2{right:7px;bottom:24px;animation-delay:.7s}
+.character-info{position:relative;z-index:1}.character-label{font-size:11px;letter-spacing:2px;color:#9a8ca5;font-weight:900}
+.character-name{font-size:25px;font-weight:1000;margin-top:5px}.character-desc{color:#756a80;font-size:13px;line-height:1.6;margin-top:5px}
+.character-route{display:inline-flex;align-items:center;gap:6px;margin-top:9px;padding:6px 10px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:11px;font-weight:900;color:#6b5b82}
+.trait-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:14px}
+.trait{background:rgba(255,255,255,.78);border:1px solid #eee5f5;border-radius:12px;padding:9px}
+.trait-top{display:flex;justify-content:space-between;gap:5px;font-size:10px;color:#81758c;font-weight:800}
+.trait-bar{height:7px;border-radius:99px;background:#eee7f3;overflow:hidden;margin-top:6px}
+.trait-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#68d9a8,#77aaff,#9b7cff);transition:width .6s}
+.evolution-next{margin-top:10px;color:#9a8ca5;font-size:11px}
+.evolution-button{margin-top:12px;border:1px solid var(--line);background:#fff;color:#665778;padding:8px 11px;border-radius:11px;cursor:pointer;font-size:11px;font-weight:900}
+.evolution-button:hover{transform:translateY(-1px)}
+.evolution-path{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:14px}
+.path-card{border:1px solid var(--line);border-radius:16px;background:#fff;padding:13px;text-align:center}
+.path-emoji{font-size:33px}.path-name{font-size:12px;font-weight:1000;margin-top:5px}.path-desc{font-size:10px;color:var(--muted);margin-top:4px;line-height:1.45}
+.path-card.current{outline:3px solid rgba(85,201,154,.35);background:#f2fff8}
+@keyframes floatCharacter{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes twinkle{0%,100%{transform:scale(.75);opacity:.45}50%{transform:scale(1.15);opacity:1}}
+
 .auth-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative}.auth-box{width:100%;max-width:430px;background:rgba(255,255,255,.9);backdrop-filter:blur(15px);border:1px solid #fff;border-radius:28px;padding:30px;box-shadow:var(--shadow)}
 .auth-logo{text-align:center;font-size:31px;font-weight:1000;letter-spacing:5px}.auth-logo span{color:var(--green)}.auth-subtitle{text-align:center;color:var(--muted);margin:10px 0 25px}
 .auth-input,.field input,.field textarea{width:100%;padding:13px;background:#fff;border:1px solid var(--line);border-radius:11px;color:var(--text);font-size:15px}.auth-input{margin-bottom:11px}.auth-switch{text-align:center;color:var(--muted);margin-top:17px;cursor:pointer;font-size:13px}.auth-message{color:#48a97f;text-align:center;margin-top:14px;line-height:1.5}.auth-error{color:#e66b7c;text-align:center;margin-top:14px;line-height:1.5}
@@ -58,8 +95,8 @@ button,input,textarea{font:inherit}.container{max-width:1120px;margin:auto;paddi
 .levelup{position:fixed;inset:0;background:rgba(45,28,55,.55);backdrop-filter:blur(7px);display:none;align-items:center;justify-content:center;z-index:300}.levelup-box{background:#fff;border-radius:30px;padding:34px;text-align:center;width:min(390px,90%);box-shadow:0 30px 100px rgba(0,0,0,.25);animation:pop .45s ease}.levelup-icon{font-size:65px}.levelup-title{font-size:28px;font-weight:1000;color:#735bd0;margin-top:10px}.levelup-sub{color:#8f839c;margin-top:8px}@keyframes pop{from{transform:scale(.75);opacity:0}to{transform:scale(1);opacity:1}}
 .toast{position:fixed;left:50%;bottom:25px;transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;background:#fff;border:1px solid var(--line);color:#493e52;padding:12px 18px;border-radius:999px;z-index:400;transition:.25s;box-shadow:0 10px 30px rgba(80,50,100,.15)}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 @media(max-width:900px){.cards{grid-template-columns:repeat(3,1fr)}.features{grid-template-columns:1fr 1fr}}
-@media(max-width:700px){.stats{grid-template-columns:repeat(2,1fr)}.growth{grid-template-columns:1fr}.score{font-size:70px}.user-email{display:none}}
-@media(max-width:480px){.cards{grid-template-columns:repeat(2,1fr)}.features{grid-template-columns:1fr}.hero{padding:24px 14px}.container{padding-left:11px;padding-right:11px}.emoji-grid,.shop-grid{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:700px){.stats{grid-template-columns:repeat(2,1fr)}.growth{grid-template-columns:1fr}.evolution-card{grid-template-columns:1fr;text-align:center}.trait-grid{grid-template-columns:repeat(2,1fr)}.score{font-size:70px}.user-email{display:none}}
+@media(max-width:480px){.cards{grid-template-columns:repeat(2,1fr)}.features{grid-template-columns:1fr}.hero{padding:24px 14px}.container{padding-left:11px;padding-right:11px}.emoji-grid,.shop-grid{grid-template-columns:repeat(4,1fr)}.evolution-card{padding:16px}.character-orb{width:125px;height:125px}.character-emoji{font-size:58px}.evolution-path{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
@@ -120,6 +157,45 @@ button,input,textarea{font:inherit}.container{max-width:1120px;margin:auto;paddi
 
     <div class="section" id="growthSection">
       <h2>🌱 나의 성장</h2>
+
+      <div class="evolution-card">
+        <div class="character-stage">
+          <div class="character-orb" id="characterOrb">
+            <div class="character-spark s1">✨</div>
+            <div class="character-emoji" id="growthCharacter">🌱</div>
+            <div class="character-spark s2">⭐</div>
+          </div>
+        </div>
+        <div class="character-info">
+          <div class="character-label">MY DAY PARTNER</div>
+          <div class="character-name" id="characterName">몽글씨앗</div>
+          <div class="character-desc" id="characterDesc">당신의 하루를 먹고 자라는 작은 성장 씨앗이에요.</div>
+          <div class="character-route" id="characterRoute">🌱 공통 성장 단계</div>
+
+          <div class="trait-grid">
+            <div class="trait">
+              <div class="trait-top"><span>🧠 지식</span><span id="studyTraitText">0</span></div>
+              <div class="trait-bar"><div class="trait-fill" id="studyTraitBar" style="width:0%"></div></div>
+            </div>
+            <div class="trait">
+              <div class="trait-top"><span>💪 활동</span><span id="exerciseTraitText">0</span></div>
+              <div class="trait-bar"><div class="trait-fill" id="exerciseTraitBar" style="width:0%"></div></div>
+            </div>
+            <div class="trait">
+              <div class="trait-top"><span>🔥 꾸준함</span><span id="streakTraitText">0</span></div>
+              <div class="trait-bar"><div class="trait-fill" id="streakTraitBar" style="width:0%"></div></div>
+            </div>
+            <div class="trait">
+              <div class="trait-top"><span>✨ 균형</span><span id="balanceTraitText">0</span></div>
+              <div class="trait-bar"><div class="trait-fill" id="balanceTraitBar" style="width:0%"></div></div>
+            </div>
+          </div>
+
+          <div class="evolution-next" id="evolutionNext">LEVEL 5에서 첫 성장이 시작돼요.</div>
+          <button class="evolution-button" onclick="openEvolutionGuide()">진화 도감 보기 ✨</button>
+        </div>
+      </div>
+
       <div class="growth">
         <div class="growth-box"><div class="stat-title">연속 기록</div><div class="growth-big" id="streak">0일 🔥</div><div class="growth-sub">꾸준함이 가장 강력한 능력이에요</div></div>
         <div class="growth-box"><div class="stat-title">보유 코인</div><div class="growth-big">🪙 <span id="coins">0</span></div><div class="growth-sub">미션과 기록으로 코인을 모아보세요</div></div>
@@ -218,7 +294,9 @@ const achievementDefs=[
  {id:"study10",icon:"🧠",name:"집중러",desc:"공부 10시간 누적",ok:r=>r.reduce((s,x)=>s+Number(x.study||0),0)>=600},
  {id:"exercise5",icon:"🏃",name:"운동왕",desc:"운동 5시간 누적",ok:r=>r.reduce((s,x)=>s+Number(x.exercise||0),0)>=300},
  {id:"level5",icon:"🚀",name:"레벨 5",desc:"레벨 5 달성",ok:r=>getLevel(r)>=5},
- {id:"score100",icon:"🏆",name:"최고의 하루",desc:"100점 달성",ok:r=>r.some(x=>Number(x.score)>=100)}
+ {id:"score100",icon:"🏆",name:"최고의 하루",desc:"100점 달성",ok:r=>r.some(x=>Number(x.score)>=100)},
+ {id:"evolve10",icon:"✨",name:"첫 진화",desc:"레벨 10 달성",ok:r=>getLevel(r)>=10},
+ {id:"evolve20",icon:"🌈",name:"최종 진화",desc:"레벨 20 달성",ok:r=>getLevel(r)>=20}
 ];
 let profile={name:"MY DAY USER",emoji:"🌱",color:"#55c99a",background:backgrounds[0],accessory:""};
 let game={coins:0,owned:[],claimedMissions:[],seenLevel:1};
@@ -305,7 +383,7 @@ function loadLocalGame(){
 function saveLocalGame(){localStorage.setItem("myday_game_"+currentUser.id,JSON.stringify(game))}
 function addCoins(n){game.coins=(game.coins||0)+n;saveLocalGame()}
 function updateAll(){
- updateToday(records[0]);updateStats();updateChart();updateHistory();updateInsight();updateGrowth();updateAchievements();updateMissionUI();
+ updateToday(records[0]);updateStats();updateChart();updateHistory();updateInsight();updateGrowth();updateEvolution();updateAchievements();updateMissionUI();
 }
 function updateToday(d){
  if(!d)return;
@@ -335,9 +413,111 @@ function updateInsight(){
  const avgSleep=records.reduce((s,x)=>s+Number(x.sleep),0)/records.length,avgFocus=records.reduce((s,x)=>s+Number(x.focus),0)/records.length,avgMood=records.reduce((s,x)=>s+Number(x.mood),0)/records.length;
  $("insight").innerText=`지금까지 평균 수면은 ${avgSleep.toFixed(1)}시간, 평균 집중도는 ${Math.round(avgFocus)}점, 평균 기분은 ${Math.round(avgMood)}점이에요. 기록이 더 쌓일수록 MY DAY가 생활 패턴을 더 자세히 보여드릴게요.`;
 }
+
+function getRecentActivityRate(days=14){
+ const today=new Date();today.setHours(0,0,0,0);
+ const active=new Set();
+ records.forEach(r=>{
+   const d=new Date(r.record_date+"T00:00:00");
+   const diff=Math.floor((today-d)/(1000*60*60*24));
+   if(diff>=0&&diff<days)active.add(r.record_date);
+ });
+ return Math.min(100,Math.round(active.size/days*100));
+}
+function getEvolutionTraits(){
+ if(!records.length)return {study:0,exercise:0,streak:0,balance:0,type:"balance"};
+ const count=Math.max(1,records.length);
+ const totalStudy=records.reduce((s,x)=>s+Number(x.study||0),0);
+ const totalExercise=records.reduce((s,x)=>s+Number(x.exercise||0),0);
+
+ // 하루 평균 공부 120분, 운동 45분을 각각 100점 기준으로 정규화
+ const study=Math.min(100,Math.round(totalStudy/(count*120)*100));
+ const exercise=Math.min(100,Math.round(totalExercise/(count*45)*100));
+
+ // 연속 기록과 최근 14일 기록률을 함께 반영
+ const streakDays=calcStreak();
+ const recentRate=getRecentActivityRate(14);
+ const streak=Math.min(100,Math.round(Math.min(streakDays,14)/14*60+recentRate*.4));
+
+ const trio=[study,exercise,streak],max=Math.max(...trio),min=Math.min(...trio),avg=trio.reduce((a,b)=>a+b,0)/3;
+ const balance=Math.max(0,Math.min(100,Math.round(avg-(max-min)*.7+35)));
+
+ let type="balance";
+ if(!(max-min<=18&&avg>=25)){
+   type=max===study?"study":max===exercise?"exercise":"streak";
+ }
+ return {study,exercise,streak,balance,type};
+}
+function getEvolutionCharacter(){
+ const level=getLevel(),t=getEvolutionTraits();
+
+ if(level<5){
+   return {emoji:"🌱",name:"몽글씨앗",route:"🌱 공통 성장 단계",desc:"당신의 하루를 먹고 자라는 작은 성장 씨앗이에요.",next:"LEVEL 5에서 첫 성장이 시작돼요.",type:"base"};
+ }
+ if(level<10){
+   return {emoji:"🐣",name:"몽글이",route:"🐣 1차 성장",desc:"매일의 기록 덕분에 알에서 깨어났어요. 아직 어떤 모습으로 진화할지는 정해지지 않았어요.",next:`LEVEL 10에서 ${t.type==="study"?"지식":t.type==="exercise"?"활동":t.type==="streak"?"꾸준함":"밸런스"} 성향으로 진화할 가능성이 높아요.`,type:"base"};
+ }
+
+ const stage=level>=20?"final":"branch";
+ const chars={
+   study: stage==="final"
+     ? {emoji:"🦉✨",name:"별빛 현자 루미",route:"🧠 지식형 최종 진화",desc:"꾸준히 쌓은 공부와 집중력이 지혜의 빛으로 변했어요."}
+     : {emoji:"🦉📚",name:"책숲 루미",route:"🧠 지식형 진화",desc:"새로운 지식을 먹고 자라는 영리한 지식 파트너예요."},
+   exercise: stage==="final"
+     ? {emoji:"🐯⚡",name:"번개 용사 타오",route:"💪 활동형 최종 진화",desc:"움직임과 도전이 강한 에너지로 응축된 활동형 파트너예요."}
+     : {emoji:"🐯🌟",name:"달림이 타오",route:"💪 활동형 진화",desc:"운동할수록 더 활기차지는 씩씩한 활동 파트너예요."},
+   streak: stage==="final"
+     ? {emoji:"🐲🔥",name:"불꽃 수호자 피오",route:"🔥 꾸준함형 최종 진화",desc:"하루하루 쌓인 연속 기록이 꺼지지 않는 불꽃이 되었어요."}
+     : {emoji:"🦊🔥",name:"불씨 피오",route:"🔥 꾸준함형 진화",desc:"작은 습관을 매일 지켜낼수록 불꽃이 커지는 꾸준함 파트너예요."},
+   balance: stage==="final"
+     ? {emoji:"🦄🌈",name:"오로라 세라",route:"✨ 밸런스형 최종 진화",desc:"공부와 운동, 꾸준함을 고르게 키워 완성된 균형의 파트너예요."}
+     : {emoji:"🐰✨",name:"별토끼 세라",route:"✨ 밸런스형 진화",desc:"여러 영역을 고르게 성장시키는 부드럽고 안정적인 밸런스 파트너예요."}
+ };
+ const c=chars[t.type];
+ return {...c,next:level<20?"LEVEL 20에서 최종 진화가 열려요.":"최종 진화 완료! 앞으로도 행동에 따라 성향은 계속 달라질 수 있어요.",type:t.type};
+}
+function updateEvolution(){
+ const t=getEvolutionTraits(),c=getEvolutionCharacter();
+ const el=$("growthCharacter");if(!el)return;
+ el.innerText=c.emoji;$("characterName").innerText=c.name;$("characterRoute").innerText=c.route;$("characterDesc").innerText=c.desc;$("evolutionNext").innerText=c.next;
+ [["study",t.study],["exercise",t.exercise],["streak",t.streak],["balance",t.balance]].forEach(([k,v])=>{
+   $(k+"TraitText").innerText=v;
+   $(k+"TraitBar").style.width=v+"%";
+ });
+ // 프로필의 작은 아바타도 성장 캐릭터와 연결
+ $("profileEmoji").innerText=c.emoji;
+ $("miniAvatar").innerText=(profile.accessory?profile.accessory+" ":"")+c.emoji;
+ $("previewAvatar").innerText=(profile.accessory?profile.accessory+" ":"")+c.emoji;
+}
+function openEvolutionGuide(){
+ const t=getEvolutionTraits(),c=getEvolutionCharacter();
+ $("featureTitle").innerText="✨ MY DAY 진화 도감";
+ const paths=[
+  {type:"study",emoji:"🦉📚",name:"지식형",desc:"공부 기록이 가장 강할 때 진화"},
+  {type:"exercise",emoji:"🐯🌟",name:"활동형",desc:"운동 기록이 가장 강할 때 진화"},
+  {type:"streak",emoji:"🦊🔥",name:"꾸준함형",desc:"연속 기록과 최근 기록률이 가장 강할 때 진화"},
+  {type:"balance",emoji:"🐰✨",name:"밸런스형",desc:"세 영역이 고르게 성장할 때 진화"}
+ ];
+ $("featureContent").innerHTML=`
+   <div class="feature-sub" style="line-height:1.7">
+     LEVEL 1~4는 씨앗, LEVEL 5~9는 공통 성장 단계예요. LEVEL 10부터 실제 기록 성향에 따라 진화하고 LEVEL 20부터 최종 모습이 열립니다.
+     <br><br><b>현재 예상 진화:</b> ${c.route}
+   </div>
+   <div class="evolution-path">
+     ${paths.map(p=>`<div class="path-card ${c.type===p.type?"current":""}">
+       <div class="path-emoji">${p.emoji}</div><div class="path-name">${p.name}</div><div class="path-desc">${p.desc}</div>
+     </div>`).join("")}
+   </div>
+   <div class="feature-card" style="margin-top:14px;cursor:default">
+     <div class="feature-title">현재 성장 수치</div>
+     <div class="feature-sub" style="line-height:1.8">🧠 지식 ${t.study} · 💪 활동 ${t.exercise} · 🔥 꾸준함 ${t.streak} · ✨ 균형 ${t.balance}</div>
+   </div>`;
+ $("featureModal").style.display="flex";
+}
+
 function updateGrowth(){
  const xp=getXP(),level=getLevel(),cur=xp%100;
- $("level").innerText=level;$("totalXP").innerText=xp+" XP";$("xpText").innerText=`${cur} / 100 XP`;$("xpInner").style.width=cur+"%";
+ $("level").innerText=level;if($("totalXP"))$("totalXP").innerText=xp+" XP";$("xpText").innerText=`${cur} / 100 XP`;$("xpInner").style.width=cur+"%";
  $("streak").innerText=calcStreak()+"일 🔥";$("coins").innerText=game.coins||0;
 }
 function updateAchievements(){
@@ -404,10 +584,14 @@ function loadProfile(){
  applyProfile();
 }
 function applyProfile(){
- $("profileName").innerText=profile.name;$("profileEmoji").innerText=profile.emoji;$("miniAvatar").innerText=(profile.accessory?profile.accessory+" ":"")+profile.emoji;
+ $("profileName").innerText=profile.name;
  $("miniAvatar").style.background=`linear-gradient(135deg,${profile.color},#72a9ff)`;
- $("previewAvatar").innerText=(profile.accessory?profile.accessory+" ":"")+profile.emoji;$("previewAvatar").style.background=`linear-gradient(135deg,${profile.color},#72a9ff)`;$("previewName").innerText=profile.name;
+ $("previewAvatar").style.background=`linear-gradient(135deg,${profile.color},#72a9ff)`;$("previewName").innerText=profile.name;
  document.body.style.background=profile.background;
+ const c=getEvolutionCharacter();
+ $("profileEmoji").innerText=c.emoji;
+ $("miniAvatar").innerText=(profile.accessory?profile.accessory+" ":"")+c.emoji;
+ $("previewAvatar").innerText=(profile.accessory?profile.accessory+" ":"")+c.emoji;
 }
 function scrollToId(id){$(id)?.scrollIntoView({behavior:"smooth"})}
 function closeLevelUp(){$("levelup").style.display="none"}
