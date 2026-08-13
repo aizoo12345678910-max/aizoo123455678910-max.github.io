@@ -27,7 +27,7 @@ button,input,textarea{font:inherit}.container{max-width:1120px;margin:auto;paddi
 .logo{font-size:25px;font-weight:1000;letter-spacing:4px;color:#46384f}.logo span{color:#52bd91}
 .user-area{display:flex;align-items:center;gap:9px}.user-email{color:var(--muted);font-size:12px}
 .btn{border:1px solid var(--line);background:#fff;color:var(--text);border-radius:12px;padding:9px 13px;cursor:pointer;box-shadow:0 5px 15px rgba(80,50,100,.06)}
-.btn:hover{transform:translateY(-1px)}.profile-mini{display:flex;align-items:center;gap:8px;cursor:pointer}
+.btn:hover{transform:translateY(-1px)}.profile-mini{display:flex;align-items:center;gap:8px;cursor:pointer;border:0;padding:0;background:transparent;color:inherit}.profile-click-target{position:relative;z-index:200;pointer-events:auto}.profile-nav-button{position:relative;z-index:200;pointer-events:auto}
 .avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--green),var(--blue));font-size:22px;border:3px solid #fff;box-shadow:0 5px 18px rgba(90,70,110,.16)}
 .avatar{overflow:hidden;position:relative}.avatar .mini-creature{width:34px;height:34px}.avatar.big .mini-creature{width:72px;height:72px}
 .creature-svg{width:112px;height:112px;display:block;filter:drop-shadow(0 10px 9px rgba(70,50,90,.14));transition:transform .25s,filter .25s}.creature-svg:hover{transform:translateY(-2px) scale(1.03)}
@@ -203,12 +203,12 @@ body:before{opacity:.2;background-image:radial-gradient(#fff 1px,transparent 1px
     <div class="resource-pill"><span>🪙</span><b id="topCoins">0</b><small>토큰</small></div>
     <div class="resource-pill"><span>💎</span><b>32</b><small>보석</small></div>
     <div class="resource-pill"><span>🔥</span><b id="topStreak">0</b><small>연속 기록</small></div>
-    <div class="profile-mini" onclick="openProfileModal()"><div class="avatar" id="miniAvatar"></div></div>
+    <button type="button" class="profile-mini profile-click-target" id="topProfileButton" aria-label="프로필 설정" onclick="openProfileModal(); return false;"><div class="avatar" id="miniAvatar"></div></button>
     <button class="icon-btn" onclick="openProfileModal()">⚙️</button><button class="icon-btn" onclick="logout()">↪</button>
   </div>
 </header>
 <nav class="tabbar">
- <button class="tab active" onclick="scrollToId('home')">🏠 홈</button><button class="tab" onclick="openModal()">📝 기록하기</button><button class="tab" onclick="scrollToId('statsSection')">📊 통계</button><button class="tab" onclick="openMissions()">🎯 미션</button><button class="tab" onclick="openAchievements()">🏆 업적</button><button class="tab" onclick="openShop()">🛍️ 상점</button><button class="tab" onclick="openEvolutionGuide()">📖 도감</button><button class="tab" onclick="openProfileModal()">👤 프로필</button></nav>
+ <button class="tab active" onclick="scrollToId('home')">🏠 홈</button><button class="tab" onclick="openModal()">📝 기록하기</button><button class="tab" onclick="scrollToId('statsSection')">📊 통계</button><button class="tab" onclick="openMissions()">🎯 미션</button><button class="tab" onclick="openAchievements()">🏆 업적</button><button class="tab" onclick="openShop()">🛍️ 상점</button><button class="tab" onclick="openEvolutionGuide()">📖 도감</button><button type="button" class="tab profile-nav-button" id="profileNavButton" onclick="openProfileModal(); return false;">👤 프로필</button></nav>
 <main id="home">
 <section class="hero">
  <div class="hero-main">
@@ -628,10 +628,14 @@ function buyItem(id){
 }
 function closeFeature(){$("featureModal").style.display="none"}
 function openProfileModal(){
- if(game.partnerId&&CHARACTER_BY_ID[game.partnerId])profile.characterId=game.partnerId;
- $("profileNameInput").value=profile.name;
- buildProfileChoices();
- $("profileModal").style.display="flex";
+ try{
+   if(game && game.partnerId && CHARACTER_BY_ID[game.partnerId]) profile.characterId=game.partnerId;
+   const nameInput=$("profileNameInput");
+   if(nameInput) nameInput.value=profile.name||"MY DAY USER";
+   buildProfileChoices();
+   const modal=$("profileModal");
+   if(modal){ modal.style.display="flex"; modal.style.pointerEvents="auto"; }
+ }catch(err){ console.error("프로필 열기 오류",err); if(typeof showToast==="function")showToast("프로필 창을 여는 중 문제가 발생했어요."); }
 }
 function closeProfileModal(){$("profileModal").style.display="none"}
 function buildProfileChoices(){
@@ -729,6 +733,19 @@ checkSession();
    }
  });
 })();
+
+// 프로필 UI 클릭 안전장치: 사이드바 프로필과 상단 캐릭터 버튼을 직접 연결합니다.
+document.addEventListener("DOMContentLoaded",()=>{
+  ["profileNavButton","topProfileButton"].forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el) return;
+    el.addEventListener("click",e=>{
+      e.preventDefault();
+      e.stopPropagation();
+      window.openProfileModal();
+    },true);
+  });
+});
 </script>
 
 </body>
