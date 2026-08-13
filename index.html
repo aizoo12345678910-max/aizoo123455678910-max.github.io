@@ -294,7 +294,10 @@ const CHARACTER_BY_ID=Object.fromEntries(MYDAY_CHARACTERS.map(c=>[c.id,c]));
 let profile={name:"MY DAY USER",characterId:"korifin",emoji:"🌱",color:"#55c99a",background:backgrounds[0],accessory:""};
 let game={coins:0,owned:[],claimedMissions:[],seenLevel:1,evolutionPrimary:null,evolutionPrimaryLockedAt:null,partnerId:"korifin"};
 
-function getPartner(){return CHARACTER_BY_ID[profile.characterId]||CHARACTER_BY_ID.korifin}
+function getPartner(){
+ const id=game&&CHARACTER_BY_ID[game.partnerId]?game.partnerId:profile.characterId;
+ return CHARACTER_BY_ID[id]||CHARACTER_BY_ID.korifin;
+}
 function svgEsc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
 function creatureSVG(ch,stage=1,cls="creature-svg") {
  const c=ch||CHARACTER_BY_ID.korifin, scale=stage===1?1:stage===2?1.06:1.14;
@@ -415,11 +418,15 @@ function calcStreak(r=records){
 function getDateObj(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
 function loadLocalGame(){
  const key="myday_game_"+currentUser.id,saved=localStorage.getItem(key);
- if(saved)game={...game,...JSON.parse(saved)};
- if(!game.partnerId)game.partnerId=profile.characterId||"moari";
- if(!CHARACTER_BY_ID[game.partnerId])game.partnerId="moari";
+ if(saved){try{game={...game,...JSON.parse(saved)};}catch(e){console.warn("game data reset",e)}}
+ if(!Array.isArray(game.claimedMissions))game.claimedMissions=[];
+ if(!Array.isArray(game.owned))game.owned=[];
+ if(!game.partnerId||!CHARACTER_BY_ID[game.partnerId])game.partnerId=profile.characterId&&CHARACTER_BY_ID[profile.characterId]?profile.characterId:"korifin";
 }
-function saveLocalGame(){localStorage.setItem("myday_game_"+currentUser.id,JSON.stringify(game))}
+function saveLocalGame(){
+ if(!currentUser)return;
+ localStorage.setItem("myday_game_"+currentUser.id,JSON.stringify(game));
+}
 function addCoins(n){game.coins=(game.coins||0)+n;saveLocalGame()}
 function updateDashboardPanels(){
  const c=getEvolutionCharacter();
@@ -428,7 +435,7 @@ function updateDashboardPanels(){
  const col=$("dashboardCollection");
  if(col){const current=getPartner().id;col.innerHTML=MYDAY_CHARACTERS.slice(0,10).map(ch=>`<div class="collection-card ${ch.id===current?"current":""}"><div class="collection-art">${creatureSVG(ch,c.stage,"creature-svg")}</div><div class="collection-name">${ch.name}</div><div class="collection-stage">${ch.type}</div></div>`).join("")}
  const mb=$("dashboardMissions");
- if(mb){mb.innerHTML=getDailyMission().map(m=>{const done=m.ok(),claimed=game.claimedMissions.includes(m.id),pct=done?100:0;return `<div class="mission-row"><div><div class="mission-row-title">${m.title}</div><div class="mission-row-sub">${m.desc}</div><div class="mission-progress"><i style="width:${pct}%"></i></div></div><div class="mission-reward"><span class="token-icon">🪙</span>${m.reward}<br><button class="btn mission-claim-btn" ${claimed||!done?"disabled":""} onclick="claimMissionById('${m.id}')">${claimed?"완료":done?"보상 받기":"진행 중"}</button></div></div>`}).join("")}
+ if(mb){mb.innerHTML=getDailyMission().map(m=>{const done=m.ok(),claimed=game.claimedMissions.includes(m.id),pct=done?100:0;return `<div class="mission-row"><div><div class="mission-row-title">${m.title}</div><div class="mission-row-sub">${m.desc}</div><div class="mission-progress"><i style="width:${pct}%"></i></div></div><div class="mission-reward"><span class="token-icon">🪙</span>${m.reward}<br><button class="btn mission-claim-btn" ${claimed?"disabled":""} onclick="claimMissionById('${m.id}')">${claimed?"완료":done?"보상 받기":"진행 중"}</button></div></div>`}).join("")}
 }
 function updateAll(){
  updateToday(records[0]);updateStats();updateChart();updateHistory();updateInsight();updateGrowth();updateEvolution();updateAchievements();updateMissionUI();updateDashboardPanels();
@@ -518,11 +525,15 @@ function getEvolutionCharacter(){
  return {character:ch,stage,formName,name:`${ch.name} · ${formName}`,route,desc,next,type:game.evolutionPrimary||t.type,secondary,svg:creatureSVG(ch,stage)};
 }
 function updateEvolution(){
- const t=getEvolutionTraits(),c=getEvolutionCharacter(),el=$("growthCharacter");if(!el)return;
- el.innerHTML=c.svg;
- $("characterName").innerText=c.name;$("characterRoute").innerText=c.route;$("evolutionNext").innerText=c.next;
+ const t=getEvolutionTraits(),evo=getEvolutionCharacter(),partner=getPartner(),el=$("growthCharacter");if(!el)return;
+ const stage=characterStage();
+ el.innerHTML=creatureSVG(partner,stage,"growth-creature");
+ $("characterName").innerText=partner.name;
+ $("characterRoute").innerText=partner.type+" · "+evo.route;
+ $("evolutionNext").innerText=stage>=3?"최종 각성 완료 ✨":evo.next;
  [["study",t.study],["exercise",t.exercise],["streak",t.streak],["balance",t.balance]].forEach(([k,v])=>{$(k+"TraitText").innerText=v;$(k+"TraitBar").style.width=v+"%"});
- renderProfileAvatar($("miniAvatar"),getPartner(),1);renderProfileAvatar($("previewAvatar"),getPartner(),2);
+ renderProfileAvatar($("miniAvatar"),partner,1);
+ renderProfileAvatar($("previewAvatar"),partner,stage);
  $("profileEmoji").innerText="";
 }
 function renderProfileAvatar(el,ch,stage=1){if(!el||!ch)return;el.innerHTML=creatureSVG(ch,stage,stage===2?"mini-creature":"mini-creature");}
@@ -568,15 +579,17 @@ function updateMissionUI(){
 }
 function claimMissionById(id){
  const m=getDailyMission().find(x=>x.id===id);
- if(!m){showToast("미션을 찾을 수 없어요.");return}
- if(!m.ok()){showToast("아직 조건을 달성하지 않았어요.");return}
- if(game.claimedMissions.includes(m.id)){showToast("이미 보상을 받았어요.");return}
+ if(!m){showToast("미션을 찾을 수 없어요.");return false}
+ if(!m.ok()){showToast("먼저 미션 조건을 완료해주세요! 🎯");return false}
+ if(!Array.isArray(game.claimedMissions))game.claimedMissions=[];
+ if(game.claimedMissions.includes(m.id)){showToast("이미 보상을 받았어요. 🪙");return false}
  game.claimedMissions.push(m.id);
- addCoins(m.reward);
+ game.coins=Number(game.coins||0)+Number(m.reward||0);
  saveLocalGame();
  updateAll();
  openMissions();
- showToast(`🎁 미션 완료! +${m.reward} 🪙`);
+ showToast(`🎁 ${m.title} 보상 +${m.reward} 🪙 획득!`);
+ return true;
 }
 function claimMission(m){
  if(m && m.id) claimMissionById(m.id);
@@ -588,7 +601,7 @@ function openMissions(){
    const claimed=game.claimedMissions.includes(m.id);
    const done=m.ok();
    const buttonText=claimed?"보상 수령 완료":(done?"보상 받기":"진행 중");
-   const disabled=claimed||!done?"disabled":"";
+   const disabled=claimed?"disabled":"";
    return `<div class="feature-card" style="margin-top:10px">
      <div class="feature-title">${m.title}</div>
      <div class="feature-sub">${m.desc} · 보상 <span class="token-icon">🪙</span>${m.reward}</div>
@@ -615,7 +628,10 @@ function buyItem(id){
 }
 function closeFeature(){$("featureModal").style.display="none"}
 function openProfileModal(){
- $("profileNameInput").value=profile.name;buildProfileChoices();$("profileModal").style.display="flex";
+ if(game.partnerId&&CHARACTER_BY_ID[game.partnerId])profile.characterId=game.partnerId;
+ $("profileNameInput").value=profile.name;
+ buildProfileChoices();
+ $("profileModal").style.display="flex";
 }
 function closeProfileModal(){$("profileModal").style.display="none"}
 function buildProfileChoices(){
@@ -624,29 +640,56 @@ function buildProfileChoices(){
  $("colorGrid").innerHTML=colors.map(c=>`<button class="color-choice ${c===profile.color?"selected":""}" style="background:${c}" onclick="chooseColor(this,'${c}')"></button>`).join("");
  $("bgGrid").innerHTML=backgrounds.map((b,i)=>`<button class="color-choice ${b===profile.background?"selected":""}" style="background:${b}" onclick="chooseBg(this,${i})"></button>`).join("");
 }
-function chooseCharacter(el,id){profile.characterId=id;game.partnerId=id;saveLocalGame();if(currentUser)localStorage.setItem("myday_profile_"+currentUser.id,JSON.stringify(profile));document.querySelectorAll(".character-choice").forEach(x=>x.classList.remove("selected"));el.classList.add("selected");applyProfile();showToast(`${CHARACTER_BY_ID[id].name}을(를) 파트너로 선택했어요!`)}
+function chooseCharacter(el,id){
+ if(!CHARACTER_BY_ID[id])return;
+ profile.characterId=id;game.partnerId=id;
+ if(currentUser)localStorage.setItem("myday_profile_"+currentUser.id,JSON.stringify(profile));
+ saveLocalGame();
+ document.querySelectorAll(".character-choice").forEach(x=>x.classList.remove("selected"));
+ el.classList.add("selected");
+ applyProfile();
+ updateEvolution();
+ showToast(`${CHARACTER_BY_ID[id].name}을(를) 파트너로 선택했어요! ✨`);
+}
 function chooseEmoji(el,e){profile.emoji=e;applyProfile()}
 function chooseColor(el,c){profile.color=c;document.querySelectorAll("#colorGrid .color-choice").forEach(x=>x.classList.remove("selected"));el.classList.add("selected");applyProfile()}
 function chooseBg(el,i){profile.background=backgrounds[i];document.querySelectorAll("#bgGrid .color-choice").forEach(x=>x.classList.remove("selected"));el.classList.add("selected");applyProfile()}
 function saveProfile(){
  profile.name=$("profileNameInput").value.trim()||"MY DAY USER";
- profile.characterId=profile.characterId||game.partnerId||"moari";game.partnerId=profile.characterId;
- localStorage.setItem("myday_profile_"+currentUser.id,JSON.stringify(profile));saveLocalGame();applyProfile();closeProfileModal();showToast("✨ 프로필이 저장됐어요!");
+ profile.characterId=CHARACTER_BY_ID[profile.characterId]?profile.characterId:(game.partnerId&&CHARACTER_BY_ID[game.partnerId]?game.partnerId:"korifin");
+ game.partnerId=profile.characterId;
+ const payload=JSON.stringify(profile);
+ if(currentUser)localStorage.setItem("myday_profile_"+currentUser.id,payload);
+ saveLocalGame();
+ applyProfile();
+ buildProfileChoices();
+ closeProfileModal();
+ showToast(`✨ ${getPartner().name} 프로필이 저장됐어요!`);
 }
 function loadProfile(){
- const key="myday_profile_"+currentUser.id,saved=localStorage.getItem(key);
- if(saved)profile={...profile,...JSON.parse(saved)};
- if(!CHARACTER_BY_ID[profile.characterId])profile.characterId=game.partnerId&&CHARACTER_BY_ID[game.partnerId]?game.partnerId:"moari";
- game.partnerId=profile.characterId;saveLocalGame();applyProfile();
+ const key="myday_profile_"+(currentUser?currentUser.id:"guest"),saved=localStorage.getItem(key);
+ if(saved){try{profile={...profile,...JSON.parse(saved)};}catch(e){console.warn("profile data reset",e)}}
+ if(!CHARACTER_BY_ID[profile.characterId])profile.characterId=game.partnerId&&CHARACTER_BY_ID[game.partnerId]?game.partnerId:"korifin";
+ game.partnerId=profile.characterId;
+ saveLocalGame();applyProfile();
 }
 function applyProfile(){
+ const partner=getPartner();
  $("profileName").innerText=profile.name;
+ if($("profileNameTop"))$("profileNameTop").innerText=profile.name;
  $("miniAvatar").style.background=`linear-gradient(135deg,${profile.color},#72a9ff)`;
- $("previewAvatar").style.background=`linear-gradient(135deg,${profile.color},#72a9ff)`;$("previewName").innerText=profile.name;
+ $("previewAvatar").style.background=`linear-gradient(135deg,${profile.color},#72a9ff)`;
+ $("previewName").innerText=profile.name;
  document.body.style.background=profile.background;
- renderProfileAvatar($("miniAvatar"),getPartner(),1);renderProfileAvatar($("previewAvatar"),getPartner(),2);
+ renderProfileAvatar($("miniAvatar"),partner,1);
+ renderProfileAvatar($("previewAvatar"),partner,characterStage());
+ if($("heroPartnerName"))$("heroPartnerName").innerText=partner.name;
+ if($("heroPartnerType"))$("heroPartnerType").innerText=partner.type;
+ if($("heroPartnerArt"))$("heroPartnerArt").innerHTML=creatureSVG(partner,characterStage(),"growth-creature");
  $("profileEmoji").innerText="";
+ updateDashboardPanels();
 }
+
 function scrollToId(id){$(id)?.scrollIntoView({behavior:"smooth"})}
 function closeLevelUp(){$("levelup").style.display="none"}
 function showToast(text){const t=$("toast");t.innerText=text;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2200)}
@@ -672,11 +715,19 @@ checkSession();
  window.openMissions=function(){
    const m=$("featureModal"),t=$("featureTitle"),c=$("featureContent");if(!m||!t||!c)return;
    const ms=getDailyMission();t.innerText="🎯 오늘의 미션";
-   c.innerHTML=ms.map(x=>{const done=x.ok(),claimed=game.claimedMissions.includes(x.id),disabled=claimed||!done;return `<div class="feature-card" style="margin-top:10px;cursor:default!important"><div class="feature-title">${x.title}</div><div class="feature-sub" style="margin-top:6px">${x.desc} · 보상 <span class="token-icon">🪙</span>${x.reward}</div><button type="button" class="btn mission-claim-btn" ${disabled?"disabled":""} onclick="claimMissionById('${x.id}')">${claimed?"보상 수령 완료":done?"🎁 보상 받기":"진행 중"}</button></div>`}).join("");
+   c.innerHTML=ms.map(x=>{const done=x.ok(),claimed=game.claimedMissions.includes(x.id),disabled=claimed;return `<div class="feature-card" style="margin-top:10px;cursor:default!important"><div class="feature-title">${x.title}</div><div class="feature-sub" style="margin-top:6px">${x.desc} · 보상 <span class="token-icon">🪙</span>${x.reward}</div><button type="button" class="btn mission-claim-btn" ${disabled?"disabled":""} onclick="claimMissionById('${x.id}')">${claimed?"보상 수령 완료":done?"🎁 보상 받기":"진행 중"}</button></div>`}).join("");
    m.style.display="flex";m.setAttribute("aria-hidden","false");
  };
  window.closeFeature=function(){const m=$("featureModal");if(m)m.style.display="none"};
- document.addEventListener('click',e=>{if(e.target.classList.contains('modal-bg'))e.target.style.display='none'});
+ document.addEventListener('click',e=>{
+   if(e.target.classList.contains('modal-bg'))e.target.style.display='none';
+   const btn=e.target.closest('.mission-claim-btn');
+   if(btn && !btn.disabled){
+     const onclick=btn.getAttribute('onclick')||'';
+     const match=onclick.match(/claimMissionById\('([^']+)'\)/);
+     if(match){e.preventDefault();e.stopPropagation();window.claimMissionById(match[1]);}
+   }
+ });
 })();
 </script>
 
