@@ -29,6 +29,14 @@ button,input,textarea{font:inherit}.container{max-width:1120px;margin:auto;paddi
 .btn{border:1px solid var(--line);background:#fff;color:var(--text);border-radius:12px;padding:9px 13px;cursor:pointer;box-shadow:0 5px 15px rgba(80,50,100,.06)}
 .btn:hover{transform:translateY(-1px)}.profile-mini{display:flex;align-items:center;gap:8px;cursor:pointer}
 .avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--green),var(--blue));font-size:22px;border:3px solid #fff;box-shadow:0 5px 18px rgba(90,70,110,.16)}
+.avatar{overflow:hidden;position:relative}.avatar .mini-creature{width:34px;height:34px}.avatar.big .mini-creature{width:72px;height:72px}
+.creature-svg{width:112px;height:112px;display:block;filter:drop-shadow(0 10px 9px rgba(70,50,90,.14));transition:transform .25s,filter .25s}.creature-svg:hover{transform:translateY(-2px) scale(1.03)}
+.profile-character-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-height:360px;overflow:auto;padding:3px}
+.character-choice{border:1px solid var(--line);background:#fff;border-radius:16px;padding:9px 6px;cursor:pointer;text-align:center;transition:.18s;min-height:112px}.character-choice:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(80,50,100,.08)}.character-choice.selected{outline:3px solid #55c99a;background:#effcf6}.character-choice .choice-art{height:65px;display:grid;place-items:center}.character-choice .choice-art .creature-svg{width:62px;height:62px}.character-choice .choice-name{font-size:11px;font-weight:1000;margin-top:3px}.character-choice .choice-type{font-size:9px;color:var(--muted);margin-top:2px}
+.character-collection{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:14px}.collection-card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:8px;text-align:center}.collection-card.current{outline:2px solid #55c99a}.collection-card .collection-art{height:78px;display:grid;place-items:center}.collection-card .collection-art .creature-svg{width:72px;height:72px}.collection-card .collection-name{font-size:11px;font-weight:1000}.collection-card .collection-stage{font-size:9px;color:var(--muted);margin-top:2px}
+.evolution-stage-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}.stage-box{background:#fff;border:1px solid var(--line);border-radius:14px;padding:8px;text-align:center}.stage-box.active{outline:2px solid #9b7cff;background:#faf7ff}.stage-box .stage-art{height:80px;display:grid;place-items:center}.stage-box .stage-art .creature-svg{width:76px;height:76px}.stage-label{font-size:10px;font-weight:900}.stage-level{font-size:9px;color:var(--muted);margin-top:2px}
+@media(max-width:700px){.profile-character-grid,.character-collection{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:480px){.profile-character-grid{grid-template-columns:repeat(3,1fr)}.character-collection{grid-template-columns:repeat(2,1fr)}}
 .hero{position:relative;overflow:hidden;background:var(--panel);backdrop-filter:blur(12px);border:1px solid #fff;border-radius:30px;padding:28px;text-align:center;box-shadow:var(--shadow);margin-bottom:14px}
 .hero:before{content:"";position:absolute;width:280px;height:280px;border-radius:50%;background:rgba(255,155,190,.15);filter:blur(30px);left:-130px;top:-130px}
 .hero:after{content:"";position:absolute;width:240px;height:240px;border-radius:50%;background:rgba(114,169,255,.13);filter:blur(30px);right:-100px;bottom:-140px}
@@ -117,7 +125,7 @@ button,input,textarea{font:inherit}.container{max-width:1120px;margin:auto;paddi
 .auth-input,.field input,.field textarea{width:100%;padding:13px;background:#fff;border:1px solid var(--line);border-radius:11px;color:var(--text);font-size:15px}.auth-input{margin-bottom:11px}.auth-switch{text-align:center;color:var(--muted);margin-top:17px;cursor:pointer;font-size:13px}.auth-message{color:#48a97f;text-align:center;margin-top:14px;line-height:1.5}.auth-error{color:#e66b7c;text-align:center;margin-top:14px;line-height:1.5}
 .modal-bg{position:fixed;inset:0;background:rgba(62,43,72,.42);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:20px;z-index:100}.modal{width:100%;max-width:650px;background:#fffafc;border:1px solid #fff;border-radius:25px;padding:24px;max-height:90vh;overflow-y:auto;box-shadow:0 25px 80px rgba(70,45,80,.22)}
 .modal-header{display:flex;justify-content:space-between;align-items:center}.modal-header h2{margin:0}.close{background:none;border:0;color:#5b5062;font-size:28px;cursor:pointer}.field{margin-top:16px}.field label{display:block;color:#8f839c;font-size:12px;margin-bottom:7px}.field textarea{min-height:80px;resize:vertical}.range-row{display:flex;gap:10px;align-items:center}.range-row input{flex:1}.range-number{width:45px;text-align:center;color:#55bd91;font-weight:1000}.save-button{margin-top:22px}
-.profile-preview{text-align:center;padding:10px 0 18px}.avatar.big{width:88px;height:88px;margin:auto;font-size:46px}.profile-name{font-size:20px;font-weight:1000;margin-top:9px}.emoji-grid,.color-grid,.shop-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}.emoji-choice,.color-choice,.shop-item{min-height:48px;border-radius:12px;border:1px solid var(--line);background:#fff;cursor:pointer}.emoji-choice.selected,.color-choice.selected{outline:3px solid #55c99a}.color-choice{height:32px;min-height:32px}.shop-item{padding:10px;text-align:center}.shop-item.owned{background:#effcf6}.shop-item.locked{opacity:.55}.shop-price{font-size:11px;color:#8d8198;margin-top:3px}.shop-emoji{font-size:25px}
+.profile-preview{text-align:center;padding:10px 0 18px}.avatar.big{width:88px;height:88px;margin:auto;font-size:46px}.profile-name{font-size:20px;font-weight:1000;margin-top:9px}.emoji-grid,.color-grid,.shop-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}.emoji-choice,.color-choice,.shop-item{min-height:48px;border-radius:12px;border:1px solid var(--line);background:#fff;cursor:pointer}.emoji-choice.selected,.color-choice.selected{outline:3px solid #55c99a}.color-choice{height:32px;min-height:32px}.shop-item{padding:10px;text-align:center}.shop-item.owned{background:#effcf6}.shop-item.locked{opacity:.55}.shop-price{font-size:11px;color:#8d8198;margin-top:3px}.shop-emoji{font-size:25px}.token-icon{display:inline-block;font-size:18px;line-height:1;vertical-align:-2px}.mission-claim-btn:disabled{opacity:.55;cursor:not-allowed}
 .tabbar{display:flex;gap:7px;overflow:auto;margin:0 0 18px;padding:4px}.tab{border:1px solid var(--line);background:rgba(255,255,255,.7);color:#7f728b;border-radius:999px;padding:9px 13px;cursor:pointer;font-size:12px;font-weight:800;white-space:nowrap}.tab.active{background:#fff;color:#5c49a5;box-shadow:0 5px 15px rgba(80,50,100,.08)}
 .levelup{position:fixed;inset:0;background:rgba(45,28,55,.55);backdrop-filter:blur(7px);display:none;align-items:center;justify-content:center;z-index:300}.levelup-box{background:#fff;border-radius:30px;padding:34px;text-align:center;width:min(390px,90%);box-shadow:0 30px 100px rgba(0,0,0,.25);animation:pop .45s ease}.levelup-icon{font-size:65px}.levelup-title{font-size:28px;font-weight:1000;color:#735bd0;margin-top:10px}.levelup-sub{color:#8f839c;margin-top:8px}@keyframes pop{from{transform:scale(.75);opacity:0}to{transform:scale(1);opacity:1}}
 .toast{position:fixed;left:50%;bottom:25px;transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;background:#fff;border:1px solid var(--line);color:#493e52;padding:12px 18px;border-radius:999px;z-index:400;transition:.25s;box-shadow:0 10px 30px rgba(80,50,100,.15)}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -222,7 +230,7 @@ button,input,textarea{font:inherit}.container{max-width:1120px;margin:auto;paddi
       <h2>🌱 나의 성장</h2>
       <div class="growth">
         <div class="growth-box"><div class="stat-title">연속 기록</div><div class="growth-big" id="streak">0일 🔥</div><div class="growth-sub">꾸준함이 가장 강력한 능력이에요</div></div>
-        <div class="growth-box"><div class="stat-title">보유 코인</div><div class="growth-big">🪙 <span id="coins">0</span></div><div class="growth-sub">미션과 기록으로 코인을 모아보세요</div></div>
+        <div class="growth-box"><div class="stat-title">보유 코인</div><div class="growth-big"><span class="token-icon" aria-label="토큰">🪙</span> <span id="coins">0</span></div><div class="growth-sub">미션과 기록으로 코인을 모아보세요</div></div>
       </div>
     </div>
 
@@ -271,9 +279,10 @@ button,input,textarea{font:inherit}.container{max-width:1120px;margin:auto;paddi
 
 <div class="modal-bg" id="profileModal"><div class="modal">
   <div class="modal-header"><h2>✨ 내 프로필 꾸미기</h2><button class="close" onclick="closeProfileModal()">×</button></div>
-  <div class="profile-preview"><div class="avatar big" id="previewAvatar">🌱</div><div class="profile-name" id="previewName">MY DAY USER</div></div>
+  <div class="profile-preview"><div class="avatar big" id="previewAvatar"></div><div class="profile-name" id="previewName">MY DAY USER</div></div>
+  <div class="field"><label>나의 파트너 캐릭터</label><div class="profile-character-grid" id="characterGrid"></div></div>
   <div class="field"><label>닉네임</label><input id="profileNameInput" maxlength="20" placeholder="나만의 닉네임"></div>
-  <div class="field"><label>프로필 아이콘</label><div class="emoji-grid" id="emojiGrid"></div></div>
+  <div class="field" style="display:none"><label>프로필 아이콘</label><div class="emoji-grid" id="emojiGrid"></div></div>
   <div class="field"><label>프로필 색상</label><div class="color-grid" id="colorGrid"></div></div>
   <div class="field"><label>프로필 배경</label><div class="color-grid" id="bgGrid"></div></div>
   <button class="save-button" onclick="saveProfile()">✨ 프로필 저장하기</button>
@@ -322,8 +331,68 @@ const achievementDefs=[
  {id:"evolve10",icon:"✨",name:"첫 진화",desc:"레벨 10 달성",ok:r=>getLevel(r)>=10},
  {id:"evolve20",icon:"🌈",name:"복합 진화",desc:"레벨 20에서 복합 최종진화 달성",ok:r=>getLevel(r)>=20}
 ];
-let profile={name:"MY DAY USER",emoji:"🌱",color:"#55c99a",background:backgrounds[0],accessory:""};
-let game={coins:0,owned:[],claimedMissions:[],seenLevel:1,evolutionPrimary:null,evolutionPrimaryLockedAt:null};
+const MYDAY_CHARACTERS=[
+ {id:"moari",name:"모아리",type:"숲싹",color:"#70d39c",accent:"#d8f6a8",shape:"leaf",desc:"작은 잎사귀에서 시작해 숲의 안내자가 돼요."},
+ {id:"nunubel",name:"누누벨",type:"구름",color:"#9ecbff",accent:"#eef7ff",shape:"cloud",desc:"느긋하게 떠다니며 마음의 균형을 지켜요."},
+ {id:"korifin",name:"코리핀",type:"여우빛",color:"#ff9b6a",accent:"#ffd3a8",shape:"fox",desc:"작은 용기로 하루의 목표를 향해 달려가요."},
+ {id:"lumicat",name:"루미캣",type:"달빛",color:"#8d7cff",accent:"#d9d1ff",shape:"cat",desc:"집중하는 순간 눈에 별빛이 모여요."},
+ {id:"tobiring",name:"토비링",type:"물결",color:"#55c9c9",accent:"#b7f4ef",shape:"otter",desc:"꾸준한 흐름으로 하루를 부드럽게 이어가요."},
+ {id:"pokorum",name:"포코룸",type:"버섯",color:"#d989b5",accent:"#ffd5e9",shape:"mushroom",desc:"작은 기록을 차곡차곡 포근하게 쌓아요."},
+ {id:"piaroo",name:"피아루",type:"새벽새",color:"#75a9ff",accent:"#d9ebff",shape:"bird",desc:"새로운 아침마다 다시 날아오를 힘을 줘요."},
+ {id:"dravi",name:"드라비",type:"꼬마룡",color:"#ff7f87",accent:"#ffc5ad",shape:"dragon",desc:"작은 습관을 뜨거운 성장 에너지로 바꿔요."},
+ {id:"neobot",name:"네오봇",type:"기어",color:"#6f91a8",accent:"#c9e8f3",shape:"robot",desc:"목표를 분석하고 루틴을 똑똑하게 정리해요."},
+ {id:"jelloa",name:"젤로아",type:"말랑",color:"#68cfd6",accent:"#d8fbff",shape:"jelly",desc:"실수해도 다시 말랑하게 튀어오르는 친구예요."},
+ {id:"lunapin",name:"루나핀",type:"달숲",color:"#a88cdd",accent:"#eee1ff",shape:"deer",desc:"차분한 마음으로 생활 리듬을 가꿔요."},
+ {id:"bamtori",name:"밤토리",type:"별밤",color:"#5565b7",accent:"#b7c0ff",shape:"bat",desc:"밤의 집중력을 모아 깊은 몰입을 만들어내요."},
+ {id:"tormy",name:"토르미",type:"산호",color:"#62b98f",accent:"#c8f0d6",shape:"turtle",desc:"천천히라도 멈추지 않는 꾸준함의 상징이에요."},
+ {id:"bibiring",name:"비비링",type:"꽃꿀",color:"#ffc95c",accent:"#fff0a8",shape:"bee",desc:"작은 성취 하나하나에서 달콤한 힘을 모아요."},
+ {id:"waveri",name:"웨이브리",type:"바다",color:"#55a9dc",accent:"#bfeaff",shape:"whale",desc:"넓은 바다처럼 마음의 여유와 지속력을 키워요."},
+ {id:"cactina",name:"선인아",type:"사막꽃",color:"#7dcf7d",accent:"#ffd2e4",shape:"cactus",desc:"조금 건조한 날에도 스스로를 돌볼 줄 알아요."},
+ {id:"crispin",name:"크리스핀",type:"결정",color:"#8bb9ff",accent:"#e4f0ff",shape:"crystal",desc:"기록이 쌓일수록 맑은 결정처럼 성장해요."},
+ {id:"mocoring",name:"모코링",type:"포근곰",color:"#b98d72",accent:"#f3d3b6",shape:"bear",desc:"편안한 하루를 만들고 작은 행복을 챙겨요."},
+ {id:"flori",name:"플로리",type:"꽃바람",color:"#ff82ad",accent:"#ffd2e2",shape:"flower",desc:"좋은 습관을 꽃피우며 주변까지 밝게 해요."},
+ {id:"starmi",name:"스타미",type:"별씨앗",color:"#f0b84e",accent:"#fff0a8",shape:"star",desc:"목표를 향한 작은 빛을 매일 하나씩 모아요."}
+];
+const CHARACTER_BY_ID=Object.fromEntries(MYDAY_CHARACTERS.map(c=>[c.id,c]));
+let profile={name:"MY DAY USER",characterId:"moari",emoji:"🌱",color:"#55c99a",background:backgrounds[0],accessory:""};
+let game={coins:0,owned:[],claimedMissions:[],seenLevel:1,evolutionPrimary:null,evolutionPrimaryLockedAt:null,partnerId:"moari"};
+
+function getPartner(){return CHARACTER_BY_ID[profile.characterId]||CHARACTER_BY_ID.moari}
+function svgEsc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+function creatureSVG(ch,stage=1,cls="creature-svg") {
+ const c=ch||CHARACTER_BY_ID.moari, scale=stage===1?1:stage===2?1.06:1.14;
+ const glow=stage===3?`<circle cx="90" cy="90" r="76" fill="${c.accent}" opacity=".18"/>`:``;
+ const extra=stage===1?``:stage===2?`<circle cx="52" cy="52" r="5" fill="#fff" opacity=".9"/><circle cx="128" cy="48" r="4" fill="#fff" opacity=".8"/>`: `<circle cx="42" cy="43" r="6" fill="#fff"/><circle cx="138" cy="43" r="5" fill="#fff"/><path d="M90 20 L95 31 L107 33 L98 41 L100 53 L90 47 L80 53 L82 41 L73 33 L85 31Z" fill="#fff3a8" opacity=".95"/>`;
+ const face=`<circle cx="70" cy="91" r="5" fill="#352c42"/><circle cx="110" cy="91" r="5" fill="#352c42"/><circle cx="72" cy="88" r="1.8" fill="#fff"/><circle cx="112" cy="88" r="1.8" fill="#fff"/><path d="M83 108 Q90 114 97 108" fill="none" stroke="#6a5267" stroke-width="3" stroke-linecap="round"/>`;
+ let body="";
+ switch(c.shape){
+  case "leaf": body=`<path d="M90 48 C62 42 40 58 43 85 C46 116 68 132 90 128 C112 132 134 116 137 85 C140 58 118 42 90 48Z" fill="${c.color}"/><path d="M89 48 C84 30 72 25 61 24 C62 40 72 51 89 56Z" fill="${c.accent}"/><path d="M91 48 C96 30 108 25 119 24 C118 40 108 51 91 56Z" fill="${c.accent}"/>`;break;
+  case "cloud": body=`<path d="M45 108 C33 98 37 78 52 73 C55 55 77 47 91 59 C103 44 132 51 134 73 C151 75 153 101 136 109 C123 116 61 117 45 108Z" fill="${c.color}"/><circle cx="58" cy="74" r="12" fill="${c.accent}" opacity=".8"/>`;break;
+  case "fox": body=`<path d="M48 62 L57 31 L77 49 Q90 44 103 49 L123 31 L132 62 Q141 83 132 105 Q121 130 90 131 Q59 130 48 105 Q39 83 48 62Z" fill="${c.color}"/><path d="M58 43 L65 59 L54 56Z M122 43 L115 59 L126 56Z" fill="${c.accent}"/>`;break;
+  case "cat": body=`<path d="M50 61 L54 29 L76 48 Q90 43 104 48 L126 29 L130 61 Q140 83 132 105 Q121 129 90 129 Q59 129 48 105 Q40 83 50 61Z" fill="${c.color}"/><path d="M59 42 L64 57 L54 53Z M121 42 L116 57 L126 53Z" fill="${c.accent}"/>`;break;
+  case "otter": body=`<ellipse cx="90" cy="90" rx="48" ry="48" fill="${c.color}"/><ellipse cx="63" cy="68" rx="13" ry="17" fill="${c.accent}"/><ellipse cx="117" cy="68" rx="13" ry="17" fill="${c.accent}"/><ellipse cx="90" cy="103" rx="26" ry="20" fill="${c.accent}" opacity=".75"/>`;break;
+  case "mushroom": body=`<path d="M42 80 Q45 45 90 40 Q135 45 138 80Z" fill="${c.color}"/><path d="M69 77 Q70 63 90 63 Q110 63 111 77 L107 121 Q90 132 73 121Z" fill="${c.accent}"/><circle cx="65" cy="59" r="5" fill="#fff"/><circle cx="90" cy="52" r="6" fill="#fff"/><circle cx="116" cy="59" r="5" fill="#fff"/>`;break;
+  case "bird": body=`<ellipse cx="90" cy="90" rx="44" ry="50" fill="${c.color}"/><path d="M53 82 Q29 68 32 49 Q58 53 70 72Z" fill="${c.accent}"/><path d="M127 82 Q151 68 148 49 Q122 53 110 72Z" fill="${c.accent}"/><path d="M82 98 L90 107 L98 98Z" fill="#ffc95c"/>`;break;
+  case "dragon": body=`<path d="M48 62 L42 35 L70 51 Q90 42 110 51 L138 35 L132 62 Q142 83 132 108 Q120 132 90 132 Q60 132 48 108 Q38 83 48 62Z" fill="${c.color}"/><path d="M49 66 Q26 63 25 45 Q45 44 61 56Z" fill="${c.accent}"/><path d="M131 66 Q154 63 155 45 Q135 44 119 56Z" fill="${c.accent}"/><path d="M83 50 L90 35 L97 50" fill="none" stroke="${c.accent}" stroke-width="8" stroke-linecap="round"/>`;break;
+  case "robot": body=`<rect x="45" y="49" width="90" height="84" rx="25" fill="${c.color}"/><rect x="56" y="63" width="68" height="47" rx="16" fill="${c.accent}"/><rect x="81" y="31" width="18" height="20" rx="9" fill="${c.color}"/><circle cx="90" cy="28" r="5" fill="#ff82ad"/><circle cx="76" cy="84" r="6" fill="#55c9c9"/><circle cx="104" cy="84" r="6" fill="#9b7cff"/><path d="M74 100 Q90 110 106 100" fill="none" stroke="#6a5267" stroke-width="3"/>`;break;
+  case "jelly": body=`<path d="M45 91 Q45 50 90 47 Q135 50 135 91 L128 122 Q90 143 52 122Z" fill="${c.color}" opacity=".95"/><path d="M62 70 Q90 54 118 70" fill="none" stroke="${c.accent}" stroke-width="10" stroke-linecap="round" opacity=".8"/>`;break;
+  case "deer": body=`<path d="M49 63 L43 32 L61 47 L76 29 L79 52 Q90 46 101 52 L104 29 L119 47 L137 32 L131 63 Q141 84 132 106 Q120 130 90 130 Q60 130 48 106 Q39 84 49 63Z" fill="${c.color}"/><path d="M55 36 Q48 18 36 23 Q47 34 58 46 M125 36 Q132 18 144 23 Q133 34 122 46" fill="none" stroke="${c.accent}" stroke-width="7" stroke-linecap="round"/>`;break;
+  case "bat": body=`<path d="M90 57 Q73 42 49 48 L27 34 L37 72 Q31 102 55 116 Q74 127 90 117 Q106 127 125 116 Q149 102 143 72 L153 34 L131 48 Q107 42 90 57Z" fill="${c.color}"/><path d="M42 50 L59 62 L37 55Z M138 50 L121 62 L143 55Z" fill="${c.accent}"/>`;break;
+  case "turtle": body=`<ellipse cx="90" cy="91" rx="52" ry="43" fill="${c.color}"/><ellipse cx="90" cy="91" rx="34" ry="28" fill="${c.accent}"/><circle cx="48" cy="91" r="16" fill="${c.color}"/><circle cx="132" cy="91" r="16" fill="${c.color}"/><path d="M76 78 Q90 67 104 78 M76 91 Q90 80 104 91 M76 104 Q90 93 104 104" fill="none" stroke="${c.color}" stroke-width="5"/>`;break;
+  case "bee": body=`<ellipse cx="90" cy="91" rx="45" ry="48" fill="${c.color}"/><path d="M49 78 Q24 59 31 39 Q55 42 69 63Z" fill="${c.accent}" opacity=".85"/><path d="M131 78 Q156 59 149 39 Q125 42 111 63Z" fill="${c.accent}" opacity=".85"/><path d="M53 79 H127 M49 97 H131 M57 115 H123" stroke="#fff5c9" stroke-width="9"/>`;break;
+  case "whale": body=`<path d="M44 90 Q49 49 91 50 Q132 51 137 91 Q136 124 103 131 Q78 136 60 119 L38 128 L45 108 Q37 99 44 90Z" fill="${c.color}"/><path d="M74 52 Q78 29 90 43 Q102 29 106 52" fill="none" stroke="${c.accent}" stroke-width="9" stroke-linecap="round"/>`;break;
+  case "cactus": body=`<path d="M72 128 V63 Q72 46 90 46 Q108 46 108 63 V77 H124 V65 Q124 53 136 53 Q148 53 148 68 V88 Q148 103 132 103 H108 V128Z" fill="${c.color}"/><path d="M54 98 H40 Q28 98 28 85 V72 Q28 60 40 60 Q52 60 52 72 V82 H72 V98Z" fill="${c.color}"/><circle cx="79" cy="67" r="3" fill="${c.accent}"/><circle cx="102" cy="82" r="3" fill="${c.accent}"/>`;break;
+  case "crystal": body=`<path d="M90 33 L125 59 L137 108 L90 137 L43 108 L55 59Z" fill="${c.color}"/><path d="M90 33 L90 137 M55 59 L90 78 L125 59 M43 108 L90 78 L137 108" fill="none" stroke="${c.accent}" stroke-width="5"/><path d="M74 57 L90 45 L106 57 L90 69Z" fill="#fff" opacity=".55"/>`;break;
+  case "bear": body=`<circle cx="59" cy="57" r="22" fill="${c.color}"/><circle cx="121" cy="57" r="22" fill="${c.color}"/><ellipse cx="90" cy="91" rx="49" ry="48" fill="${c.color}"/><ellipse cx="90" cy="105" rx="26" ry="19" fill="${c.accent}" opacity=".8"/>`;break;
+  case "flower": body=`<circle cx="90" cy="90" r="25" fill="${c.accent}"/><circle cx="90" cy="50" r="27" fill="${c.color}"/><circle cx="90" cy="130" r="27" fill="${c.color}"/><circle cx="50" cy="90" r="27" fill="${c.color}"/><circle cx="130" cy="90" r="27" fill="${c.color}"/><ellipse cx="90" cy="94" rx="42" ry="36" fill="${c.accent}" opacity=".85"/>`;break;
+  case "star": body=`<path d="M90 32 L104 66 L141 70 L113 93 L121 130 L90 111 L59 130 L67 93 L39 70 L76 66Z" fill="${c.color}"/><circle cx="90" cy="90" r="31" fill="${c.accent}" opacity=".75"/>`;break;
+ }
+ const faceLayer=c.shape==="robot"?"":face;
+ return `<svg class="${cls}" viewBox="0 0 180 180" role="img" aria-label="${svgEsc(c.name)}">${glow}<g transform="translate(90 90) scale(${scale}) translate(-90 -90)">${body}${faceLayer}</g>${extra}</svg>`;
+}
+function characterStage(){const level=getLevel();return level>=10?3:(level>=5?2:1)}
+function characterStageName(stage){return stage===1?"씨앗형":stage===2?"성장형":"각성형"}
+
 
 function $(id){return document.getElementById(id)}
 function clearAuthMessages(){$("authMessage").innerText="";$("authError").innerText=""}
@@ -384,9 +453,9 @@ async function saveRecord(){
    if(newLevel>oldLevel){
       ensureEvolutionPath();
       const evo=getEvolutionCharacter();
-      $("levelupText").innerText=(newLevel===10||newLevel===20)
-        ?`레벨 ${newLevel}! ${evo.name}으로 진화했어요!`
-        :`레벨 ${newLevel}에 도달했어요! 새로운 성장 단계가 열렸습니다.`;
+      $("levelupText").innerText=(newLevel===5||newLevel===10)
+        ?`레벨 ${newLevel}! ${evo.character.name}이(가) ${evo.formName}으로 성장했어요!`
+        :`레벨 ${newLevel}에 도달했어요! ${evo.character.name}과 함께 계속 성장해요.`;
       $("levelup").style.display="flex";
     }
  }catch(e){alert("저장 실패: "+e.message)}
@@ -410,6 +479,8 @@ function getDateObj(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padSt
 function loadLocalGame(){
  const key="myday_game_"+currentUser.id,saved=localStorage.getItem(key);
  if(saved)game={...game,...JSON.parse(saved)};
+ if(!game.partnerId)game.partnerId=profile.characterId||"moari";
+ if(!CHARACTER_BY_ID[game.partnerId])game.partnerId="moari";
 }
 function saveLocalGame(){localStorage.setItem("myday_game_"+currentUser.id,JSON.stringify(game))}
 function addCoins(n){game.coins=(game.coins||0)+n;saveLocalGame()}
@@ -480,11 +551,8 @@ function getEvolutionTraits(){
 function ensureEvolutionPath(){
  if(!currentUser)return;
  const level=getLevel(),t=getEvolutionTraits();
- if(level>=10&&!game.evolutionPrimary){
-   game.evolutionPrimary=t.type;
-   game.evolutionPrimaryLockedAt=level;
-   saveLocalGame();
- }
+ if(level>=10&&!game.evolutionPrimary){game.evolutionPrimary=t.type;game.evolutionPrimaryLockedAt=level;saveLocalGame()}
+ if(!game.partnerId)game.partnerId=profile.characterId||"moari";
 }
 function getSecondaryType(primary,t){
  const candidates=["study","exercise","streak","balance"].filter(x=>x!==primary);
@@ -492,106 +560,42 @@ function getSecondaryType(primary,t){
  return candidates[0]||"balance";
 }
 function getEvolutionCharacter(){
- const level=getLevel(),t=getEvolutionTraits();
  ensureEvolutionPath();
-
- if(level<5){
-   return {emoji:"🌱",name:"몽글씨앗",route:"🌱 공통 성장 단계",desc:"당신의 하루를 먹고 자라는 작은 성장 씨앗이에요.",next:"LEVEL 5에서 첫 성장이 시작돼요.",type:"base"};
- }
- if(level<10){
-   return {emoji:"🐣",name:"몽글이",route:"🐣 1차 성장 준비",desc:"아직 진화 계열은 정해지지 않았어요.",next:`LEVEL 10에서 ${t.type==="study"?"지식":t.type==="exercise"?"활동":t.type==="streak"?"꾸준함":"밸런스"} 계열로 진화할 가능성이 높아요.`,type:"base"};
- }
-
- const primary=game.evolutionPrimary||t.type;
- const secondary=getSecondaryType(primary,t);
-
- const branch={
-   study:{emoji:"🦉📚",name:"루미",route:"🧠 지식 계열",desc:"LEVEL 10에서 지식 계열로 진화했어요. 이제 이 계열은 바뀌지 않아요."},
-   exercise:{emoji:"🐯🌟",name:"타오",route:"💪 활동 계열",desc:"LEVEL 10에서 활동 계열로 진화했어요. 이제 이 계열은 바뀌지 않아요."},
-   streak:{emoji:"🦊🔥",name:"피오",route:"🔥 꾸준함 계열",desc:"LEVEL 10에서 꾸준함 계열로 진화했어요. 이제 이 계열은 바뀌지 않아요."},
-   balance:{emoji:"🐰✨",name:"세라",route:"✨ 밸런스 계열",desc:"LEVEL 10에서 밸런스 계열로 진화했어요. 이제 이 계열은 바뀌지 않아요."}
- };
-
- if(level<20){
-   const c=branch[primary];
-   return {...c,next:`LEVEL 20에서는 현재 두 번째 성향에 따라 복합 진화해요. 예상 보조 성향: ${secondary==="study"?"지식":secondary==="exercise"?"활동":secondary==="streak"?"꾸준함":"밸런스"}`,type:primary,secondary};
- }
-
- const finals={
-   study:{
-     exercise:{emoji:"🦉⚔️",name:"전투학자 루미온",route:"🧠+💪 지식·활동 복합형",desc:"지식을 쌓는 힘과 행동력을 함께 키운 전략형 파트너예요."},
-     streak:{emoji:"🦉🔥",name:"불꽃현자 루미엘",route:"🧠+🔥 지식·꾸준함 복합형",desc:"집중과 반복을 힘으로 바꾸는 깊은 몰입형 파트너예요."},
-     balance:{emoji:"🦉🌈",name:"별빛설계자 루미아",route:"🧠+✨ 지식·균형 복합형",desc:"생각과 생활의 균형을 설계하는 안정형 파트너예요."}
-   },
-   exercise:{
-     study:{emoji:"🐯📘",name:"전략투사 타오젠",route:"💪+🧠 활동·지식 복합형",desc:"몸으로 부딪히되 생각으로 승부하는 전략형 파트너예요."},
-     streak:{emoji:"🐯🔥",name:"불굴전사 타오르",route:"💪+🔥 활동·꾸준함 복합형",desc:"움직임과 반복을 통해 강해지는 끈기형 파트너예요."},
-     balance:{emoji:"🐯🌈",name:"리듬가디언 타오라",route:"💪+✨ 활동·균형 복합형",desc:"에너지와 생활 리듬을 함께 지키는 균형형 파트너예요."}
-   },
-   streak:{
-     study:{emoji:"🦊📚",name:"기록현자 피오린",route:"🔥+🧠 꾸준함·지식 복합형",desc:"매일의 기록을 지식으로 축적하는 성장형 파트너예요."},
-     exercise:{emoji:"🦊⚡",name:"루틴러너 피오스",route:"🔥+💪 꾸준함·활동 복합형",desc:"끊기지 않는 루틴으로 움직임을 완성하는 파트너예요."},
-     balance:{emoji:"🦊🌙",name:"루틴수호자 피오라",route:"🔥+✨ 꾸준함·균형 복합형",desc:"무너지지 않는 생활 리듬을 만드는 안정형 파트너예요."}
-   },
-   balance:{
-     study:{emoji:"🐰📖",name:"균형현자 세리안",route:"✨+🧠 균형·지식 복합형",desc:"생활의 균형 속에서 지식을 깊게 쌓는 파트너예요."},
-     exercise:{emoji:"🐰⚡",name:"밸런스러너 세리오",route:"✨+💪 균형·활동 복합형",desc:"균형 잡힌 생활에 활력을 더하는 민첩형 파트너예요."},
-     streak:{emoji:"🐰🔥",name:"루틴마스터 세리온",route:"✨+🔥 균형·꾸준함 복합형",desc:"균형과 지속성을 함께 완성한 안정 성장형 파트너예요."}
-   }
- };
-
- const final=finals[primary][secondary] || branch[primary];
- return {...final,next:"복합 최종 진화 완료! 1차 계열은 고정되고, 현재 보조 성향은 계속 성장 수치에 반영돼요.",type:primary,secondary};
+ const ch=getPartner(),stage=characterStage(),t=getEvolutionTraits();
+ const labels={study:"🧠 지식",exercise:"💪 활동",streak:"🔥 꾸준함",balance:"✨ 밸런스"};
+ const secondary=getSecondaryType(game.evolutionPrimary||t.type,t);
+ const formName=stage===1?"씨앗형":stage===2?"성장형":"각성형";
+ let route=`${ch.type} · ${labels[game.evolutionPrimary||t.type]||"✨ 밸런스"}`;
+ let desc=stage===1?`${ch.name}과 함께 MY DAY의 첫 성장을 시작해요.`:stage===2?`${ch.name}이 기록과 습관을 먹고 한 단계 성장했어요.`:`${ch.name}이 당신의 생활 패턴을 반영한 각성형 파트너가 되었어요.`;
+ let next=stage===1?"LEVEL 5에서 성장형으로 변해요.":stage===2?"LEVEL 10에서 각성형으로 진화하고 주 성향이 고정돼요.":`현재 보조 성향: ${labels[secondary]||"✨ 밸런스"} · 꾸준히 기록하면 더 강해져요.`;
+ return {character:ch,stage,formName,name:`${ch.name} · ${formName}`,route,desc,next,type:game.evolutionPrimary||t.type,secondary,svg:creatureSVG(ch,stage)};
 }
 function updateEvolution(){
- const t=getEvolutionTraits(),c=getEvolutionCharacter();
- const el=$("growthCharacter");if(!el)return;
- el.innerText=c.emoji;$("characterName").innerText=c.name;$("characterRoute").innerText=c.route;$("evolutionNext").innerText=c.next;
- [["study",t.study],["exercise",t.exercise],["streak",t.streak],["balance",t.balance]].forEach(([k,v])=>{
-   $(k+"TraitText").innerText=v;
-   $(k+"TraitBar").style.width=v+"%";
- });
- $("profileEmoji").innerText=c.emoji;
- $("miniAvatar").innerText=(profile.accessory?profile.accessory+" ":"")+c.emoji;
- $("previewAvatar").innerText=(profile.accessory?profile.accessory+" ":"")+c.emoji;
+ const t=getEvolutionTraits(),c=getEvolutionCharacter(),el=$("growthCharacter");if(!el)return;
+ el.innerHTML=c.svg;
+ $("characterName").innerText=c.name;$("characterRoute").innerText=c.route;$("evolutionNext").innerText=c.next;
+ [["study",t.study],["exercise",t.exercise],["streak",t.streak],["balance",t.balance]].forEach(([k,v])=>{$(k+"TraitText").innerText=v;$(k+"TraitBar").style.width=v+"%"});
+ renderProfileAvatar($("miniAvatar"),getPartner(),1);renderProfileAvatar($("previewAvatar"),getPartner(),2);
+ $("profileEmoji").innerText="";
 }
+function renderProfileAvatar(el,ch,stage=1){if(!el||!ch)return;el.innerHTML=creatureSVG(ch,stage,stage===2?"mini-creature":"mini-creature");}
 function openEvolutionGuide(){
- const t=getEvolutionTraits(),c=getEvolutionCharacter();
- ensureEvolutionPath();
- const primary=game.evolutionPrimary;
- const primaryLabel=primary?({study:"🧠 지식",exercise:"💪 활동",streak:"🔥 꾸준함",balance:"✨ 밸런스"}[primary]):"아직 미정";
+ const t=getEvolutionTraits(),c=getEvolutionCharacter();ensureEvolutionPath();
+ const primary=game.evolutionPrimary, labels={study:"🧠 지식",exercise:"💪 활동",streak:"🔥 꾸준함",balance:"✨ 밸런스"};
  const secondary=getSecondaryType(primary||t.type,t);
- const secondaryLabel={study:"🧠 지식",exercise:"💪 활동",streak:"🔥 꾸준함",balance:"✨ 밸런스"}[secondary];
-
- $("featureTitle").innerText="✨ MY DAY 진화 도감";
- const paths=[
-  {type:"study",emoji:"🦉📚",name:"루미 계열",desc:"LEVEL 10에서 공부 성향이 가장 강할 때"},
-  {type:"exercise",emoji:"🐯🌟",name:"타오 계열",desc:"LEVEL 10에서 운동 성향이 가장 강할 때"},
-  {type:"streak",emoji:"🦊🔥",name:"피오 계열",desc:"LEVEL 10에서 꾸준함 성향이 가장 강할 때"},
-  {type:"balance",emoji:"🐰✨",name:"세라 계열",desc:"세 영역이 고르게 성장했을 때"}
- ];
+ $("featureTitle").innerText="✨ MY DAY 캐릭터 도감";
+ const currentId=getPartner().id;
  $("featureContent").innerHTML=`
-   <div class="feature-card" style="cursor:default">
-     <div class="feature-title">진화 규칙</div>
-     <div class="feature-sub" style="line-height:1.8;margin-top:8px">
-       LEVEL 10에서 1차 계열이 결정되면 <b>그 계열은 영구 고정</b>됩니다.<br>
-       LEVEL 20에서는 고정된 1차 계열 + 그때 가장 강한 보조 성향을 조합해 복합 최종진화합니다.
-     </div>
+  <div class="feature-card" style="cursor:default">
+   <div class="feature-title">${c.character.name} 성장 단계</div>
+   <div class="feature-sub" style="line-height:1.7;margin-top:6px">모든 캐릭터는 <b>씨앗형 → 성장형 → 각성형</b> 3단계로 성장해요. LEVEL 10부터 생활 성향이 캐릭터 설명과 루트에 반영됩니다.</div>
+   <div class="evolution-stage-row">
+    ${[1,2,3].map(st=>`<div class="stage-box ${c.stage===st?"active":""}"><div class="stage-art">${creatureSVG(c.character,st,"creature-svg")}</div><div class="stage-label">${characterStageName(st)}</div><div class="stage-level">${st===1?"Lv.1~4":st===2?"Lv.5~9":"Lv.10+"}</div></div>`).join("")}
    </div>
-   <div class="evolution-path">
-     ${paths.map(p=>`<div class="path-card ${primary===p.type||(!primary&&c.type===p.type)?"current":""}">
-       <div class="path-emoji">${p.emoji}</div><div class="path-name">${p.name}</div><div class="path-desc">${p.desc}</div>
-     </div>`).join("")}
-   </div>
-   <div class="feature-card" style="margin-top:14px;cursor:default">
-     <div class="feature-title">현재 진화 정보</div>
-     <div class="feature-sub" style="line-height:1.8">
-       1차 계열: <b>${primaryLabel}</b><br>
-       현재 보조 성향: <b>${secondaryLabel}</b><br>
-       현재 캐릭터: <b>${c.name}</b><br>
-       🧠 ${t.study} · 💪 ${t.exercise} · 🔥 ${t.streak} · ✨ ${t.balance}
-     </div>
-   </div>`;
+  </div>
+  <div class="feature-card" style="margin-top:12px;cursor:default"><div class="feature-title">현재 성장 정보</div><div class="feature-sub" style="line-height:1.8">파트너: <b>${c.character.name}</b><br>주 성향: <b>${labels[primary||t.type]}</b><br>보조 성향: <b>${labels[secondary]}</b><br>🧠 ${t.study} · 💪 ${t.exercise} · 🔥 ${t.streak} · ✨ ${t.balance}</div></div>
+  <div class="feature-title" style="margin-top:16px">🌟 20종 파트너 도감</div>
+  <div class="character-collection">${MYDAY_CHARACTERS.map(ch=>`<div class="collection-card ${ch.id===currentId?"current":""}"><div class="collection-art">${creatureSVG(ch,c.stage,"creature-svg")}</div><div class="collection-name">${ch.name}</div><div class="collection-stage">${ch.type}</div></div>`).join("")}</div>`;
  $("featureModal").style.display="flex";
 }
 
@@ -615,15 +619,35 @@ function getDailyMission(){
 function updateMissionUI(){
  const m=getDailyMission()[0],done=m.ok();$("missionTitle").innerText=done?"오늘 미션 완료!":"오늘 기록하기";$("missionProgress").innerText=done?"완료 · +20 🪙":"0 / 1 완료";
 }
-function claimMission(m){
+function claimMissionById(id){
+ const m=getDailyMission().find(x=>x.id===id);
+ if(!m){showToast("미션을 찾을 수 없어요.");return}
  if(!m.ok()){showToast("아직 조건을 달성하지 않았어요.");return}
  if(game.claimedMissions.includes(m.id)){showToast("이미 보상을 받았어요.");return}
- game.claimedMissions.push(m.id);addCoins(m.reward);saveLocalGame();updateAll();showToast(`🎁 미션 완료! +${m.reward} 🪙`);
+ game.claimedMissions.push(m.id);
+ addCoins(m.reward);
+ saveLocalGame();
+ updateAll();
+ openMissions();
+ showToast(`🎁 미션 완료! +${m.reward} 🪙`);
+}
+function claimMission(m){
+ if(m && m.id) claimMissionById(m.id);
 }
 function openMissions(){
  const ms=getDailyMission();
  $("featureTitle").innerText="🎯 오늘의 미션";
- $("featureContent").innerHTML=ms.map(m=>`<div class="feature-card" style="margin-top:10px"><div class="feature-title">${m.title}</div><div class="feature-sub">${m.desc} · 보상 🪙${m.reward}</div><button class="btn" style="margin-top:10px" onclick='claimMission(${JSON.stringify(m)})'>${m.ok()?"보상 받기":"진행 중"}</button></div>`).join("");
+ $("featureContent").innerHTML=ms.map(m=>{
+   const claimed=game.claimedMissions.includes(m.id);
+   const done=m.ok();
+   const buttonText=claimed?"보상 수령 완료":(done?"보상 받기":"진행 중");
+   const disabled=claimed||!done?"disabled":"";
+   return `<div class="feature-card" style="margin-top:10px">
+     <div class="feature-title">${m.title}</div>
+     <div class="feature-sub">${m.desc} · 보상 <span class="token-icon">🪙</span>${m.reward}</div>
+     <button class="btn mission-claim-btn" style="margin-top:10px" ${disabled} onclick="claimMissionById('${m.id}')">${buttonText}</button>
+   </div>`;
+ }).join("");
  $("featureModal").style.display="flex";
 }
 function openAchievements(){
@@ -648,30 +672,33 @@ function openProfileModal(){
 }
 function closeProfileModal(){$("profileModal").style.display="none"}
 function buildProfileChoices(){
- $("emojiGrid").innerHTML=emojis.map(e=>`<button class="emoji-choice ${e===profile.emoji?"selected":""}" onclick="chooseEmoji(this,'${e}')">${e}</button>`).join("");
+ $("characterGrid").innerHTML=MYDAY_CHARACTERS.map(ch=>`<button type="button" class="character-choice ${ch.id===profile.characterId?"selected":""}" onclick="chooseCharacter(this,'${ch.id}')"><div class="choice-art">${creatureSVG(ch,characterStage(),"creature-svg")}</div><div class="choice-name">${ch.name}</div><div class="choice-type">${ch.type}</div></button>`).join("");
+ $("emojiGrid").innerHTML="";
  $("colorGrid").innerHTML=colors.map(c=>`<button class="color-choice ${c===profile.color?"selected":""}" style="background:${c}" onclick="chooseColor(this,'${c}')"></button>`).join("");
  $("bgGrid").innerHTML=backgrounds.map((b,i)=>`<button class="color-choice ${b===profile.background?"selected":""}" style="background:${b}" onclick="chooseBg(this,${i})"></button>`).join("");
 }
-function chooseEmoji(el,e){profile.emoji=e;document.querySelectorAll(".emoji-choice").forEach(x=>x.classList.remove("selected"));el.classList.add("selected");applyProfile()}
+function chooseCharacter(el,id){profile.characterId=id;game.partnerId=id;saveLocalGame();if(currentUser)localStorage.setItem("myday_profile_"+currentUser.id,JSON.stringify(profile));document.querySelectorAll(".character-choice").forEach(x=>x.classList.remove("selected"));el.classList.add("selected");applyProfile();showToast(`${CHARACTER_BY_ID[id].name}을(를) 파트너로 선택했어요!`)}
+function chooseEmoji(el,e){profile.emoji=e;applyProfile()}
 function chooseColor(el,c){profile.color=c;document.querySelectorAll("#colorGrid .color-choice").forEach(x=>x.classList.remove("selected"));el.classList.add("selected");applyProfile()}
 function chooseBg(el,i){profile.background=backgrounds[i];document.querySelectorAll("#bgGrid .color-choice").forEach(x=>x.classList.remove("selected"));el.classList.add("selected");applyProfile()}
 function saveProfile(){
  profile.name=$("profileNameInput").value.trim()||"MY DAY USER";
- localStorage.setItem("myday_profile_"+currentUser.id,JSON.stringify(profile));applyProfile();closeProfileModal();showToast("✨ 프로필이 저장됐어요!");
+ profile.characterId=profile.characterId||game.partnerId||"moari";game.partnerId=profile.characterId;
+ localStorage.setItem("myday_profile_"+currentUser.id,JSON.stringify(profile));saveLocalGame();applyProfile();closeProfileModal();showToast("✨ 프로필이 저장됐어요!");
 }
 function loadProfile(){
- const key="myday_profile_"+currentUser.id,saved=localStorage.getItem(key);if(saved)profile={...profile,...JSON.parse(saved)};
- applyProfile();
+ const key="myday_profile_"+currentUser.id,saved=localStorage.getItem(key);
+ if(saved)profile={...profile,...JSON.parse(saved)};
+ if(!CHARACTER_BY_ID[profile.characterId])profile.characterId=game.partnerId&&CHARACTER_BY_ID[game.partnerId]?game.partnerId:"moari";
+ game.partnerId=profile.characterId;saveLocalGame();applyProfile();
 }
 function applyProfile(){
  $("profileName").innerText=profile.name;
  $("miniAvatar").style.background=`linear-gradient(135deg,${profile.color},#72a9ff)`;
  $("previewAvatar").style.background=`linear-gradient(135deg,${profile.color},#72a9ff)`;$("previewName").innerText=profile.name;
  document.body.style.background=profile.background;
- const c=getEvolutionCharacter();
- $("profileEmoji").innerText=c.emoji;
- $("miniAvatar").innerText=(profile.accessory?profile.accessory+" ":"")+c.emoji;
- $("previewAvatar").innerText=(profile.accessory?profile.accessory+" ":"")+c.emoji;
+ renderProfileAvatar($("miniAvatar"),getPartner(),1);renderProfileAvatar($("previewAvatar"),getPartner(),2);
+ $("profileEmoji").innerText="";
 }
 function scrollToId(id){$(id)?.scrollIntoView({behavior:"smooth"})}
 function closeLevelUp(){$("levelup").style.display="none"}
