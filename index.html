@@ -3,712 +3,525 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MY DAY — 나의 하루 성장 기록</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>MY DAY · 성장형 대시보드</title>
 <style>
-*{box-sizing:border-box}
-:root{
-  --bg:#fff8f1;--bg2:#f4ecff;--panel:rgba(255,255,255,.84);--line:#eadff2;
-  --text:#352c42;--muted:#8f839c;--green:#55c99a;--blue:#72a9ff;
-  --purple:#9b7cff;--pink:#ff82ad;--yellow:#ffc95c;--orange:#ff9b6a;
-  --shadow:0 18px 55px rgba(87,61,111,.13)
-}
-body{
- margin:0;color:var(--text);font-family:Arial,"Noto Sans KR",sans-serif;min-height:100vh;
- background:
- radial-gradient(circle at 5% 5%,rgba(255,183,206,.35),transparent 28%),
- radial-gradient(circle at 95% 10%,rgba(171,211,255,.35),transparent 28%),
- radial-gradient(circle at 50% 100%,rgba(206,181,255,.28),transparent 35%),
- linear-gradient(135deg,var(--bg),var(--bg2))
-}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.32;background-image:radial-gradient(#fff 1px,transparent 1px);background-size:24px 24px}
-button,input,textarea{font:inherit}.container{max-width:1120px;margin:auto;padding:22px 16px 80px;position:relative}
-.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
-.logo{font-size:25px;font-weight:1000;letter-spacing:4px;color:#46384f}.logo span{color:#52bd91}
-.user-area{display:flex;align-items:center;gap:9px}.user-email{color:var(--muted);font-size:12px}
-.btn{border:1px solid var(--line);background:#fff;color:var(--text);border-radius:12px;padding:9px 13px;cursor:pointer;box-shadow:0 5px 15px rgba(80,50,100,.06)}
-.btn:hover{transform:translateY(-1px)}.profile-mini{display:flex;align-items:center;gap:8px;cursor:pointer}
-.avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--green),var(--blue));font-size:22px;border:3px solid #fff;box-shadow:0 5px 18px rgba(90,70,110,.16)}
-.avatar{overflow:hidden;position:relative}.avatar .mini-creature{width:34px;height:34px}.avatar.big .mini-creature{width:72px;height:72px}
-.creature-svg{width:112px;height:112px;display:block;filter:drop-shadow(0 10px 9px rgba(70,50,90,.14));transition:transform .25s,filter .25s}.creature-svg:hover{transform:translateY(-2px) scale(1.03)}
-.profile-character-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-height:360px;overflow:auto;padding:3px}
-.character-choice{border:1px solid var(--line);background:#fff;border-radius:16px;padding:9px 6px;cursor:pointer;text-align:center;transition:.18s;min-height:112px}.character-choice:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(80,50,100,.08)}.character-choice.selected{outline:3px solid #55c99a;background:#effcf6}.character-choice .choice-art{height:65px;display:grid;place-items:center}.character-choice .choice-art .creature-svg{width:62px;height:62px}.character-choice .choice-name{font-size:11px;font-weight:1000;margin-top:3px}.character-choice .choice-type{font-size:9px;color:var(--muted);margin-top:2px}
-.character-collection{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:14px}.collection-card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:8px;text-align:center}.collection-card.current{outline:2px solid #55c99a}.collection-card .collection-art{height:78px;display:grid;place-items:center}.collection-card .collection-art .creature-svg{width:72px;height:72px}.collection-card .collection-name{font-size:11px;font-weight:1000}.collection-card .collection-stage{font-size:9px;color:var(--muted);margin-top:2px}
-.evolution-stage-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}.stage-box{background:#fff;border:1px solid var(--line);border-radius:14px;padding:8px;text-align:center}.stage-box.active{outline:2px solid #9b7cff;background:#faf7ff}.stage-box .stage-art{height:80px;display:grid;place-items:center}.stage-box .stage-art .creature-svg{width:76px;height:76px}.stage-label{font-size:10px;font-weight:900}.stage-level{font-size:9px;color:var(--muted);margin-top:2px}
-@media(max-width:700px){.profile-character-grid,.character-collection{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:480px){.profile-character-grid{grid-template-columns:repeat(3,1fr)}.character-collection{grid-template-columns:repeat(2,1fr)}}
-.hero{position:relative;overflow:hidden;background:var(--panel);backdrop-filter:blur(12px);border:1px solid #fff;border-radius:30px;padding:28px;text-align:center;box-shadow:var(--shadow);margin-bottom:14px}
-.hero:before{content:"";position:absolute;width:280px;height:280px;border-radius:50%;background:rgba(255,155,190,.15);filter:blur(30px);left:-130px;top:-130px}
-.hero:after{content:"";position:absolute;width:240px;height:240px;border-radius:50%;background:rgba(114,169,255,.13);filter:blur(30px);right:-100px;bottom:-140px}
+  *{box-sizing:border-box}
+  :root{
+    --lav:#9b7cff; --lav2:#c6b7ff; --mint:#62d5b1; --blue:#72a9ff;
+    --pink:#ffeaf5; --bg:#f7effc; --ink:#39354d; --muted:#9189a6;
+    --white:#fff; --gold:#f7c84b; --shadow:0 14px 35px rgba(112,84,151,.10);
+  }
+  body{
+    margin:0; color:var(--ink); font-family:Inter,"Noto Sans KR","Apple SD Gothic Neo",sans-serif;
+    background:
+      radial-gradient(circle at 8% 8%,rgba(255,214,237,.7),transparent 24%),
+      radial-gradient(circle at 92% 22%,rgba(197,220,255,.8),transparent 25%),
+      linear-gradient(180deg,#fffaff 0%,#f4eafb 100%);
+    min-height:100vh;
+  }
+  button{font:inherit}
+  .app{max-width:1180px;margin:auto;padding:22px 28px 45px}
+  .hero{
+    position:relative; display:grid; grid-template-columns:1fr 330px; gap:22px;
+    padding:30px; border-radius:30px; overflow:hidden;
+    background:rgba(255,255,255,.82); box-shadow:var(--shadow);
+  }
+  .hero:before,.hero:after{content:"";position:absolute;border-radius:50%;filter:blur(2px);pointer-events:none}
+  .hero:before{width:260px;height:260px;background:#e7d9ff;left:-120px;top:-130px;opacity:.7}
+  .hero:after{width:280px;height:280px;background:#dff2ff;right:-130px;bottom:-150px;opacity:.7}
+  .main{position:relative;z-index:1}
+  .level-line{display:flex;align-items:center;gap:16px}
+  .level-badge{
+    width:86px;height:86px;border-radius:26px;display:grid;place-items:center;
+    background:linear-gradient(145deg,#7f6cff,#a78cff);color:#fff;box-shadow:0 10px 22px rgba(123,99,225,.28)
+  }
+  .level-badge small{display:block;font-size:12px;font-weight:800;text-align:center;letter-spacing:1px}
+  .level-badge b{display:block;font-size:42px;line-height:38px}
+  .headline{font-size:24px;font-weight:900;margin:0 0 5px}
+  .subline{color:var(--muted);font-size:13px}
+  .xp-card{margin-top:24px;padding:22px 24px;border-radius:22px;background:#fff;border:1px solid #f0e8f7}
+  .xp-top{display:flex;justify-content:space-between;align-items:center;font-weight:900}
+  .pill{padding:8px 13px;border-radius:999px;background:linear-gradient(90deg,#8d76ff,#6ca9ff);color:#fff;font-size:12px}
+  .xp-text{font-size:13px;color:#8e85a0;margin:8px 0}
+  .bar{height:12px;border-radius:999px;background:#eee8f5;overflow:hidden}
+  .bar i{display:block;width:92%;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--mint),#69a8ff,#9474ff)}
+  .record{
+    width:100%;border:0;margin-top:18px;padding:15px;border-radius:17px;color:#fff;
+    font-size:16px;font-weight:900;cursor:pointer;background:linear-gradient(90deg,#5dd5ad,#6fa7ff);
+    box-shadow:0 10px 22px rgba(102,176,220,.18)
+  }
+  .profile{
+    position:relative;z-index:2;border-radius:25px;padding:20px;text-align:center;
+    background:linear-gradient(180deg,#fff 0%,#f9f7ff 100%);border:1px solid #eee7f5;
+  }
+  .settings{position:absolute;right:16px;top:14px;border:0;background:transparent;font-size:20px;cursor:pointer}
+  .character{
+    width:190px;height:190px;margin:0 auto 3px;display:grid;place-items:center;
+    filter:drop-shadow(0 13px 12px rgba(100,78,130,.13))
+  }
+  .char-svg{width:100%;height:100%}
+  .profile h2{margin:4px 0 5px;font-size:20px}
+  .profile p{margin:0;color:var(--muted);font-size:12px}
+  .resource-row{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:15px}
+  .resource{background:#fff;border:1px solid #eee6f6;border-radius:12px;padding:8px 3px;font-size:12px;font-weight:900}
+  .resource span{display:block;font-size:16px;margin-bottom:2px}
+  .evo-open{margin-top:10px;width:100%;padding:9px;border:1px solid #e5d9f3;border-radius:12px;background:#fff;color:#68558a;font-weight:800;cursor:pointer}
+  .section-title{display:flex;align-items:center;gap:8px;margin:25px 2px 13px;font-size:18px;font-weight:900}
+  .metrics{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+  .metric,.growth-card,.mission-panel{
+    background:rgba(255,255,255,.9);border:1px solid #eee5f5;box-shadow:var(--shadow);border-radius:21px
+  }
+  .metric{padding:18px 14px;min-height:120px}
+  .metric .ico{font-size:26px}
+  .metric .label{color:var(--muted);font-size:13px;margin-top:5px}
+  .metric b{font-size:20px;display:block;margin-top:5px}
+  .bottom{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .growth-card,.mission-panel{padding:20px}
+  .growth-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .growth-stat{padding:16px;border-radius:18px;background:#fcf9ff;border:1px solid #f0e8f6}
+  .growth-stat small{color:var(--muted)}
+  .growth-stat strong{display:block;font-size:29px;margin:4px 0}
+  .evolution-mini{margin-top:12px;padding:15px;border-radius:19px;background:linear-gradient(180deg,#fbf7ff,#fff);border:1px solid #eee5f5}
+  .evo-title{font-weight:900;margin-bottom:12px}
+  .evo-line{display:flex;align-items:center;justify-content:space-between;gap:5px}
+  .evo-node{text-align:center;flex:1}
+  .mini-char,.silhouette{
+    width:62px;height:62px;margin:auto;border-radius:50%;display:grid;place-items:center;
+    background:linear-gradient(145deg,#fff,#f1eaff);border:2px solid #eee4fb
+  }
+  .mini-char svg{width:52px;height:52px}
+  .silhouette{font-size:28px;color:#77708d;background:#e7e0ef;filter:grayscale(1)}
+  .evo-node b{display:block;font-size:11px;margin-top:5px}
+  .evo-node span{font-size:10px;color:var(--muted)}
+  .arrow{color:#a48ac9;font-size:20px;font-weight:900}
+  .mission{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #f0eaf6}
+  .mission:last-of-type{border-bottom:0}
+  .mission-icon{width:44px;height:44px;border-radius:14px;background:#fff3c9;display:grid;place-items:center;font-size:24px;flex:none}
+  .mission-main{flex:1}.mission-main b{font-size:14px}.mission-main small{display:block;color:var(--muted);margin-top:3px}
+  .reward{font-weight:900;color:#d59c15;font-size:12px;white-space:nowrap}
+  .reward-btn{border:0;background:#9277ff;color:#fff;padding:8px 11px;border-radius:10px;font-size:11px;font-weight:900;cursor:pointer}
+  .all-missions{width:100%;margin-top:10px;padding:12px;border:0;border-radius:14px;background:linear-gradient(90deg,#a887ff,#806cf0);color:#fff;font-weight:900;cursor:pointer}
+  .coin{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;font-size:13px;
+    background:radial-gradient(circle at 35% 30%,#ffeaa0,#f2b928);border:2px solid #e1a820;color:#9a6b00;font-weight:1000;vertical-align:-5px;box-shadow:0 2px 4px rgba(177,129,20,.2)}
 
-.hero-main{
-  position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1fr) 250px;
-  gap:24px;align-items:center;text-align:left
-}
-.hero-score-wrap{text-align:center}
-.hero-character-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center}
-.hero-character-label{font-size:10px;letter-spacing:2px;font-weight:900;color:#9a8ca5;margin-bottom:8px}
-.hero-character-orb{
-  width:180px;height:180px;border-radius:50%;display:grid;place-items:center;position:relative;
-  background:linear-gradient(135deg,rgba(255,255,255,.96),rgba(240,248,255,.9) 50%,rgba(247,239,255,.92));
-  box-shadow:inset 0 0 0 6px rgba(255,255,255,.76),0 18px 42px rgba(95,71,145,.16);
-  animation:floatCharacter 3s ease-in-out infinite
-}
-.hero-character-orb:after{content:"";position:absolute;left:25px;right:25px;bottom:-14px;height:22px;border-radius:50%;background:rgba(76,60,90,.11);filter:blur(9px);z-index:-1}
-.hero-character-emoji{font-size:84px;line-height:1;filter:drop-shadow(0 10px 12px rgba(70,50,90,.15))}
-.hero-character-name{font-size:18px;font-weight:1000;margin-top:11px;text-align:center}
-.hero-character-route{font-size:11px;color:#786b84;margin-top:4px;text-align:center}
-.hero-character-next{font-size:10px;color:#a194aa;margin-top:6px;text-align:center;line-height:1.45;max-width:220px}
-.hero-traits{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px;width:100%}
-.hero-trait{background:rgba(255,255,255,.7);border:1px solid #eee5f5;border-radius:10px;padding:7px}
-.hero-trait-top{display:flex;justify-content:space-between;gap:5px;font-size:9px;color:#81758c;font-weight:800}
-.hero-trait-bar{height:5px;border-radius:99px;background:#eee7f3;overflow:hidden;margin-top:5px}
-.hero-trait-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#68d9a8,#77aaff,#9b7cff);transition:width .6s}
-.hero-evo-btn{margin-top:9px;border:1px solid var(--line);background:rgba(255,255,255,.84);color:#665778;padding:7px 10px;border-radius:10px;cursor:pointer;font-size:10px;font-weight:900}
-.hero-evo-btn:hover{transform:translateY(-1px)}
 
-.small-title{color:#9b8da7;font-size:11px;letter-spacing:3px;font-weight:800}.date{margin-top:7px;color:#9a8ca5;font-size:13px}
-.score{font-size:86px;line-height:1;font-weight:1000;color:#54c493;margin:12px 0;text-shadow:0 8px 25px rgba(84,196,147,.16)}
-.message{font-size:18px;font-weight:800}.main-button,.save-button,.auth-button{width:100%;border:0;background:linear-gradient(135deg,#68d9a8,#77aaff);color:#fff;font-weight:900;padding:15px;border-radius:15px;cursor:pointer;font-size:15px;box-shadow:0 10px 25px rgba(93,167,220,.18)}
-.main-button{margin-top:20px}.main-button:hover,.save-button:hover,.auth-button:hover{filter:brightness(1.04);transform:translateY(-1px)}
-.level-card{margin-top:18px;text-align:left;background:rgba(255,255,255,.7);border:1px solid #fff;border-radius:20px;padding:16px;position:relative;z-index:1}
-.level-top{display:flex;justify-content:space-between;align-items:center;gap:10px}.level-name{font-weight:900}.level-badge{color:#fff;background:linear-gradient(135deg,#9b7cff,#72a9ff);padding:6px 10px;border-radius:999px;font-size:12px;font-weight:900}
-.xp-text{color:var(--muted);font-size:12px}.xp-bar{height:11px;background:#eee6f3;border-radius:99px;overflow:hidden;margin-top:9px}.xp-inner{height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--blue),var(--purple));border-radius:99px;transition:width .6s}
-.cards{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.card,.stat,.chart,.history-item,.insight,.growth-box,.feature-card{background:var(--panel);backdrop-filter:blur(10px);border:1px solid #fff;border-radius:19px;box-shadow:0 8px 28px rgba(87,61,111,.08)}
-.card{padding:17px}.icon{font-size:23px}.card-title{color:var(--muted);font-size:12px;margin-top:7px}.value{font-size:20px;font-weight:900;margin-top:5px}
-.section{margin-top:26px}.section h2{font-size:18px;margin:0 0 12px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stat{padding:16px}.stat-title{color:var(--muted);font-size:12px}.stat-value{font-size:22px;font-weight:1000;margin-top:7px;color:#6c55c4}
-.chart{padding:19px}.chart-row{display:flex;align-items:center;gap:10px;margin:11px 0}.chart-date{width:65px;color:#9a8ca5;font-size:12px}.chart-bar{flex:1;height:25px;background:#eee7f4;border-radius:8px;overflow:hidden}.chart-inner{height:100%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:8px}.chart-score{width:35px;text-align:right;font-size:12px;font-weight:800}
-.history{display:flex;flex-direction:column;gap:9px}.history-item{padding:15px;display:flex;justify-content:space-between;align-items:center}.history-date{color:#9a8ca5;font-size:12px}.history-note{margin-top:4px;color:#51465c;font-size:14px}.history-score{font-size:24px;font-weight:1000;color:#55bd91}
-.insight{padding:22px;background:linear-gradient(135deg,rgba(226,255,241,.88),rgba(245,240,255,.88));border-color:#fff}.insight-title{color:#49a77f;font-weight:1000;margin-bottom:8px}.insight-text{color:#61576a;line-height:1.7}
-.growth{display:grid;grid-template-columns:1fr 1fr;gap:10px}.growth-box{padding:18px}.growth-big{font-size:30px;font-weight:1000;margin-top:5px}.growth-sub{color:var(--muted);font-size:12px;margin-top:4px}
-.features{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.feature-card{padding:18px;cursor:pointer;transition:.2s}.feature-card:hover{transform:translateY(-3px);box-shadow:0 14px 35px rgba(87,61,111,.14)}.feature-icon{font-size:28px}.feature-title{font-weight:900;margin-top:8px}.feature-sub{font-size:12px;color:var(--muted);margin-top:4px}
-.badges{display:flex;gap:9px;overflow:auto;padding:4px 2px 8px}.badge{min-width:115px;padding:13px;border-radius:16px;background:#fff;border:1px solid var(--line);text-align:center;box-shadow:0 5px 16px rgba(80,50,100,.05)}.badge.locked{opacity:.42;filter:grayscale(1)}.badge-icon{font-size:26px}.badge-name{font-size:12px;font-weight:900;margin-top:5px}.badge-desc{font-size:10px;color:var(--muted);margin-top:3px}
+  /* ===== 일러스트 배경 ===== */
+  .login-scene{
+    position:absolute;inset:0;overflow:hidden;pointer-events:none;
+  }
 
-.evolution-card{
-  margin-bottom:12px;padding:20px;background:
-  linear-gradient(135deg,rgba(255,255,255,.92),rgba(247,243,255,.86));
-  border:1px solid #fff;border-radius:24px;box-shadow:0 10px 32px rgba(87,61,111,.09);
-  display:grid;grid-template-columns:190px 1fr;gap:22px;align-items:center;overflow:hidden;position:relative
-}
-.evolution-card:before{content:"";position:absolute;width:180px;height:180px;border-radius:50%;background:rgba(155,124,255,.10);right:-70px;top:-90px}
-.character-stage{display:grid;place-items:center;min-height:170px;position:relative}
-.character-orb{
-  width:145px;height:145px;border-radius:50%;display:grid;place-items:center;position:relative;
-  background:linear-gradient(135deg,#fff8dc,#edf7ff 52%,#f3eaff);
-  box-shadow:inset 0 0 0 5px rgba(255,255,255,.72),0 14px 35px rgba(114,93,160,.16);
-  animation:floatCharacter 3s ease-in-out infinite
-}
-.character-orb:after{content:"";position:absolute;left:24px;right:24px;bottom:-12px;height:20px;border-radius:50%;background:rgba(76,60,90,.10);filter:blur(8px);z-index:-1}
-.character-emoji{font-size:68px;line-height:1;filter:drop-shadow(0 8px 10px rgba(70,50,90,.13))}
-.character-spark{position:absolute;font-size:22px;animation:twinkle 1.8s ease-in-out infinite}
-.character-spark.s1{left:10px;top:15px}.character-spark.s2{right:7px;bottom:24px;animation-delay:.7s}
-.character-info{position:relative;z-index:1}.character-label{font-size:11px;letter-spacing:2px;color:#9a8ca5;font-weight:900}
-.character-name{font-size:25px;font-weight:1000;margin-top:5px}.character-desc{color:#756a80;font-size:13px;line-height:1.6;margin-top:5px}
-.character-route{display:inline-flex;align-items:center;gap:6px;margin-top:9px;padding:6px 10px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:11px;font-weight:900;color:#6b5b82}
-.trait-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:14px}
-.trait{background:rgba(255,255,255,.78);border:1px solid #eee5f5;border-radius:12px;padding:9px}
-.trait-top{display:flex;justify-content:space-between;gap:5px;font-size:10px;color:#81758c;font-weight:800}
-.trait-bar{height:7px;border-radius:99px;background:#eee7f3;overflow:hidden;margin-top:6px}
-.trait-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#68d9a8,#77aaff,#9b7cff);transition:width .6s}
-.evolution-next{margin-top:10px;color:#9a8ca5;font-size:11px}
-.evolution-button{margin-top:12px;border:1px solid var(--line);background:#fff;color:#665778;padding:8px 11px;border-radius:11px;cursor:pointer;font-size:11px;font-weight:900}
-.evolution-button:hover{transform:translateY(-1px)}
-.evolution-path{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:14px}
-.path-card{border:1px solid var(--line);border-radius:16px;background:#fff;padding:13px;text-align:center}
-.path-emoji{font-size:33px}.path-name{font-size:12px;font-weight:1000;margin-top:5px}.path-desc{font-size:10px;color:var(--muted);margin-top:4px;line-height:1.45}
-.path-card.current{outline:3px solid rgba(85,201,154,.35);background:#f2fff8}
-@keyframes floatCharacter{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
-@keyframes twinkle{0%,100%{transform:scale(.75);opacity:.45}50%{transform:scale(1.15);opacity:1}}
+  .scene-castle{position:absolute;left:4%;bottom:83px;width:155px;height:105px;opacity:.8;filter:drop-shadow(0 8px 12px rgba(100,90,140,.12))}
+  .scene-castle .tower{position:absolute;bottom:0;width:34px;height:72px;background:linear-gradient(90deg,#f7d9e8,#e8ddff);border-radius:8px 8px 2px 2px}
+  .scene-castle .tower:before{content:"";position:absolute;left:-6px;top:-24px;border-left:23px solid transparent;border-right:23px solid transparent;border-bottom:28px solid #b9a4ef}
+  .scene-castle .t1{left:5px;height:58px}.scene-castle .t2{left:58px;height:86px}.scene-castle .t3{right:5px;height:64px}
+  .scene-castle .body{position:absolute;left:25px;bottom:0;width:108px;height:54px;background:#f7e5ee;border-radius:10px}
+  .scene-castle .window{position:absolute;bottom:18px;left:50%;width:13px;height:19px;transform:translateX(-50%);border-radius:8px 8px 2px 2px;background:#9fd8ef}
 
-.auth-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative}.auth-box{width:100%;max-width:430px;background:rgba(255,255,255,.9);backdrop-filter:blur(15px);border:1px solid #fff;border-radius:28px;padding:30px;box-shadow:var(--shadow)}
-.auth-logo{text-align:center;font-size:31px;font-weight:1000;letter-spacing:5px}.auth-logo span{color:var(--green)}.auth-subtitle{text-align:center;color:var(--muted);margin:10px 0 25px}
-.auth-input,.field input,.field textarea{width:100%;padding:13px;background:#fff;border:1px solid var(--line);border-radius:11px;color:var(--text);font-size:15px}.auth-input{margin-bottom:11px}.auth-switch{text-align:center;color:var(--muted);margin-top:17px;cursor:pointer;font-size:13px}.auth-message{color:#48a97f;text-align:center;margin-top:14px;line-height:1.5}.auth-error{color:#e66b7c;text-align:center;margin-top:14px;line-height:1.5}
-.modal-bg{position:fixed;inset:0;background:rgba(62,43,72,.42);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:20px;z-index:100}.modal{width:100%;max-width:650px;background:#fffafc;border:1px solid #fff;border-radius:25px;padding:24px;max-height:90vh;overflow-y:auto;box-shadow:0 25px 80px rgba(70,45,80,.22)}
-.modal-header{display:flex;justify-content:space-between;align-items:center}.modal-header h2{margin:0}.close{background:none;border:0;color:#5b5062;font-size:28px;cursor:pointer}.field{margin-top:16px}.field label{display:block;color:#8f839c;font-size:12px;margin-bottom:7px}.field textarea{min-height:80px;resize:vertical}.range-row{display:flex;gap:10px;align-items:center}.range-row input{flex:1}.range-number{width:45px;text-align:center;color:#55bd91;font-weight:1000}.save-button{margin-top:22px}
-.profile-preview{text-align:center;padding:10px 0 18px}.avatar.big{width:88px;height:88px;margin:auto;font-size:46px}.profile-name{font-size:20px;font-weight:1000;margin-top:9px}.emoji-grid,.color-grid,.shop-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}.emoji-choice,.color-choice,.shop-item{min-height:48px;border-radius:12px;border:1px solid var(--line);background:#fff;cursor:pointer}.emoji-choice.selected,.color-choice.selected{outline:3px solid #55c99a}.color-choice{height:32px;min-height:32px}.shop-item{padding:10px;text-align:center}.shop-item.owned{background:#effcf6}.shop-item.locked{opacity:.55}.shop-price{font-size:11px;color:#8d8198;margin-top:3px}.shop-emoji{font-size:25px}.token-icon{display:inline-block;font-size:18px;line-height:1;vertical-align:-2px}.mission-claim-btn:disabled{opacity:.55;cursor:not-allowed}
-.tabbar{display:flex;gap:7px;overflow:auto;margin:0 0 18px;padding:4px}.tab{border:1px solid var(--line);background:rgba(255,255,255,.7);color:#7f728b;border-radius:999px;padding:9px 13px;cursor:pointer;font-size:12px;font-weight:800;white-space:nowrap}.tab.active{background:#fff;color:#5c49a5;box-shadow:0 5px 15px rgba(80,50,100,.08)}
-.levelup{position:fixed;inset:0;background:rgba(45,28,55,.55);backdrop-filter:blur(7px);display:none;align-items:center;justify-content:center;z-index:300}.levelup-box{background:#fff;border-radius:30px;padding:34px;text-align:center;width:min(390px,90%);box-shadow:0 30px 100px rgba(0,0,0,.25);animation:pop .45s ease}.levelup-icon{font-size:65px}.levelup-title{font-size:28px;font-weight:1000;color:#735bd0;margin-top:10px}.levelup-sub{color:#8f839c;margin-top:8px}@keyframes pop{from{transform:scale(.75);opacity:0}to{transform:scale(1);opacity:1}}
-.toast{position:fixed;left:50%;bottom:25px;transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;background:#fff;border:1px solid var(--line);color:#493e52;padding:12px 18px;border-radius:999px;z-index:400;transition:.25s;box-shadow:0 10px 30px rgba(80,50,100,.15)}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-@media(max-width:900px){.cards{grid-template-columns:repeat(3,1fr)}.features{grid-template-columns:1fr 1fr}}
-@media(max-width:700px){.stats{grid-template-columns:repeat(2,1fr)}.growth{grid-template-columns:1fr}.hero-main{grid-template-columns:1fr;text-align:center}.hero-character-wrap{margin-top:6px}.score{font-size:70px}.user-email{display:none}}
-@media(max-width:480px){.cards{grid-template-columns:repeat(2,1fr)}.features{grid-template-columns:1fr}.hero{padding:24px 14px}.container{padding-left:11px;padding-right:11px}.emoji-grid,.shop-grid{grid-template-columns:repeat(4,1fr)}.hero-character-orb{width:145px;height:145px}.hero-character-emoji{font-size:68px}.hero-traits{grid-template-columns:repeat(2,1fr)}.evolution-path{grid-template-columns:repeat(2,1fr)}}
+  .scene-sun{
+    position:absolute;width:180px;height:180px;border-radius:50%;
+    right:11%;top:9%;
+    background:radial-gradient(circle at 35% 32%,#fff7c8 0 12%,#ffdca0 34%,rgba(255,220,160,.15) 70%);
+    filter:blur(.2px);opacity:.9;
+  }
+  .scene-cloud{
+    position:absolute;width:180px;height:55px;border-radius:50px;
+    background:rgba(255,255,255,.72);filter:blur(.3px);
+  }
+  .scene-cloud:before,.scene-cloud:after{
+    content:"";position:absolute;border-radius:50%;background:inherit;
+  }
+  .scene-cloud:before{width:70px;height:70px;left:28px;top:-31px}
+  .scene-cloud:after{width:92px;height:92px;right:22px;top:-48px}
+  .cloud1{left:6%;top:22%;transform:scale(.75)}
+  .cloud2{right:7%;top:42%;transform:scale(.55);opacity:.65}
+  .scene-hill{
+    position:absolute;bottom:-105px;width:58vw;height:230px;border-radius:50% 50% 0 0;
+    background:linear-gradient(180deg,#d9f2dd,#bfe5d0);
+  }
+  .hill1{left:-12vw}.hill2{right:-18vw;height:190px;background:linear-gradient(180deg,#eadffb,#d9cef1)}
+  .scene-ground{
+    position:absolute;bottom:0;left:0;right:0;height:125px;
+    background:linear-gradient(180deg,rgba(205,239,218,.55),rgba(188,225,207,.72));
+    clip-path:ellipse(72% 80% at 50% 100%);
+  }
+  .scene-flower{
+    position:absolute;bottom:74px;font-size:28px;filter:drop-shadow(0 4px 4px rgba(80,100,80,.12));
+  }
+  .flower1{left:15%;transform:rotate(-7deg)}.flower2{right:18%;font-size:23px;transform:rotate(8deg)}
+  .scene-spark{position:absolute;color:#fff;font-size:24px;text-shadow:0 2px 10px rgba(255,255,255,.8)}
+  .sp1{left:25%;top:12%}.sp2{left:46%;top:8%;font-size:17px}.sp3{right:28%;top:25%;font-size:18px}
+  .login-card{z-index:2}
+
+  /* ===== 예쁜 로그인 화면 ===== */
+  .login-screen{
+    position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:24px;
+    background:
+      radial-gradient(circle at 15% 15%,rgba(255,193,222,.75),transparent 27%),
+      radial-gradient(circle at 88% 18%,rgba(180,211,255,.8),transparent 28%),
+      radial-gradient(circle at 50% 100%,rgba(211,192,255,.65),transparent 35%),
+      linear-gradient(135deg,#fff8fc,#f2edff 55%,#eef7ff);
+    transition:opacity .45s,visibility .45s;
+  }
+  .login-screen.hide{opacity:0;visibility:hidden;pointer-events:none}
+  .login-orb{position:absolute;border-radius:50%;filter:blur(1px);opacity:.65;pointer-events:none}
+  .login-orb.one{width:150px;height:150px;background:#ffd3e7;left:8%;top:16%}
+  .login-orb.two{width:120px;height:120px;background:#c9dcff;right:10%;bottom:18%}
+  .login-card{
+    width:min(450px,100%);position:relative;overflow:hidden;text-align:center;
+    padding:34px 34px 30px;border:1px solid rgba(255,255,255,.95);border-radius:32px;
+    background:rgba(255,255,255,.82);backdrop-filter:blur(18px);
+    box-shadow:0 28px 80px rgba(92,70,128,.18);
+  }
+  .login-card:before{
+    content:"";position:absolute;width:220px;height:220px;border-radius:50%;
+    background:#eee5ff;right:-100px;top:-120px;opacity:.7
+  }
+  .login-mascot{
+    width:174px;height:174px;margin:0 auto 5px;display:grid;place-items:center;
+    border-radius:52px;background:linear-gradient(145deg,#f4eaff,#eef8ff 55%,#fff6fb);
+    box-shadow:inset 0 0 0 1px #eee3fa,0 18px 34px rgba(128,100,165,.15);
+    position:relative;z-index:1;transform:translateY(-2px);
+  }
+  .login-mascot:after{
+    content:"";position:absolute;inset:10px;border-radius:45px;
+    border:1px dashed rgba(145,120,210,.18);pointer-events:none;
+  }
+  .login-mascot svg{width:166px;height:166px}
+  .login-spark{position:absolute;font-size:22px}
+  .login-spark.a{left:28%;top:18%}.login-spark.b{right:27%;top:13%}.login-spark.c{right:16%;top:34%}
+  .login-card h1{position:relative;margin:12px 0 4px;font-size:29px;letter-spacing:-1px}
+  .login-card h1 span{background:linear-gradient(90deg,#7e68ed,#54c9aa);-webkit-background-clip:text;color:transparent}
+  .login-sub{position:relative;margin:0 0 23px;color:#9189a6;font-size:13px}
+  .login-form{text-align:left;position:relative}
+  .login-label{display:block;margin:0 0 7px 4px;font-size:12px;font-weight:900;color:#625a75}
+  .login-input{
+    width:100%;height:51px;border:1px solid #e9e1f2;border-radius:15px;background:#fff;
+    padding:0 15px;outline:none;color:#3f394f;font-size:14px;transition:.2s;
+  }
+  .login-input:focus{border-color:#9b84ff;box-shadow:0 0 0 4px rgba(155,124,255,.11)}
+  .login-field{margin-bottom:14px}
+  .login-options{display:flex;justify-content:space-between;align-items:center;margin:2px 2px 17px;color:#9189a6;font-size:11px}
+  .remember{display:flex;align-items:center;gap:7px;cursor:pointer}
+  .remember input{accent-color:#8f77f5}
+  .login-link{border:0;background:none;color:#7c68d8;font-weight:800;cursor:pointer}
+  .login-btn{
+    width:100%;height:54px;border:0;border-radius:17px;color:#fff;font-weight:900;font-size:15px;
+    cursor:pointer;background:linear-gradient(100deg,#62d5b1,#70a8ff,#9879ff);
+    box-shadow:0 12px 25px rgba(118,139,237,.22);transition:transform .15s,box-shadow .15s;
+  }
+  .login-btn:hover{transform:translateY(-2px);box-shadow:0 16px 30px rgba(118,139,237,.28)}
+  .login-divider{display:flex;align-items:center;gap:10px;color:#aaa1b7;font-size:11px;margin:20px 0 13px}
+  .login-divider:before,.login-divider:after{content:"";height:1px;flex:1;background:#eee7f3}
+  .guest-btn{
+    width:100%;height:45px;border:1px solid #e7def0;border-radius:14px;background:#fff;
+    color:#675e78;font-weight:800;cursor:pointer
+  }
+  .login-footer{margin:17px 0 0;color:#aaa1b7;font-size:10px}
+  .login-footer b{color:#8d79df}
+
+  .toast{position:fixed;left:50%;bottom:25px;transform:translate(-50%,20px);padding:12px 18px;border-radius:999px;background:#3d3750;color:#fff;opacity:0;pointer-events:none;transition:.25s;z-index:30;font-weight:800;font-size:13px}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+  .modal-back{position:fixed;inset:0;background:rgba(52,42,73,.35);backdrop-filter:blur(5px);display:none;place-items:center;z-index:20;padding:20px}
+  .modal-back.show{display:grid}
+  .modal{width:min(720px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:28px;padding:24px;box-shadow:0 30px 70px rgba(49,32,72,.25)}
+  .modal-head{display:flex;justify-content:space-between;align-items:center}.modal h2{margin:0}.close{border:0;background:#f1ebf8;width:36px;height:36px;border-radius:50%;cursor:pointer}
+  .evo-full{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}
+  .evo-full .card{padding:14px;text-align:center;border:1px solid #eee5f6;border-radius:18px;background:#fcfaff}
+  .evo-full .big{height:120px;display:grid;place-items:center}
+  .evo-full .big svg{width:105px;height:105px}
+  .unknown{font-size:54px;color:#77718b}.locked{background:#e9e3ef;border-radius:50%;width:100px;height:100px;display:grid;place-items:center;margin:auto;filter:grayscale(1)}
+  .note{font-size:12px;color:var(--muted);margin-top:8px}
+  @media(max-width:950px){.hero{grid-template-columns:1fr}.profile{max-width:420px;margin:auto}.metrics{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:650px){.app{padding:12px}.hero{padding:18px}.metrics{grid-template-columns:repeat(2,1fr)}.bottom{grid-template-columns:1fr}.evo-full{grid-template-columns:repeat(2,1fr)}.headline{font-size:20px}}
 </style>
 </head>
 <body>
 
-<div id="authScreen" class="auth-screen">
-  <div class="auth-box">
-    <div class="auth-logo">MY <span>DAY</span></div>
-    <div class="auth-subtitle" id="authTitle">나의 하루를 기록하세요</div>
-    <input class="auth-input" type="email" id="email" placeholder="이메일">
-    <input class="auth-input" type="password" id="password" placeholder="비밀번호">
-    <button class="auth-button" id="authButton" onclick="handleAuth()">로그인</button>
-    <div class="auth-switch" id="authSwitch" onclick="toggleAuthMode()">처음이신가요? 회원가입</div>
-    <div id="authMessage" class="auth-message"></div><div id="authError" class="auth-error"></div>
+<div class="login-screen" id="loginScreen">
+
+  <div class="login-scene" aria-hidden="true">
+    <div class="scene-sun"></div>
+
+    <div class="scene-castle">
+      <div class="tower t1"></div><div class="tower t2"></div><div class="tower t3"></div>
+      <div class="body"><div class="window"></div></div>
+    </div>
+
+    <div class="scene-cloud cloud1"></div>
+    <div class="scene-cloud cloud2"></div>
+    <div class="scene-hill hill1"></div>
+    <div class="scene-hill hill2"></div>
+    <div class="scene-ground"></div>
+    <div class="scene-flower flower1">🌼</div>
+    <div class="scene-flower flower2">🌷</div>
+    <div class="scene-spark sp1">✦</div>
+    <div class="scene-spark sp2">✧</div>
+    <div class="scene-spark sp3">✦</div>
+  </div>
+  <div class="login-orb one"></div><div class="login-orb two"></div>
+
+  <div class="login-card">
+    <span class="login-spark a">✦</span><span class="login-spark b">✧</span><span class="login-spark c">✦</span>
+
+    <div class="login-mascot">
+  <svg viewBox="0 0 260 260" aria-label="MY DAY 판타지 여우 캐릭터">
+    <defs>
+      <linearGradient id="foxFur" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#fffdfd"/>
+        <stop offset=".55" stop-color="#f9ecff"/>
+        <stop offset="1" stop-color="#dcd8ff"/>
+      </linearGradient>
+      <linearGradient id="foxEar" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#a7dfff"/>
+        <stop offset="1" stop-color="#b7a2ff"/>
+      </linearGradient>
+      <linearGradient id="wing" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#ffffff"/>
+        <stop offset=".55" stop-color="#c9edff"/>
+        <stop offset="1" stop-color="#b99dff"/>
+      </linearGradient>
+      <radialGradient id="eye" cx=".35" cy=".25">
+        <stop offset="0" stop-color="#fff"/>
+        <stop offset=".15" stop-color="#8fe8ff"/>
+        <stop offset="1" stop-color="#5967d9"/>
+      </radialGradient>
+    </defs>
+
+    <ellipse cx="130" cy="229" rx="67" ry="13" fill="#c9bce0" opacity=".4"/>
+
+    <!-- wings -->
+    <path d="M76 128 C43 107 28 75 43 54 C64 60 80 78 91 105 C67 76 57 67 47 64 C52 91 67 113 91 132Z"
+          fill="url(#wing)" stroke="#9bbbe9" stroke-width="3"/>
+    <path d="M184 128 C217 107 232 75 217 54 C196 60 180 78 169 105 C193 76 203 67 213 64 C208 91 193 113 169 132Z"
+          fill="url(#wing)" stroke="#9bbbe9" stroke-width="3"/>
+    <path d="M54 77 Q70 88 82 112 M206 77 Q190 88 178 112" fill="none" stroke="#fff" stroke-width="5" opacity=".9"/>
+
+    <!-- tail -->
+    <path d="M80 178 C45 188 42 220 77 222 C91 223 100 214 99 203 C90 211 77 211 72 202 C68 195 78 188 92 190Z"
+          fill="url(#foxFur)" stroke="#c2b5e4" stroke-width="3"/>
+    <path d="M67 198 Q78 204 89 197" fill="none" stroke="#c3d8ff" stroke-width="5"/>
+
+    <!-- ears -->
+    <path d="M75 89 L68 34 Q68 24 78 31 L111 67Z" fill="url(#foxFur)" stroke="#b8acd8" stroke-width="3"/>
+    <path d="M185 89 L192 34 Q192 24 182 31 L149 67Z" fill="url(#foxFur)" stroke="#b8acd8" stroke-width="3"/>
+    <path d="M78 65 L76 45 L96 68Z" fill="url(#foxEar)"/>
+    <path d="M182 65 L184 45 L164 68Z" fill="url(#foxEar)"/>
+
+    <!-- head -->
+    <path d="M66 91 C69 65 91 52 130 52 C169 52 191 65 194 91
+             C198 124 179 165 130 176 C81 165 62 124 66 91Z"
+          fill="url(#foxFur)" stroke="#b8acd8" stroke-width="3"/>
+
+    <!-- forehead gem -->
+    <path d="M130 63 L139 75 L130 87 L121 75Z" fill="#70dff5" stroke="#7e9be9" stroke-width="2"/>
+
+    <!-- eyes -->
+    <ellipse cx="99" cy="112" rx="18" ry="23" fill="#45486e"/>
+    <ellipse cx="161" cy="112" rx="18" ry="23" fill="#45486e"/>
+    <ellipse cx="99" cy="112" rx="14" ry="19" fill="url(#eye)"/>
+    <ellipse cx="161" cy="112" rx="14" ry="19" fill="url(#eye)"/>
+    <circle cx="94" cy="104" r="6" fill="#fff"/>
+    <circle cx="156" cy="104" r="6" fill="#fff"/>
+    <circle cx="104" cy="119" r="2.5" fill="#fff" opacity=".8"/>
+    <circle cx="166" cy="119" r="2.5" fill="#fff" opacity=".8"/>
+
+    <!-- cheeks -->
+    <ellipse cx="79" cy="137" rx="11" ry="6" fill="#ff9eb7" opacity=".55"/>
+    <ellipse cx="181" cy="137" rx="11" ry="6" fill="#ff9eb7" opacity=".55"/>
+
+    <!-- mouth -->
+    <path d="M124 130 Q130 126 136 130 L130 136Z" fill="#e47c9d"/>
+    <path d="M130 136 Q124 146 115 141 M130 136 Q136 146 145 141"
+          fill="none" stroke="#66516d" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- scarf -->
+    <path d="M82 162 Q130 185 178 162 L183 187 Q130 211 77 187Z"
+          fill="url(#foxEar)" stroke="#8e8ad8" stroke-width="3"/>
+    <path d="M92 176 Q130 191 168 176" fill="none" stroke="#ffffff" stroke-width="4" opacity=".7"/>
+
+    <!-- paws -->
+    <ellipse cx="98" cy="202" rx="23" ry="12" fill="#f6d7dd" stroke="#c5afd0" stroke-width="3"/>
+    <ellipse cx="162" cy="202" rx="23" ry="12" fill="#f6d7dd" stroke="#c5afd0" stroke-width="3"/>
+
+    <!-- little floating sparkles -->
+    <path d="M45 115 l4 8 8 4-8 4-4 8-4-8-8-4 8-4Z" fill="#ffd76e"/>
+    <path d="M215 110 l3 6 6 3-6 3-3 6-3-6-6-3 6-3Z" fill="#8ee9ff"/>
+  </svg>
+</div>
+
+    <h1>MY <span>DAY</span> 🌱</h1>
+    <p class="login-sub">작은 기록이 모여, 나만의 성장이 돼요.</p>
+
+    <form class="login-form" onsubmit="login(event)">
+      <div class="login-field">
+        <label class="login-label" for="loginId">아이디</label>
+        <input class="login-input" id="loginId" type="text" placeholder="아이디를 입력해주세요" autocomplete="username" required>
+      </div>
+      <div class="login-field">
+        <label class="login-label" for="loginPw">비밀번호</label>
+        <input class="login-input" id="loginPw" type="password" placeholder="비밀번호를 입력해주세요" autocomplete="current-password" required>
+      </div>
+
+      <div class="login-options">
+        <label class="remember"><input type="checkbox" id="remember"> 로그인 상태 유지</label>
+        <button type="button" class="login-link" onclick="toast('비밀번호 찾기는 준비 중이에요 💌')">비밀번호 찾기</button>
+      </div>
+
+      <button class="login-btn" type="submit">🌱 MY DAY 시작하기</button>
+    </form>
+
+    <div class="login-divider">또는</div>
+    <button class="guest-btn" onclick="guestLogin()">✨ 체험으로 둘러보기</button>
+    <p class="login-footer">오늘의 나를 기록하고 <b>내일의 나</b>를 만나보세요.</p>
   </div>
 </div>
 
-<div id="app" style="display:none">
-<div class="container">
-  <div class="header">
-    <div class="logo">MY <span>DAY</span></div>
-    <div class="user-area">
-      <div class="profile-mini" onclick="openProfileModal()"><div class="avatar" id="miniAvatar">🌱</div><div class="user-email" id="userEmail"></div></div>
-      <button class="btn" onclick="openProfileModal()">✨ 꾸미기</button>
-      <button class="btn" onclick="logout()">로그아웃</button>
+<div class="app">
+  <section class="hero">
+    <div class="main">
+      <div class="level-line">
+        <div class="level-badge"><div><small>LEVEL</small><b id="level">67</b></div></div>
+        <div><p class="headline">내일은 더 좋아질 거예요 🌱</p><div class="subline">오늘도 조금씩 성장하고 있어요.</div></div>
+      </div>
+      <div class="xp-card">
+        <div class="xp-top"><span>MY DAY USER</span><span class="pill">LEVEL 1</span></div>
+        <div class="xp-text">92 / 100 XP</div><div class="bar"><i></i></div>
+        <button class="record" onclick="toast('오늘의 기록 화면을 열었어요 ✨')">＋ 오늘 기록하기</button>
+      </div>
     </div>
+
+    <aside class="profile">
+      <button class="settings" onclick="toast('프로필 꾸미기는 준비 중이에요 🧸')" aria-label="설정">⚙️</button>
+      <div class="character">
+        <!-- 코드 안에 직접 그린 귀여운 씨앗형 캐릭터 일러스트 -->
+        <svg class="char-svg" viewBox="0 0 220 220" aria-label="씨앗형 고양이 캐릭터">
+          <defs><linearGradient id="fur" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffd56f"/><stop offset="1" stop-color="#ff9f68"/></linearGradient></defs>
+          <ellipse cx="110" cy="184" rx="58" ry="13" fill="#e9ddf7"/>
+          <path d="M65 83 L69 40 Q70 30 79 39 L96 57 Q110 52 124 57 L142 39 Q151 30 152 42 L155 84 Q171 102 164 138 Q158 169 110 173 Q62 169 56 138 Q49 102 65 83Z" fill="url(#fur)" stroke="#d98b67" stroke-width="3"/>
+          <path d="M73 91 Q110 70 147 91 Q155 110 150 135 Q142 160 110 162 Q78 160 70 135 Q65 110 73 91Z" fill="#fff4dd" opacity=".92"/>
+          <ellipse cx="86" cy="108" rx="10" ry="14" fill="#493b58"/><ellipse cx="134" cy="108" rx="10" ry="14" fill="#493b58"/>
+          <circle cx="89" cy="104" r="3.5" fill="#fff"/><circle cx="137" cy="104" r="3.5" fill="#fff"/>
+          <path d="M106 121 Q110 117 114 121 L110 126Z" fill="#e9787f"/><path d="M110 126 Q106 133 99 130 M110 126 Q114 133 121 130" fill="none" stroke="#6b4c5b" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="73" cy="125" r="6" fill="#ff9da0" opacity=".55"/><circle cx="147" cy="125" r="6" fill="#ff9da0" opacity=".55"/>
+          <path d="M72 155 Q110 174 148 155 L153 181 Q111 201 67 181Z" fill="#a98aff"/>
+          <path d="M77 164 Q110 181 143 164" fill="none" stroke="#8b70db" stroke-width="4"/>
+          <path d="M82 181 Q76 196 65 197 M138 181 Q144 196 155 197" fill="none" stroke="#e99a67" stroke-width="9" stroke-linecap="round"/>
+          <path d="M75 74 Q66 63 59 58 M145 74 Q154 63 161 58" fill="none" stroke="#70c79f" stroke-width="5" stroke-linecap="round"/>
+          <path d="M60 56 Q61 43 72 39" fill="none" stroke="#70c79f" stroke-width="4" stroke-linecap="round"/>
+          <path d="M160 56 Q159 43 148 39" fill="none" stroke="#70c79f" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h2>코리핀 · 씨앗형 🌱</h2>
+      <p>여유빛 · 🧠 지식</p>
+      <p style="margin-top:5px">LEVEL 5에서 성장형으로 변해요.</p>
+      <div class="resource-row">
+        <div class="resource"><span class="coin">₩</span>100</div>
+        <div class="resource"><span>🔥</span>4</div>
+        <div class="resource"><span>💎</span>21</div>
+        <div class="resource"><span>🌱</span>9</div>
+      </div>
+      <button class="evo-open" onclick="openEvo()">진화 도감 보기 ✨</button>
+    </aside>
+  </section>
+
+  <div class="metrics">
+    <div class="metric"><div class="ico">😴</div><div class="label">수면</div><b>6시간</b></div>
+    <div class="metric"><div class="ico">📚</div><div class="label">공부</div><b>480분</b></div>
+    <div class="metric"><div class="ico">🏃</div><div class="label">운동</div><b>0분</b></div>
+    <div class="metric"><div class="ico">😊</div><div class="label">기분</div><b>80점</b></div>
+    <div class="metric"><div class="ico">⚡</div><div class="label">집중도</div><b>80점</b></div>
+    <div class="metric"><div class="ico">🪙</div><div class="label">오늘 지출</div><b>10,000원</b></div>
   </div>
 
-  <div class="tabbar">
-    <button class="tab active" onclick="scrollToId('home')">🏠 홈</button>
-    <button class="tab" onclick="scrollToId('growthSection')">🆙 성장</button>
-    <button class="tab" onclick="openAchievements()">🏆 업적</button>
-    <button class="tab" onclick="openShop()">🛍️ 상점</button>
-    <button class="tab" onclick="openMissions()">🎯 미션</button>
-  </div>
-
-  <div id="home">
-    <div class="hero">
-      <div class="hero-main">
-        <div class="hero-score-wrap">
-          <div class="small-title">TODAY SCORE</div><div class="date" id="todayDate"></div>
-          <div class="score" id="score">0</div><div class="message" id="message">오늘의 데이터를 입력해보세요 🌱</div>
-          <div class="level-card">
-            <div class="level-top">
-              <div class="level-name"><span id="profileEmoji">🌱</span> <span id="profileName">MY DAY USER</span></div>
-              <div class="level-badge">LEVEL <span id="level">1</span></div>
-            </div>
-            <div class="xp-text" id="xpText">0 / 100 XP</div><div class="xp-bar"><div class="xp-inner" id="xpInner"></div></div>
-          </div>
-          <button class="main-button" onclick="openModal()">＋ 오늘 기록하기</button>
+  <div class="section-title">🌱 나의 성장</div>
+  <div class="bottom">
+    <section class="growth-card">
+      <div class="growth-grid">
+        <div class="growth-stat"><small>연속 기록</small><strong>3일 🔥</strong><small>꾸준함이 가장 강력한 능력이에요</small></div>
+        <div class="growth-stat"><small>보유 코인</small><strong><span class="coin">₩</span> 62</strong><small>미션과 기록으로 코인을 모아보세요</small></div>
+      </div>
+      <div class="evolution-mini">
+        <div class="evo-title">🌟 진화 도감</div>
+        <div class="evo-line">
+          <div class="evo-node"><div class="mini-char"><svg viewBox="0 0 220 220"><use href="#none"></use></svg><span style="position:absolute"></span></div><b>씨앗형</b><span>Lv.1</span></div>
+          <div class="arrow">→</div>
+          <div class="evo-node"><div class="silhouette">?</div><b>???</b><span>Lv.5</span></div>
+          <div class="arrow">→</div>
+          <div class="evo-node"><div class="silhouette">?</div><b>???</b><span>Lv.10</span></div>
+          <div class="arrow">→</div>
+          <div class="evo-node"><div class="silhouette">?</div><b>???</b><span>Lv.20</span></div>
         </div>
-
-        <div class="hero-character-wrap">
-          <div class="hero-character-label">MY DAY PARTNER</div>
-          <div class="hero-character-orb" id="characterOrb">
-            <div class="character-spark s1">✨</div>
-            <div class="hero-character-emoji" id="growthCharacter">🌱</div>
-            <div class="character-spark s2">⭐</div>
-          </div>
-          <div class="hero-character-name" id="characterName">몽글씨앗</div>
-          <div class="hero-character-route" id="characterRoute">🌱 공통 성장 단계</div>
-          <div class="hero-character-next" id="evolutionNext">LEVEL 5에서 첫 성장이 시작돼요.</div>
-
-          <div class="hero-traits">
-            <div class="hero-trait">
-              <div class="hero-trait-top"><span>🧠</span><span id="studyTraitText">0</span></div>
-              <div class="hero-trait-bar"><div class="hero-trait-fill" id="studyTraitBar" style="width:0%"></div></div>
-            </div>
-            <div class="hero-trait">
-              <div class="hero-trait-top"><span>💪</span><span id="exerciseTraitText">0</span></div>
-              <div class="hero-trait-bar"><div class="hero-trait-fill" id="exerciseTraitBar" style="width:0%"></div></div>
-            </div>
-            <div class="hero-trait">
-              <div class="hero-trait-top"><span>🔥</span><span id="streakTraitText">0</span></div>
-              <div class="hero-trait-bar"><div class="hero-trait-fill" id="streakTraitBar" style="width:0%"></div></div>
-            </div>
-            <div class="hero-trait">
-              <div class="hero-trait-top"><span>✨</span><span id="balanceTraitText">0</span></div>
-              <div class="hero-trait-bar"><div class="hero-trait-fill" id="balanceTraitBar" style="width:0%"></div></div>
-            </div>
-          </div>
-          <button class="hero-evo-btn" onclick="openEvolutionGuide()">진화 도감 보기 ✨</button>
-        </div>
       </div>
-    </div>
+    </section>
 
-    <div class="cards">
-      <div class="card"><div class="icon">😴</div><div class="card-title">수면</div><div class="value" id="sleepValue">-</div></div>
-      <div class="card"><div class="icon">📚</div><div class="card-title">공부</div><div class="value" id="studyValue">-</div></div>
-      <div class="card"><div class="icon">🏃</div><div class="card-title">운동</div><div class="value" id="exerciseValue">-</div></div>
-      <div class="card"><div class="icon">😊</div><div class="card-title">기분</div><div class="value" id="moodValue">-</div></div>
-      <div class="card"><div class="icon">⚡</div><div class="card-title">집중도</div><div class="value" id="focusValue">-</div></div>
-      <div class="card"><div class="icon">💰</div><div class="card-title">오늘 지출</div><div class="value" id="moneyValue">-</div></div>
-    </div>
-
-    <div class="section" id="growthSection">
-      <h2>🌱 나의 성장</h2>
-      <div class="growth">
-        <div class="growth-box"><div class="stat-title">연속 기록</div><div class="growth-big" id="streak">0일 🔥</div><div class="growth-sub">꾸준함이 가장 강력한 능력이에요</div></div>
-        <div class="growth-box"><div class="stat-title">보유 코인</div><div class="growth-big"><span class="token-icon" aria-label="토큰">🪙</span> <span id="coins">0</span></div><div class="growth-sub">미션과 기록으로 코인을 모아보세요</div></div>
+    <section class="mission-panel">
+      <div class="section-title" style="margin:0 0 4px">🎯 오늘의 미션</div>
+      <div class="mission">
+        <div class="mission-icon">🎯</div>
+        <div class="mission-main"><b>오늘 미션 완료!</b><small>완료 · +20 <span class="coin">₩</span> 코인</small></div>
+        <span style="font-size:22px">☑️</span>
       </div>
-    </div>
-
-    <div class="section">
-      <h2>🎯 오늘의 미션</h2>
-      <div class="features">
-        <div class="feature-card" onclick="openMissions()"><div class="feature-icon">🎯</div><div class="feature-title" id="missionTitle">오늘 기록하기</div><div class="feature-sub" id="missionProgress">0 / 1 완료</div></div>
-        <div class="feature-card" onclick="openAchievements()"><div class="feature-icon">🏆</div><div class="feature-title">업적 확인</div><div class="feature-sub"><span id="achievementCount">0</span>개 달성</div></div>
-        <div class="feature-card" onclick="openShop()"><div class="feature-icon">🛍️</div><div class="feature-title">꾸미기 상점</div><div class="feature-sub">코인으로 나만의 MY DAY</div></div>
+      <div class="mission">
+        <div class="mission-icon">🏆</div>
+        <div class="mission-main"><b>업적 확인</b><small>3개 달성</small></div>
+        <button class="reward-btn" onclick="claim(this)">보상 받기</button>
+        <span class="reward">+10 <span class="coin">₩</span></span>
       </div>
-    </div>
-
-    <div class="section">
-      <h2>🏅 나의 배지</h2><div class="badges" id="badges"></div>
-    </div>
-
-    <div class="section"><h2>📈 나의 기록</h2>
-      <div class="stats">
-        <div class="stat"><div class="stat-title">평균 점수</div><div class="stat-value" id="averageScore">0점</div></div>
-        <div class="stat"><div class="stat-title">최고 점수</div><div class="stat-value" id="bestScore">0점</div></div>
-        <div class="stat"><div class="stat-title">누적 공부</div><div class="stat-value" id="totalStudy">0시간</div></div>
-        <div class="stat"><div class="stat-title">누적 운동</div><div class="stat-value" id="totalExercise">0시간</div></div>
+      <div class="mission">
+        <div class="mission-icon">🛍️</div>
+        <div class="mission-main"><b>꾸미기 상점</b><small>코인으로 나만의 MY DAY</small></div>
+        <button class="reward-btn" onclick="toast('꾸미기 상점을 열었어요 🛍️')">상점 가기</button>
       </div>
-    </div>
-
-    <div class="section"><h2>📊 최근 기록</h2><div class="chart" id="chart"><div class="empty">아직 기록이 없습니다.</div></div></div>
-
-    <div class="section"><h2>🧠 MY INSIGHT</h2><div class="insight"><div class="insight-title">오늘의 분석</div><div class="insight-text" id="insight">기록을 쌓으면 나만의 생활 패턴을 분석해드려요.</div></div></div>
-
-    <div class="section"><h2>📅 기록 히스토리</h2><div class="history" id="history"><div class="empty">아직 기록이 없습니다.</div></div></div>
+      <button class="all-missions" onclick="toast('미션 목록을 확인했어요 🎯')">모든 미션 보기 ⭐</button>
+    </section>
   </div>
 </div>
-</div>
-
-<div class="modal-bg" id="modalBg"><div class="modal">
-  <div class="modal-header"><h2>오늘 기록하기</h2><button class="close" onclick="closeModal()">×</button></div>
-  <div class="field"><label>수면 시간 (시간)</label><input type="number" id="sleep" min="0" max="24" step="0.1" placeholder="예: 7.5"></div>
-  <div class="field"><label>공부 시간 (분)</label><input type="number" id="study" min="0" placeholder="예: 120"></div>
-  <div class="field"><label>운동 시간 (분)</label><input type="number" id="exercise" min="0" placeholder="예: 45"></div>
-  <div class="field"><label>오늘 지출 (원)</label><input type="number" id="money" min="0" placeholder="예: 23000"></div>
-  <div class="field"><label>기분</label><div class="range-row"><input type="range" min="0" max="100" value="70" id="mood" oninput="updateMood()"><div class="range-number" id="moodNumber">70</div></div></div>
-  <div class="field"><label>집중도</label><div class="range-row"><input type="range" min="0" max="100" value="70" id="focus" oninput="updateFocus()"><div class="range-number" id="focusNumber">70</div></div></div>
-  <div class="field"><label>오늘 한마디</label><textarea id="note" placeholder="오늘 하루는 어땠나요?"></textarea></div>
-  <button class="save-button" onclick="saveRecord()">☁️ 클라우드에 저장하기</button>
-</div></div>
-
-<div class="modal-bg" id="profileModal"><div class="modal">
-  <div class="modal-header"><h2>✨ 내 프로필 꾸미기</h2><button class="close" onclick="closeProfileModal()">×</button></div>
-  <div class="profile-preview"><div class="avatar big" id="previewAvatar"></div><div class="profile-name" id="previewName">MY DAY USER</div></div>
-  <div class="field"><label>나의 파트너 캐릭터</label><div class="profile-character-grid" id="characterGrid"></div></div>
-  <div class="field"><label>닉네임</label><input id="profileNameInput" maxlength="20" placeholder="나만의 닉네임"></div>
-  <div class="field" style="display:none"><label>프로필 아이콘</label><div class="emoji-grid" id="emojiGrid"></div></div>
-  <div class="field"><label>프로필 색상</label><div class="color-grid" id="colorGrid"></div></div>
-  <div class="field"><label>프로필 배경</label><div class="color-grid" id="bgGrid"></div></div>
-  <button class="save-button" onclick="saveProfile()">✨ 프로필 저장하기</button>
-</div></div>
-
-<div class="modal-bg" id="featureModal"><div class="modal">
-  <div class="modal-header"><h2 id="featureTitle">🎯</h2><button class="close" onclick="closeFeature()">×</button></div>
-  <div id="featureContent"></div>
-</div></div>
-
-<div class="levelup" id="levelup"><div class="levelup-box">
-  <div class="levelup-icon">🎉</div><div class="levelup-title">LEVEL UP!</div>
-  <div id="levelupText" class="levelup-sub">새로운 레벨에 도달했어요!</div>
-  <button class="save-button" onclick="closeLevelUp()">계속 성장하기 🚀</button>
-</div></div>
 
 <div class="toast" id="toast"></div>
 
-<script>
-/* 중요: 아래 URL은 기존 프로젝트를 유지합니다.
-   API 키는 Supabase Dashboard의 현재 Publishable key로 교체하세요. */
-const SUPABASE_URL="https://raasbxkmehjprsjmjxtj.supabase.co";
-const SUPABASE_KEY="sb_publishable_BALs2dGrARhYLLa3-5Uc9Q_UAHF_4Vh";
-const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-
-let isSignup=false,currentUser=null,records=[];
-const emojis=["🌱","🐰","🐻","🐱","🐶","🦊","🐼","🐸","🐵","🐨","🦄","⭐","🌸","🍀","🍓","🍒","🐣","🦋","🌈","🚀"];
-const colors=["#55c99a","#72a9ff","#9b7cff","#ff82ad","#ffc95c","#ff9b6a","#65d6df","#8ddc73"];
-const backgrounds=["linear-gradient(135deg,#fff1f6,#eef8ff)","linear-gradient(135deg,#effff6,#eaf2ff)","linear-gradient(135deg,#f5efff,#fff0f8)","linear-gradient(135deg,#fff8e7,#ffeef1)","linear-gradient(135deg,#eafaff,#f3edff)"];
-const shopItems=[
- {id:"crown",emoji:"👑",name:"왕관",price:80,type:"accessory"},
- {id:"sparkle",emoji:"✨",name:"반짝이",price:120,type:"accessory"},
- {id:"heart",emoji:"💖",name:"하트",price:150,type:"accessory"},
- {id:"rocket",emoji:"🚀",name:"로켓",price:200,type:"accessory"},
- {id:"star",emoji:"🌟",name:"별",price:250,type:"accessory"}
-];
-const achievementDefs=[
- {id:"first",icon:"🌱",name:"첫걸음",desc:"첫 기록을 남겼어요",ok:r=>r.length>=1},
- {id:"three",icon:"📚",name:"3일 기록",desc:"3개 이상의 기록",ok:r=>r.length>=3},
- {id:"seven",icon:"🔥",name:"7일 연속",desc:"7일 연속 기록",ok:r=>calcStreak(r)>=7},
- {id:"perfect",icon:"💯",name:"완벽한 하루",desc:"90점 이상 달성",ok:r=>r.some(x=>Number(x.score)>=90)},
- {id:"study10",icon:"🧠",name:"집중러",desc:"공부 10시간 누적",ok:r=>r.reduce((s,x)=>s+Number(x.study||0),0)>=600},
- {id:"exercise5",icon:"🏃",name:"운동왕",desc:"운동 5시간 누적",ok:r=>r.reduce((s,x)=>s+Number(x.exercise||0),0)>=300},
- {id:"level5",icon:"🚀",name:"레벨 5",desc:"레벨 5 달성",ok:r=>getLevel(r)>=5},
- {id:"score100",icon:"🏆",name:"최고의 하루",desc:"100점 달성",ok:r=>r.some(x=>Number(x.score)>=100)},
- {id:"evolve10",icon:"✨",name:"첫 진화",desc:"레벨 10 달성",ok:r=>getLevel(r)>=10},
- {id:"evolve20",icon:"🌈",name:"복합 진화",desc:"레벨 20에서 복합 최종진화 달성",ok:r=>getLevel(r)>=20}
-];
-const MYDAY_CHARACTERS=[
- {id:"moari",name:"모아리",type:"숲싹",color:"#70d39c",accent:"#d8f6a8",shape:"leaf",desc:"작은 잎사귀에서 시작해 숲의 안내자가 돼요."},
- {id:"nunubel",name:"누누벨",type:"구름",color:"#9ecbff",accent:"#eef7ff",shape:"cloud",desc:"느긋하게 떠다니며 마음의 균형을 지켜요."},
- {id:"korifin",name:"코리핀",type:"여우빛",color:"#ff9b6a",accent:"#ffd3a8",shape:"fox",desc:"작은 용기로 하루의 목표를 향해 달려가요."},
- {id:"lumicat",name:"루미캣",type:"달빛",color:"#8d7cff",accent:"#d9d1ff",shape:"cat",desc:"집중하는 순간 눈에 별빛이 모여요."},
- {id:"tobiring",name:"토비링",type:"물결",color:"#55c9c9",accent:"#b7f4ef",shape:"otter",desc:"꾸준한 흐름으로 하루를 부드럽게 이어가요."},
- {id:"pokorum",name:"포코룸",type:"버섯",color:"#d989b5",accent:"#ffd5e9",shape:"mushroom",desc:"작은 기록을 차곡차곡 포근하게 쌓아요."},
- {id:"piaroo",name:"피아루",type:"새벽새",color:"#75a9ff",accent:"#d9ebff",shape:"bird",desc:"새로운 아침마다 다시 날아오를 힘을 줘요."},
- {id:"dravi",name:"드라비",type:"꼬마룡",color:"#ff7f87",accent:"#ffc5ad",shape:"dragon",desc:"작은 습관을 뜨거운 성장 에너지로 바꿔요."},
- {id:"neobot",name:"네오봇",type:"기어",color:"#6f91a8",accent:"#c9e8f3",shape:"robot",desc:"목표를 분석하고 루틴을 똑똑하게 정리해요."},
- {id:"jelloa",name:"젤로아",type:"말랑",color:"#68cfd6",accent:"#d8fbff",shape:"jelly",desc:"실수해도 다시 말랑하게 튀어오르는 친구예요."},
- {id:"lunapin",name:"루나핀",type:"달숲",color:"#a88cdd",accent:"#eee1ff",shape:"deer",desc:"차분한 마음으로 생활 리듬을 가꿔요."},
- {id:"bamtori",name:"밤토리",type:"별밤",color:"#5565b7",accent:"#b7c0ff",shape:"bat",desc:"밤의 집중력을 모아 깊은 몰입을 만들어내요."},
- {id:"tormy",name:"토르미",type:"산호",color:"#62b98f",accent:"#c8f0d6",shape:"turtle",desc:"천천히라도 멈추지 않는 꾸준함의 상징이에요."},
- {id:"bibiring",name:"비비링",type:"꽃꿀",color:"#ffc95c",accent:"#fff0a8",shape:"bee",desc:"작은 성취 하나하나에서 달콤한 힘을 모아요."},
- {id:"waveri",name:"웨이브리",type:"바다",color:"#55a9dc",accent:"#bfeaff",shape:"whale",desc:"넓은 바다처럼 마음의 여유와 지속력을 키워요."},
- {id:"cactina",name:"선인아",type:"사막꽃",color:"#7dcf7d",accent:"#ffd2e4",shape:"cactus",desc:"조금 건조한 날에도 스스로를 돌볼 줄 알아요."},
- {id:"crispin",name:"크리스핀",type:"결정",color:"#8bb9ff",accent:"#e4f0ff",shape:"crystal",desc:"기록이 쌓일수록 맑은 결정처럼 성장해요."},
- {id:"mocoring",name:"모코링",type:"포근곰",color:"#b98d72",accent:"#f3d3b6",shape:"bear",desc:"편안한 하루를 만들고 작은 행복을 챙겨요."},
- {id:"flori",name:"플로리",type:"꽃바람",color:"#ff82ad",accent:"#ffd2e2",shape:"flower",desc:"좋은 습관을 꽃피우며 주변까지 밝게 해요."},
- {id:"starmi",name:"스타미",type:"별씨앗",color:"#f0b84e",accent:"#fff0a8",shape:"star",desc:"목표를 향한 작은 빛을 매일 하나씩 모아요."}
-];
-const CHARACTER_BY_ID=Object.fromEntries(MYDAY_CHARACTERS.map(c=>[c.id,c]));
-let profile={name:"MY DAY USER",characterId:"moari",emoji:"🌱",color:"#55c99a",background:backgrounds[0],accessory:""};
-let game={coins:0,owned:[],claimedMissions:[],seenLevel:1,evolutionPrimary:null,evolutionPrimaryLockedAt:null,partnerId:"moari"};
-
-function getPartner(){return CHARACTER_BY_ID[profile.characterId]||CHARACTER_BY_ID.moari}
-function svgEsc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
-function creatureSVG(ch,stage=1,cls="creature-svg") {
- const c=ch||CHARACTER_BY_ID.moari, scale=stage===1?1:stage===2?1.06:1.14;
- const glow=stage===3?`<circle cx="90" cy="90" r="76" fill="${c.accent}" opacity=".18"/>`:``;
- const extra=stage===1?``:stage===2?`<circle cx="52" cy="52" r="5" fill="#fff" opacity=".9"/><circle cx="128" cy="48" r="4" fill="#fff" opacity=".8"/>`: `<circle cx="42" cy="43" r="6" fill="#fff"/><circle cx="138" cy="43" r="5" fill="#fff"/><path d="M90 20 L95 31 L107 33 L98 41 L100 53 L90 47 L80 53 L82 41 L73 33 L85 31Z" fill="#fff3a8" opacity=".95"/>`;
- const face=`<circle cx="70" cy="91" r="5" fill="#352c42"/><circle cx="110" cy="91" r="5" fill="#352c42"/><circle cx="72" cy="88" r="1.8" fill="#fff"/><circle cx="112" cy="88" r="1.8" fill="#fff"/><path d="M83 108 Q90 114 97 108" fill="none" stroke="#6a5267" stroke-width="3" stroke-linecap="round"/>`;
- let body="";
- switch(c.shape){
-  case "leaf": body=`<path d="M90 48 C62 42 40 58 43 85 C46 116 68 132 90 128 C112 132 134 116 137 85 C140 58 118 42 90 48Z" fill="${c.color}"/><path d="M89 48 C84 30 72 25 61 24 C62 40 72 51 89 56Z" fill="${c.accent}"/><path d="M91 48 C96 30 108 25 119 24 C118 40 108 51 91 56Z" fill="${c.accent}"/>`;break;
-  case "cloud": body=`<path d="M45 108 C33 98 37 78 52 73 C55 55 77 47 91 59 C103 44 132 51 134 73 C151 75 153 101 136 109 C123 116 61 117 45 108Z" fill="${c.color}"/><circle cx="58" cy="74" r="12" fill="${c.accent}" opacity=".8"/>`;break;
-  case "fox": body=`<path d="M48 62 L57 31 L77 49 Q90 44 103 49 L123 31 L132 62 Q141 83 132 105 Q121 130 90 131 Q59 130 48 105 Q39 83 48 62Z" fill="${c.color}"/><path d="M58 43 L65 59 L54 56Z M122 43 L115 59 L126 56Z" fill="${c.accent}"/>`;break;
-  case "cat": body=`<path d="M50 61 L54 29 L76 48 Q90 43 104 48 L126 29 L130 61 Q140 83 132 105 Q121 129 90 129 Q59 129 48 105 Q40 83 50 61Z" fill="${c.color}"/><path d="M59 42 L64 57 L54 53Z M121 42 L116 57 L126 53Z" fill="${c.accent}"/>`;break;
-  case "otter": body=`<ellipse cx="90" cy="90" rx="48" ry="48" fill="${c.color}"/><ellipse cx="63" cy="68" rx="13" ry="17" fill="${c.accent}"/><ellipse cx="117" cy="68" rx="13" ry="17" fill="${c.accent}"/><ellipse cx="90" cy="103" rx="26" ry="20" fill="${c.accent}" opacity=".75"/>`;break;
-  case "mushroom": body=`<path d="M42 80 Q45 45 90 40 Q135 45 138 80Z" fill="${c.color}"/><path d="M69 77 Q70 63 90 63 Q110 63 111 77 L107 121 Q90 132 73 121Z" fill="${c.accent}"/><circle cx="65" cy="59" r="5" fill="#fff"/><circle cx="90" cy="52" r="6" fill="#fff"/><circle cx="116" cy="59" r="5" fill="#fff"/>`;break;
-  case "bird": body=`<ellipse cx="90" cy="90" rx="44" ry="50" fill="${c.color}"/><path d="M53 82 Q29 68 32 49 Q58 53 70 72Z" fill="${c.accent}"/><path d="M127 82 Q151 68 148 49 Q122 53 110 72Z" fill="${c.accent}"/><path d="M82 98 L90 107 L98 98Z" fill="#ffc95c"/>`;break;
-  case "dragon": body=`<path d="M48 62 L42 35 L70 51 Q90 42 110 51 L138 35 L132 62 Q142 83 132 108 Q120 132 90 132 Q60 132 48 108 Q38 83 48 62Z" fill="${c.color}"/><path d="M49 66 Q26 63 25 45 Q45 44 61 56Z" fill="${c.accent}"/><path d="M131 66 Q154 63 155 45 Q135 44 119 56Z" fill="${c.accent}"/><path d="M83 50 L90 35 L97 50" fill="none" stroke="${c.accent}" stroke-width="8" stroke-linecap="round"/>`;break;
-  case "robot": body=`<rect x="45" y="49" width="90" height="84" rx="25" fill="${c.color}"/><rect x="56" y="63" width="68" height="47" rx="16" fill="${c.accent}"/><rect x="81" y="31" width="18" height="20" rx="9" fill="${c.color}"/><circle cx="90" cy="28" r="5" fill="#ff82ad"/><circle cx="76" cy="84" r="6" fill="#55c9c9"/><circle cx="104" cy="84" r="6" fill="#9b7cff"/><path d="M74 100 Q90 110 106 100" fill="none" stroke="#6a5267" stroke-width="3"/>`;break;
-  case "jelly": body=`<path d="M45 91 Q45 50 90 47 Q135 50 135 91 L128 122 Q90 143 52 122Z" fill="${c.color}" opacity=".95"/><path d="M62 70 Q90 54 118 70" fill="none" stroke="${c.accent}" stroke-width="10" stroke-linecap="round" opacity=".8"/>`;break;
-  case "deer": body=`<path d="M49 63 L43 32 L61 47 L76 29 L79 52 Q90 46 101 52 L104 29 L119 47 L137 32 L131 63 Q141 84 132 106 Q120 130 90 130 Q60 130 48 106 Q39 84 49 63Z" fill="${c.color}"/><path d="M55 36 Q48 18 36 23 Q47 34 58 46 M125 36 Q132 18 144 23 Q133 34 122 46" fill="none" stroke="${c.accent}" stroke-width="7" stroke-linecap="round"/>`;break;
-  case "bat": body=`<path d="M90 57 Q73 42 49 48 L27 34 L37 72 Q31 102 55 116 Q74 127 90 117 Q106 127 125 116 Q149 102 143 72 L153 34 L131 48 Q107 42 90 57Z" fill="${c.color}"/><path d="M42 50 L59 62 L37 55Z M138 50 L121 62 L143 55Z" fill="${c.accent}"/>`;break;
-  case "turtle": body=`<ellipse cx="90" cy="91" rx="52" ry="43" fill="${c.color}"/><ellipse cx="90" cy="91" rx="34" ry="28" fill="${c.accent}"/><circle cx="48" cy="91" r="16" fill="${c.color}"/><circle cx="132" cy="91" r="16" fill="${c.color}"/><path d="M76 78 Q90 67 104 78 M76 91 Q90 80 104 91 M76 104 Q90 93 104 104" fill="none" stroke="${c.color}" stroke-width="5"/>`;break;
-  case "bee": body=`<ellipse cx="90" cy="91" rx="45" ry="48" fill="${c.color}"/><path d="M49 78 Q24 59 31 39 Q55 42 69 63Z" fill="${c.accent}" opacity=".85"/><path d="M131 78 Q156 59 149 39 Q125 42 111 63Z" fill="${c.accent}" opacity=".85"/><path d="M53 79 H127 M49 97 H131 M57 115 H123" stroke="#fff5c9" stroke-width="9"/>`;break;
-  case "whale": body=`<path d="M44 90 Q49 49 91 50 Q132 51 137 91 Q136 124 103 131 Q78 136 60 119 L38 128 L45 108 Q37 99 44 90Z" fill="${c.color}"/><path d="M74 52 Q78 29 90 43 Q102 29 106 52" fill="none" stroke="${c.accent}" stroke-width="9" stroke-linecap="round"/>`;break;
-  case "cactus": body=`<path d="M72 128 V63 Q72 46 90 46 Q108 46 108 63 V77 H124 V65 Q124 53 136 53 Q148 53 148 68 V88 Q148 103 132 103 H108 V128Z" fill="${c.color}"/><path d="M54 98 H40 Q28 98 28 85 V72 Q28 60 40 60 Q52 60 52 72 V82 H72 V98Z" fill="${c.color}"/><circle cx="79" cy="67" r="3" fill="${c.accent}"/><circle cx="102" cy="82" r="3" fill="${c.accent}"/>`;break;
-  case "crystal": body=`<path d="M90 33 L125 59 L137 108 L90 137 L43 108 L55 59Z" fill="${c.color}"/><path d="M90 33 L90 137 M55 59 L90 78 L125 59 M43 108 L90 78 L137 108" fill="none" stroke="${c.accent}" stroke-width="5"/><path d="M74 57 L90 45 L106 57 L90 69Z" fill="#fff" opacity=".55"/>`;break;
-  case "bear": body=`<circle cx="59" cy="57" r="22" fill="${c.color}"/><circle cx="121" cy="57" r="22" fill="${c.color}"/><ellipse cx="90" cy="91" rx="49" ry="48" fill="${c.color}"/><ellipse cx="90" cy="105" rx="26" ry="19" fill="${c.accent}" opacity=".8"/>`;break;
-  case "flower": body=`<circle cx="90" cy="90" r="25" fill="${c.accent}"/><circle cx="90" cy="50" r="27" fill="${c.color}"/><circle cx="90" cy="130" r="27" fill="${c.color}"/><circle cx="50" cy="90" r="27" fill="${c.color}"/><circle cx="130" cy="90" r="27" fill="${c.color}"/><ellipse cx="90" cy="94" rx="42" ry="36" fill="${c.accent}" opacity=".85"/>`;break;
-  case "star": body=`<path d="M90 32 L104 66 L141 70 L113 93 L121 130 L90 111 L59 130 L67 93 L39 70 L76 66Z" fill="${c.color}"/><circle cx="90" cy="90" r="31" fill="${c.accent}" opacity=".75"/>`;break;
- }
- const faceLayer=c.shape==="robot"?"":face;
- return `<svg class="${cls}" viewBox="0 0 180 180" role="img" aria-label="${svgEsc(c.name)}">${glow}<g transform="translate(90 90) scale(${scale}) translate(-90 -90)">${body}${faceLayer}</g>${extra}</svg>`;
-}
-function characterStage(){const level=getLevel();return level>=10?3:(level>=5?2:1)}
-function characterStageName(stage){return stage===1?"씨앗형":stage===2?"성장형":"각성형"}
-
-
-function $(id){return document.getElementById(id)}
-function clearAuthMessages(){$("authMessage").innerText="";$("authError").innerText=""}
-function toggleAuthMode(){
- isSignup=!isSignup;clearAuthMessages();
- $("authTitle").innerText=isSignup?"MY DAY 계정을 만들어보세요":"나의 하루를 기록하세요";
- $("authButton").innerText=isSignup?"회원가입":"로그인";
- $("authSwitch").innerText=isSignup?"이미 계정이 있나요? 로그인":"처음이신가요? 회원가입";
-}
-async function handleAuth(){
- clearAuthMessages();
- const email=$("email").value.trim(),password=$("password").value;
- if(!email||!password){$("authError").innerText="이메일과 비밀번호를 입력해주세요.";return}
- if(password.length<6){$("authError").innerText="비밀번호는 6자 이상이어야 합니다.";return}
- const b=$("authButton");b.disabled=true;b.innerText="처리 중...";
- try{
-   if(isSignup){
-     const {error}=await supabaseClient.auth.signUp({email,password});if(error)throw error;
-     $("authMessage").innerText="회원가입이 완료되었습니다. 이메일 인증이 필요하면 인증 후 로그인해주세요.";
-   }else{
-     const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});if(error)throw error;
-     if(data.user){currentUser=data.user;showApp();await loadRecords()}
-   }
- }catch(e){$("authError").innerText=e.message||"오류가 발생했습니다."}
- b.disabled=false;b.innerText=isSignup?"회원가입":"로그인";
-}
-async function logout(){await supabaseClient.auth.signOut();currentUser=null;records=[];$("app").style.display="none";$("authScreen").style.display="flex"}
-function showApp(){
- $("authScreen").style.display="none";$("app").style.display="block";
- $("userEmail").innerText=currentUser.email;
- loadLocalGame();loadProfile();
- $("todayDate").innerText=new Date().toLocaleDateString("ko-KR",{year:"numeric",month:"long",day:"numeric",weekday:"long"});
-}
-function getToday(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
-function openModal(){$("modalBg").style.display="flex"}function closeModal(){$("modalBg").style.display="none"}
-function updateMood(){$("moodNumber").innerText=$("mood").value}function updateFocus(){$("focusNumber").innerText=$("focus").value}
-function calculateScore(sleep,study,exercise,mood,focus){
- const ss=Math.min(100,Math.max(0,100-Math.abs(8-sleep)*20));
- const st=Math.min(100,study/180*100),ex=Math.min(100,exercise/60*100);
- return Math.round(ss*.2+st*.15+ex*.15+mood*.25+focus*.25)
-}
-async function saveRecord(){
- if(!currentUser){alert("먼저 로그인해주세요.");return}
- const sleep=Number($("sleep").value),study=Number($("study").value)||0,exercise=Number($("exercise").value)||0,money=Number($("money").value)||0,mood=Number($("mood").value),focus=Number($("focus").value),note=$("note").value.trim();
- if(!sleep){alert("수면 시간을 입력해주세요.");return}
- const oldLevel=getLevel(records),score=calculateScore(sleep,study,exercise,mood,focus);
- const record={user_id:currentUser.id,record_date:getToday(),sleep,study,exercise,money,mood,focus,note,score};
- const b=document.querySelector("#modalBg .save-button");b.disabled=true;b.innerText="저장 중...";
- try{
-   const {error}=await supabaseClient.from("daily_records").upsert(record,{onConflict:"user_id,record_date"});
-   if(error)throw error;
-   const xpGain=Math.max(5,Math.round(score/2));
-   addCoins(Math.max(5,Math.floor(score/10)));
-   closeModal();showToast(`☁️ 저장 완료! +${xpGain} XP · +${Math.max(5,Math.floor(score/10))} 🪙`);
-   ["sleep","study","exercise","money","note"].forEach(id=>$(id).value="");
-   await loadRecords();
-   const newLevel=getLevel(records);
-   if(newLevel>oldLevel){
-      ensureEvolutionPath();
-      const evo=getEvolutionCharacter();
-      $("levelupText").innerText=(newLevel===5||newLevel===10)
-        ?`레벨 ${newLevel}! ${evo.character.name}이(가) ${evo.formName}으로 성장했어요!`
-        :`레벨 ${newLevel}에 도달했어요! ${evo.character.name}과 함께 계속 성장해요.`;
-      $("levelup").style.display="flex";
-    }
- }catch(e){alert("저장 실패: "+e.message)}
- b.disabled=false;b.innerText="☁️ 클라우드에 저장하기";
-}
-async function loadRecords(){
- if(!currentUser)return;
- const {data,error}=await supabaseClient.from("daily_records").select("*").eq("user_id",currentUser.id).order("record_date",{ascending:false});
- if(error){console.error(error);alert("기록을 불러오지 못했습니다.");return}
- records=data||[];updateAll();
-}
-function getXP(){return records.reduce((s,x)=>s+Math.max(5,Math.round(Number(x.score||0)/2)),0)}
-function getLevel(r=records){return Math.floor(r.reduce((s,x)=>s+Math.max(5,Math.round(Number(x.score||0)/2)),0)/100)+1}
-function calcStreak(r=records){
- if(!r.length)return 0;
- const dates=new Set(r.map(x=>x.record_date));let d=new Date();d.setHours(0,0,0,0);let streak=0;
- while(dates.has(getDateObj(d))){streak++;d.setDate(d.getDate()-1)}
- return streak;
-}
-function getDateObj(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
-function loadLocalGame(){
- const key="myday_game_"+currentUser.id,saved=localStorage.getItem(key);
- if(saved)game={...game,...JSON.parse(saved)};
- if(!game.partnerId)game.partnerId=profile.characterId||"moari";
- if(!CHARACTER_BY_ID[game.partnerId])game.partnerId="moari";
-}
-function saveLocalGame(){localStorage.setItem("myday_game_"+currentUser.id,JSON.stringify(game))}
-function addCoins(n){game.coins=(game.coins||0)+n;saveLocalGame()}
-function updateAll(){
- updateToday(records[0]);updateStats();updateChart();updateHistory();updateInsight();updateGrowth();updateEvolution();updateAchievements();updateMissionUI();
-}
-function updateToday(d){
- if(!d)return;
- $("sleepValue").innerText=d.sleep+"시간";$("studyValue").innerText=d.study+"분";$("exerciseValue").innerText=d.exercise+"분";
- $("moodValue").innerText=d.mood+"점";$("focusValue").innerText=d.focus+"점";$("moneyValue").innerText=Number(d.money).toLocaleString()+"원";$("score").innerText=d.score;
- $("message").innerText=d.score>=90?"완벽한 하루였어요! 🔥":d.score>=80?"정말 좋은 하루예요! 🌿":d.score>=70?"괜찮은 하루였어요 🙂":"내일은 더 좋아질 거예요 🌱";
-}
-function updateStats(){
- if(!records.length)return;
- const scores=records.map(x=>Number(x.score));const avg=Math.round(scores.reduce((a,b)=>a+b,0)/scores.length),best=Math.max(...scores);
- const study=records.reduce((s,x)=>s+Number(x.study||0),0),exercise=records.reduce((s,x)=>s+Number(x.exercise||0),0);
- $("averageScore").innerText=avg+"점";$("bestScore").innerText=best+"점";$("totalStudy").innerText=(study/60).toFixed(1)+"시간";$("totalExercise").innerText=(exercise/60).toFixed(1)+"시간";
-}
-function updateChart(){
- const recent=records.slice(0,7).reverse();$("chart").innerHTML="";
- if(!recent.length){$("chart").innerHTML='<div class="empty">아직 기록이 없습니다.</div>';return}
- recent.forEach(x=>{$("chart").insertAdjacentHTML("beforeend",`<div class="chart-row"><div class="chart-date">${x.record_date.slice(5)}</div><div class="chart-bar"><div class="chart-inner" style="width:${x.score}%"></div></div><div class="chart-score">${x.score}</div></div>`)})
-}
-function updateHistory(){
- $("history").innerHTML="";
- if(!records.length){$("history").innerHTML='<div class="empty">아직 기록이 없습니다.</div>';return}
- records.slice(0,10).forEach(x=>$("history").insertAdjacentHTML("beforeend",`<div class="history-item"><div><div class="history-date">${x.record_date}</div><div class="history-note">${escapeHtml(x.note||"오늘의 기록")}</div></div><div class="history-score">${x.score}</div></div>`))
-}
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-function updateInsight(){
- if(records.length<2){$("insight").innerText="기록이 2일 이상 쌓이면 생활 패턴을 분석해드려요.";return}
- const avgSleep=records.reduce((s,x)=>s+Number(x.sleep),0)/records.length,avgFocus=records.reduce((s,x)=>s+Number(x.focus),0)/records.length,avgMood=records.reduce((s,x)=>s+Number(x.mood),0)/records.length;
- $("insight").innerText=`지금까지 평균 수면은 ${avgSleep.toFixed(1)}시간, 평균 집중도는 ${Math.round(avgFocus)}점, 평균 기분은 ${Math.round(avgMood)}점이에요. 기록이 더 쌓일수록 MY DAY가 생활 패턴을 더 자세히 보여드릴게요.`;
-}
-
-
-function getRecentActivityRate(days=14){
- const today=new Date();today.setHours(0,0,0,0);
- const active=new Set();
- records.forEach(r=>{
-   const d=new Date(r.record_date+"T00:00:00");
-   const diff=Math.floor((today-d)/(1000*60*60*24));
-   if(diff>=0&&diff<days)active.add(r.record_date);
- });
- return Math.min(100,Math.round(active.size/days*100));
-}
-function getEvolutionTraits(){
- if(!records.length)return {study:0,exercise:0,streak:0,balance:0,type:"balance"};
- const count=Math.max(1,records.length);
- const totalStudy=records.reduce((s,x)=>s+Number(x.study||0),0);
- const totalExercise=records.reduce((s,x)=>s+Number(x.exercise||0),0);
-
- const study=Math.min(100,Math.round(totalStudy/(count*120)*100));
- const exercise=Math.min(100,Math.round(totalExercise/(count*45)*100));
- const streakDays=calcStreak();
- const recentRate=getRecentActivityRate(14);
- const streak=Math.min(100,Math.round(Math.min(streakDays,14)/14*60+recentRate*.4));
-
- const trio=[study,exercise,streak],max=Math.max(...trio),min=Math.min(...trio),avg=trio.reduce((a,b)=>a+b,0)/3;
- const balance=Math.max(0,Math.min(100,Math.round(avg-(max-min)*.7+35)));
-
- let type="balance";
- if(!(max-min<=18&&avg>=25)){
-   type=max===study?"study":max===exercise?"exercise":"streak";
- }
- return {study,exercise,streak,balance,type};
-}
-function ensureEvolutionPath(){
- if(!currentUser)return;
- const level=getLevel(),t=getEvolutionTraits();
- if(level>=10&&!game.evolutionPrimary){game.evolutionPrimary=t.type;game.evolutionPrimaryLockedAt=level;saveLocalGame()}
- if(!game.partnerId)game.partnerId=profile.characterId||"moari";
-}
-function getSecondaryType(primary,t){
- const candidates=["study","exercise","streak","balance"].filter(x=>x!==primary);
- candidates.sort((a,b)=>t[b]-t[a]);
- return candidates[0]||"balance";
-}
-function getEvolutionCharacter(){
- ensureEvolutionPath();
- const ch=getPartner(),stage=characterStage(),t=getEvolutionTraits();
- const labels={study:"🧠 지식",exercise:"💪 활동",streak:"🔥 꾸준함",balance:"✨ 밸런스"};
- const secondary=getSecondaryType(game.evolutionPrimary||t.type,t);
- const formName=stage===1?"씨앗형":stage===2?"성장형":"각성형";
- let route=`${ch.type} · ${labels[game.evolutionPrimary||t.type]||"✨ 밸런스"}`;
- let desc=stage===1?`${ch.name}과 함께 MY DAY의 첫 성장을 시작해요.`:stage===2?`${ch.name}이 기록과 습관을 먹고 한 단계 성장했어요.`:`${ch.name}이 당신의 생활 패턴을 반영한 각성형 파트너가 되었어요.`;
- let next=stage===1?"LEVEL 5에서 성장형으로 변해요.":stage===2?"LEVEL 10에서 각성형으로 진화하고 주 성향이 고정돼요.":`현재 보조 성향: ${labels[secondary]||"✨ 밸런스"} · 꾸준히 기록하면 더 강해져요.`;
- return {character:ch,stage,formName,name:`${ch.name} · ${formName}`,route,desc,next,type:game.evolutionPrimary||t.type,secondary,svg:creatureSVG(ch,stage)};
-}
-function updateEvolution(){
- const t=getEvolutionTraits(),c=getEvolutionCharacter(),el=$("growthCharacter");if(!el)return;
- el.innerHTML=c.svg;
- $("characterName").innerText=c.name;$("characterRoute").innerText=c.route;$("evolutionNext").innerText=c.next;
- [["study",t.study],["exercise",t.exercise],["streak",t.streak],["balance",t.balance]].forEach(([k,v])=>{$(k+"TraitText").innerText=v;$(k+"TraitBar").style.width=v+"%"});
- renderProfileAvatar($("miniAvatar"),getPartner(),1);renderProfileAvatar($("previewAvatar"),getPartner(),2);
- $("profileEmoji").innerText="";
-}
-function renderProfileAvatar(el,ch,stage=1){if(!el||!ch)return;el.innerHTML=creatureSVG(ch,stage,stage===2?"mini-creature":"mini-creature");}
-function openEvolutionGuide(){
- const t=getEvolutionTraits(),c=getEvolutionCharacter();ensureEvolutionPath();
- const primary=game.evolutionPrimary, labels={study:"🧠 지식",exercise:"💪 활동",streak:"🔥 꾸준함",balance:"✨ 밸런스"};
- const secondary=getSecondaryType(primary||t.type,t);
- $("featureTitle").innerText="✨ MY DAY 캐릭터 도감";
- const currentId=getPartner().id;
- $("featureContent").innerHTML=`
-  <div class="feature-card" style="cursor:default">
-   <div class="feature-title">${c.character.name} 성장 단계</div>
-   <div class="feature-sub" style="line-height:1.7;margin-top:6px">모든 캐릭터는 <b>씨앗형 → 성장형 → 각성형</b> 3단계로 성장해요. LEVEL 10부터 생활 성향이 캐릭터 설명과 루트에 반영됩니다.</div>
-   <div class="evolution-stage-row">
-    ${[1,2,3].map(st=>`<div class="stage-box ${c.stage===st?"active":""}"><div class="stage-art">${creatureSVG(c.character,st,"creature-svg")}</div><div class="stage-label">${characterStageName(st)}</div><div class="stage-level">${st===1?"Lv.1~4":st===2?"Lv.5~9":"Lv.10+"}</div></div>`).join("")}
-   </div>
+<div class="modal-back" id="evoModal" onclick="if(event.target===this)closeEvo()">
+  <div class="modal">
+    <div class="modal-head"><h2>✨ 진화 도감</h2><button class="close" onclick="closeEvo()">✕</button></div>
+    <p class="note">현재 캐릭터와 앞으로 만나게 될 진화형을 한눈에 볼 수 있어요.</p>
+    <div class="evo-full">
+      <div class="card"><div class="big">
+        <svg viewBox="0 0 220 220"><defs><linearGradient id="fur2" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffd56f"/><stop offset="1" stop-color="#ff9f68"/></linearGradient></defs><circle cx="110" cy="110" r="72" fill="#f3eaff"/><path d="M65 83 L69 40 Q70 30 79 39 L96 57 Q110 52 124 57 L142 39 Q151 30 152 42 L155 84 Q171 102 164 138 Q158 169 110 173 Q62 169 56 138 Q49 102 65 83Z" fill="url(#fur2)" stroke="#d98b67" stroke-width="3"/><path d="M73 91 Q110 70 147 91 Q155 110 150 135 Q142 160 110 162 Q78 160 70 135 Q65 110 73 91Z" fill="#fff4dd"/><ellipse cx="86" cy="108" rx="10" ry="14" fill="#493b58"/><ellipse cx="134" cy="108" rx="10" ry="14" fill="#493b58"/><circle cx="89" cy="104" r="3.5" fill="#fff"/><circle cx="137" cy="104" r="3.5" fill="#fff"/><path d="M106 121 Q110 117 114 121 L110 126Z" fill="#e9787f"/><path d="M110 126 Q106 133 99 130 M110 126 Q114 133 121 130" fill="none" stroke="#6b4c5b" stroke-width="2.5" stroke-linecap="round"/><path d="M72 155 Q110 174 148 155 L153 181 Q111 201 67 181Z" fill="#a98aff"/></svg>
+      </div><b>씨앗형</b><div class="note">Lv.1 · 현재</div></div>
+      <div class="card"><div class="big"><div class="locked"><span class="unknown">?</span></div></div><b>???</b><div class="note">Lv.5 · 잠김</div></div>
+      <div class="card"><div class="big"><div class="locked"><span class="unknown">?</span></div></div><b>???</b><div class="note">Lv.10 · 잠김</div></div>
+      <div class="card"><div class="big"><div class="locked"><span class="unknown">?</span></div></div><b>???</b><div class="note">Lv.20 · 잠김</div></div>
+    </div>
   </div>
-  <div class="feature-card" style="margin-top:12px;cursor:default"><div class="feature-title">현재 성장 정보</div><div class="feature-sub" style="line-height:1.8">파트너: <b>${c.character.name}</b><br>주 성향: <b>${labels[primary||t.type]}</b><br>보조 성향: <b>${labels[secondary]}</b><br>🧠 ${t.study} · 💪 ${t.exercise} · 🔥 ${t.streak} · ✨ ${t.balance}</div></div>
-  <div class="feature-title" style="margin-top:16px">🌟 20종 파트너 도감</div>
-  <div class="character-collection">${MYDAY_CHARACTERS.map(ch=>`<div class="collection-card ${ch.id===currentId?"current":""}"><div class="collection-art">${creatureSVG(ch,c.stage,"creature-svg")}</div><div class="collection-name">${ch.name}</div><div class="collection-stage">${ch.type}</div></div>`).join("")}</div>`;
- $("featureModal").style.display="flex";
+</div>
+
+<script>
+
+function login(e){
+  e.preventDefault();
+  const id=document.getElementById('loginId').value.trim();
+  if(!id) return;
+  enterApp('환영해요, '+id+'님! 🌱');
+}
+function guestLogin(){
+  enterApp('체험 모드로 시작했어요 ✨');
+}
+function enterApp(message){
+  const screen=document.getElementById('loginScreen');
+  screen.classList.add('hide');
+  setTimeout(()=>screen.remove(),500);
+  setTimeout(()=>toast(message),450);
 }
 
-function updateGrowth(){
- const xp=getXP(),level=getLevel(),cur=xp%100;
- $("level").innerText=level;if($("totalXP"))$("totalXP").innerText=xp+" XP";$("xpText").innerText=`${cur} / 100 XP`;$("xpInner").style.width=cur+"%";
- $("streak").innerText=calcStreak()+"일 🔥";$("coins").innerText=game.coins||0;
+function toast(msg){
+  const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show');
+  clearTimeout(window.__t); window.__t=setTimeout(()=>el.classList.remove('show'),1800);
 }
-function updateAchievements(){
- const unlocked=achievementDefs.filter(a=>a.ok(records));$("achievementCount").innerText=unlocked.length;
- $("badges").innerHTML=achievementDefs.map(a=>`<div class="badge ${a.ok(records)?"":"locked"}"><div class="badge-icon">${a.icon}</div><div class="badge-name">${a.name}</div><div class="badge-desc">${a.desc}</div></div>`).join("");
+function openEvo(){document.getElementById('evoModal').classList.add('show')}
+function closeEvo(){document.getElementById('evoModal').classList.remove('show')}
+function claim(btn){
+  btn.disabled=true; btn.textContent='받음 ✓'; btn.style.opacity='.6'; toast('+10 코인을 획득했어요! 🪙');
 }
-function getDailyMission(){
- const today=getToday();
- return [
-  {id:"record-"+today,title:"오늘 기록하기",desc:"오늘의 하루 기록을 저장하세요",reward:20,ok:()=>records.some(x=>x.record_date===today)},
-  {id:"score-"+today,title:"80점 이상 달성",desc:"오늘 점수 80점 이상 만들기",reward:30,ok:()=>records.some(x=>x.record_date===today&&Number(x.score)>=80)},
-  {id:"study-"+today,title:"공부 1시간",desc:"오늘 공부 60분 이상 기록",reward:25,ok:()=>records.some(x=>x.record_date===today&&Number(x.study)>=60)}
- ];
-}
-function updateMissionUI(){
- const m=getDailyMission()[0],done=m.ok();$("missionTitle").innerText=done?"오늘 미션 완료!":"오늘 기록하기";$("missionProgress").innerText=done?"완료 · +20 🪙":"0 / 1 완료";
-}
-function claimMissionById(id){
- const m=getDailyMission().find(x=>x.id===id);
- if(!m){showToast("미션을 찾을 수 없어요.");return}
- if(!m.ok()){showToast("아직 조건을 달성하지 않았어요.");return}
- if(game.claimedMissions.includes(m.id)){showToast("이미 보상을 받았어요.");return}
- game.claimedMissions.push(m.id);
- addCoins(m.reward);
- saveLocalGame();
- updateAll();
- openMissions();
- showToast(`🎁 미션 완료! +${m.reward} 🪙`);
-}
-function claimMission(m){
- if(m && m.id) claimMissionById(m.id);
-}
-function openMissions(){
- const ms=getDailyMission();
- $("featureTitle").innerText="🎯 오늘의 미션";
- $("featureContent").innerHTML=ms.map(m=>{
-   const claimed=game.claimedMissions.includes(m.id);
-   const done=m.ok();
-   const buttonText=claimed?"보상 수령 완료":(done?"보상 받기":"진행 중");
-   const disabled=claimed||!done?"disabled":"";
-   return `<div class="feature-card" style="margin-top:10px">
-     <div class="feature-title">${m.title}</div>
-     <div class="feature-sub">${m.desc} · 보상 <span class="token-icon">🪙</span>${m.reward}</div>
-     <button class="btn mission-claim-btn" style="margin-top:10px" ${disabled} onclick="claimMissionById('${m.id}')">${buttonText}</button>
-   </div>`;
- }).join("");
- $("featureModal").style.display="flex";
-}
-function openAchievements(){
- $("featureTitle").innerText="🏆 업적";
- $("featureContent").innerHTML=achievementDefs.map(a=>`<div class="feature-card" style="margin-top:10px;display:flex;align-items:center;gap:12px"><div style="font-size:32px">${a.icon}</div><div><div class="feature-title">${a.name} ${a.ok(records)?"✅":"🔒"}</div><div class="feature-sub">${a.desc}</div></div></div>`).join("");
- $("featureModal").style.display="flex";
-}
-function openShop(){
- $("featureTitle").innerText="🛍️ 꾸미기 상점 · 🪙 "+(game.coins||0);
- $("featureContent").innerHTML=`<div class="shop-grid">${shopItems.map(i=>{const owned=game.owned.includes(i.id);return `<div class="shop-item ${owned?"owned":""}"><div class="shop-emoji">${i.emoji}</div><div>${i.name}</div><div class="shop-price">${owned?"보유 중":"🪙 "+i.price}</div><button class="btn" style="margin-top:7px" onclick="buyItem('${i.id}')">${owned?"장착":"구매"}</button></div>`}).join("")}</div>`;
- $("featureModal").style.display="flex";
-}
-function buyItem(id){
- const item=shopItems.find(x=>x.id===id);if(!item)return;
- if(game.owned.includes(id)){profile.accessory=item.emoji;saveProfile();showToast(`${item.name} 장착!`);return}
- if((game.coins||0)<item.price){showToast("코인이 부족해요 🪙");return}
- game.coins-=item.price;game.owned.push(id);profile.accessory=item.emoji;saveLocalGame();saveProfile();openShop();showToast(`${item.name} 구매 완료!`);
-}
-function closeFeature(){$("featureModal").style.display="none"}
-function openProfileModal(){
- $("profileNameInput").value=profile.name;buildProfileChoices();$("profileModal").style.display="flex";
-}
-function closeProfileModal(){$("profileModal").style.display="none"}
-function buildProfileChoices(){
- $("characterGrid").innerHTML=MYDAY_CHARACTERS.map(ch=>`<button type="button" class="character-choice ${ch.id===profile.characterId?"selected":""}" onclick="chooseCharacter(this,'${ch.id}')"><div class="choice-art">${creatureSVG(ch,characterStage(),"creature-svg")}</div><div class="choice-name">${ch.name}</div><div class="choice-type">${ch.type}</div></button>`).join("");
- $("emojiGrid").innerHTML="";
- $("colorGrid").innerHTML=colors.map(c=>`<button class="color-choice ${c===profile.color?"selected":""}" style="background:${c}" onclick="chooseColor(this,'${c}')"></button>`).join("");
- $("bgGrid").innerHTML=backgrounds.map((b,i)=>`<button class="color-choice ${b===profile.background?"selected":""}" style="background:${b}" onclick="chooseBg(this,${i})"></button>`).join("");
-}
-function chooseCharacter(el,id){profile.characterId=id;game.partnerId=id;saveLocalGame();if(currentUser)localStorage.setItem("myday_profile_"+currentUser.id,JSON.stringify(profile));document.querySelectorAll(".character-choice").forEach(x=>x.classList.remove("selected"));el.classList.add("selected");applyProfile();showToast(`${CHARACTER_BY_ID[id].name}을(를) 파트너로 선택했어요!`)}
-function chooseEmoji(el,e){profile.emoji=e;applyProfile()}
-function chooseColor(el,c){profile.color=c;document.querySelectorAll("#colorGrid .color-choice").forEach(x=>x.classList.remove("selected"));el.classList.add("selected");applyProfile()}
-function chooseBg(el,i){profile.background=backgrounds[i];document.querySelectorAll("#bgGrid .color-choice").forEach(x=>x.classList.remove("selected"));el.classList.add("selected");applyProfile()}
-function saveProfile(){
- profile.name=$("profileNameInput").value.trim()||"MY DAY USER";
- profile.characterId=profile.characterId||game.partnerId||"moari";game.partnerId=profile.characterId;
- localStorage.setItem("myday_profile_"+currentUser.id,JSON.stringify(profile));saveLocalGame();applyProfile();closeProfileModal();showToast("✨ 프로필이 저장됐어요!");
-}
-function loadProfile(){
- const key="myday_profile_"+currentUser.id,saved=localStorage.getItem(key);
- if(saved)profile={...profile,...JSON.parse(saved)};
- if(!CHARACTER_BY_ID[profile.characterId])profile.characterId=game.partnerId&&CHARACTER_BY_ID[game.partnerId]?game.partnerId:"moari";
- game.partnerId=profile.characterId;saveLocalGame();applyProfile();
-}
-function applyProfile(){
- $("profileName").innerText=profile.name;
- $("miniAvatar").style.background=`linear-gradient(135deg,${profile.color},#72a9ff)`;
- $("previewAvatar").style.background=`linear-gradient(135deg,${profile.color},#72a9ff)`;$("previewName").innerText=profile.name;
- document.body.style.background=profile.background;
- renderProfileAvatar($("miniAvatar"),getPartner(),1);renderProfileAvatar($("previewAvatar"),getPartner(),2);
- $("profileEmoji").innerText="";
-}
-function scrollToId(id){$(id)?.scrollIntoView({behavior:"smooth"})}
-function closeLevelUp(){$("levelup").style.display="none"}
-function showToast(text){const t=$("toast");t.innerText=text;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2200)}
-async function checkSession(){
- const {data}=await supabaseClient.auth.getSession();
- if(data?.session?.user){currentUser=data.session.user;showApp();await loadRecords()}
-}
-supabaseClient.auth.onAuthStateChange((event,session)=>{if(session?.user&&!currentUser){currentUser=session.user;showApp();loadRecords()}});
-checkSession();
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeEvo()});
 </script>
 </body>
 </html>
